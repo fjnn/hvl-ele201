@@ -1,12 +1,24 @@
 main:
-  - title: "Topics"
-    url: /topics
+  - title: "Lectures"
+    url: /lectures
   - title: "Examples"
     url: /examples
 
-topics:
+lectures:
   - title: "L1 - Intro"
-    url: /topics/l1-intro
+    url: /lectures/l1-intro
   - title: "L2 - Micro"
-    url: /topics/l2-micro
+    url: /lectures/l2-micro
+
+examples:
+  - title: "E1 - Blink"
+    url: /examples/e1-blink
+  - title: "E2 - XXX"
+    url: /custom404
+
+projects:
+  - title: "P1 - XXX"
+    url: /custom404
+  - title: "P22 - XXX"
+    url: /custom404
 

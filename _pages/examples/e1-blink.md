@@ -1,15 +1,15 @@
 ---
 layout: single
-title: "Lesson 2 - Micro"
-permalink: /topics/l2-micro
+title: "Example 1 - Blink"
+permalink: /examples/e1-blink
 toc: false
 breadcrumbs: true
 sidebar:
-  - title: "Lesson 2 - Micro"
+  - title: "Example 1 - Blink"
     image: /assets/images/logo.png
     image_alt: "image"
-    text: "Introduction to the subject"
+    nav: examples
 taxonomy: markup
 ---
 
-asdasd
+Here is a simple blink.

@@ -1,13 +1,15 @@
 ---
 layout: single
-title: "Lesson 1 - Intro"
-permalink: /topics/l1-intro
+title: "Lecture 2 - Micro"
+permalink: /lectures/l2-micro
 toc: false
 breadcrumbs: true
 sidebar:
-  - title: "Subjects"
+  - title: "Lecture 2 - Micro"
     image: /assets/images/logo.png
     image_alt: "image"
-    nav: topics
+    nav: lectures
 taxonomy: markup
 ---
+
+asdasd
