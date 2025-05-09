@@ -5,7 +5,7 @@ permalink: /examples/e1-blink
 toc: false
 breadcrumbs: true
 sidebar:
-  - title: "Example 1 - Blink"
+  - title: "Examples"
     image: /assets/images/logo.png
     image_alt: "image"
     nav: examples

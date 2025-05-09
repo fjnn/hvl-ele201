@@ -12,5 +12,5 @@ sidebar:
 taxonomy: markup
 ---
 
-- [Example 1 - LED Blink](/custom404)
+- [Example 1 - LED Blink](/examples/e1-blink)
 - [Example 2 - Print data](/custom404)
