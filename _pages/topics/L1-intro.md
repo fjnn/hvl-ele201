@@ -5,9 +5,9 @@ permalink: /topics/l1-intro
 toc: false
 breadcrumbs: true
 sidebar:
-  - title: "Lesson 1 - Intro"
-    image: /assets/images/hvlRobotics_logo.png
+  - title: "Subjects"
+    image: /assets/images/logo.png
     image_alt: "image"
-    text: "Introduction to the subject"
+    nav: topics
 taxonomy: markup
 ---
