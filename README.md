@@ -12,7 +12,7 @@ You can manually modify the content on Github through your browser, and the chan
 Therefore, you can modify the content locally on your PC, and push the changes when you feel ready.
 
 1. Please make sure that all Jekyll relevant installations are done as explained [here](https://jekyllrb.com/docs/installation/).
-2. Clone this repository ´git clone .....´
+2. Clone this repository ´git clone https://github.com/fjnn/hvl-ele201.git´
 
 
 ### Important folders and files

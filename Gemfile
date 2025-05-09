@@ -34,4 +34,4 @@ gem "http_parser.rb", "~> 0.6.0", :platforms => [:jruby]
 
 # our theme:
 gem "minimal-mistakes-jekyll"
-
+gem 'faraday-retry', '~> 2.2'
