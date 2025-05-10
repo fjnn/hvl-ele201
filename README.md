@@ -16,12 +16,21 @@ Therefore, you can modify the content locally on your PC, and push the changes w
 3. Run `bundle install` via terminal under the downloaded folder (aka inside the project repository).
 
 
+<a name="local-edit"></a>
 ### Start
 1. Open the project folder using VS Code.
 2. Open a terminal in the directory.
 3. Run the local side: ´bundle exec jekyll serve´
 4. The changes will immediately apply at **http://127.0.0.1:4000/** or **http://localhost:4000/**.
 5. When you push the changes to Github, the changes will apply within a minute or two.
+
+<a name="via-github"></a>
+### Alternative: Github on browser
+You don't need any installation for this method.
+1. Browse to the page that you want to edit on [GitHub](https://github.com/fjnn/hvl-ele201.git).
+1. Click *edit this file* button on the right-top corner.
+1. Do the desired changes.
+1. Save and push changes.
 
 
 ### Important folders and files
