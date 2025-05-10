@@ -6,26 +6,28 @@ This website is for HVL ELE201 Microcontrollers and Computer Network (ELE201 Mik
 ### Info
 This website is created using [Minimal Mistakes Jekyll Theme](https://mmistakes.github.io/minimal-mistakes/). The guide on how to use this theme is well explained in the [Quick-Start Guide](https://mmistakes.github.io/minimal-mistakes/). The purpose of this page is to have a quick reference on some features which are mainly used in this website.
 
-### Setup
-You can manually modify the content on Github through your browser, and the changes will be automatically applied as you push your changes. However, please use this method only when you do minor changes since it is harder to debug if there is a mistake that causes compilation problems. Also every push fills the commit history and it becomes harder to track important changes.
+You can manually modify the content on Github through your browser, and the changes will be automatically applied as you push your changes. **However, please use [via github.com](#via-githubcom) method only when you do minor changes since it is harder to debug if there is a mistake that causes compilation problems**. Also every push fills the commit history and it becomes harder to track important changes. To prepare a whole lecure content, it is highly recommended to use [local edit](#local-edit). 
 
-Therefore, you can modify the content locally on your PC, and push the changes when you feel ready.
+### Local edit
+In this method, you need to have the repository downloaded to your PC, and you can modify the files as you wish.
 
+#### Setup
 1. Please make sure that all Jekyll relevant installations are done as explained [here](https://jekyllrb.com/docs/installation/).
-2. Clone this repository ´git clone https://github.com/fjnn/hvl-ele201.git´
+2. Clone this repository `git clone https://github.com/fjnn/hvl-ele201.git`
 3. Run `bundle install` via terminal under the downloaded folder (aka inside the project repository).
 
 
 <a name="local-edit"></a>
-### Start
+#### Start
 1. Open the project folder using VS Code.
 2. Open a terminal in the directory.
-3. Run the local side: ´bundle exec jekyll serve´
+3. Run the local side: `bundle exec jekyll serve`
 4. The changes will immediately apply at **http://127.0.0.1:4000/** or **http://localhost:4000/**.
 5. When you push the changes to Github, the changes will apply within a minute or two.
 
+
 <a name="via-github"></a>
-### Alternative: Github on browser
+### Alternative: Via Github
 You don't need any installation for this method.
 1. Browse to the page that you want to edit on [GitHub](https://github.com/fjnn/hvl-ele201.git).
 1. Click *edit this file* button on the right-top corner.
