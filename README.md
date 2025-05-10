@@ -6,7 +6,7 @@ This website is for HVL ELE201 Microcontrollers and Computer Network (ELE201 Mik
 ### Info
 This website is created using [Minimal Mistakes Jekyll Theme](https://mmistakes.github.io/minimal-mistakes/). The guide on how to use this theme is well explained in the [Quick-Start Guide](https://mmistakes.github.io/minimal-mistakes/). The purpose of this page is to have a quick reference on some features which are mainly used in this website.
 
-You can manually modify the content on Github through your browser, and the changes will be automatically applied as you push your changes. **However, please use [via github.com](#via-githubcom) method only when you do minor changes since it is harder to debug if there is a mistake that causes compilation problems**. Also every push fills the commit history and it becomes harder to track important changes. To prepare a whole lecure content, it is highly recommended to use [local edit](#local-edit). 
+You can manually modify the content on Github through your browser, and the changes will be automatically applied as you push your changes. **However, please use [via Github](#via-githubcom) method only when you do minor changes since it is harder to debug if there is a mistake that causes compilation problems**. Also every push fills the commit history and it becomes harder to track important changes. To prepare a whole lecure content, it is highly recommended to use [local edit](#local-edit). 
 
 ### Local edit
 In this method, you need to have the repository downloaded to your PC, and you can modify the files as you wish.
@@ -51,8 +51,8 @@ The sources of this website are written in markdown syntax. There are **3 steps*
 There are **5 steps** in adding a page:
 
 1. Find the respective folder under `_pages`.
-1. Create the name accordingly such as `lX-TOPICNAME.md`
-1. Copy-paste the course content header:
+2. Create the name accordingly such as `lX-TOPICNAME.md`
+3. Copy-paste the course content header:
 ```markdown
 ---
 layout: single
@@ -68,11 +68,11 @@ sidebar:
 taxonomy: markup
 ---
 ```
-1. Change the **title**, **permalink** and **nav** elements.
+4. Change the **title**, **permalink** and **nav** elements.
   - **Title:** is just the name of the page. It can be chosen freely.
   - **Permalink:** is the link to this page. By using this link in anywhere in any page, you can create a reference to this page. For consistency between notes, please keep the rule `/lectures/lx-name` for lecture notes, `/examples/ex-name` for examples and `/projects/px-name` for projects.
   - **Navigation:** is the category of this page belong to. This tag is important for the left navigation bar and `_data/navigation.yml`
-1. Add the title and the permalink under the respective parent folder in `_data/navigation.yml`.
+5. Add the title and the permalink under the respective parent folder in `_data/navigation.yml`.
 
   ```markdown
   - title: "Lecture X"
