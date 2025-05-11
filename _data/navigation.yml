@@ -5,10 +5,34 @@ main:
     url: /examples
 
 lectures:
-  - title: "L1 - Intro"
+  - title: "L0 - Installation"
+    url: /lectures/l0-install
+  - title: "L1 - Introduction"
     url: /lectures/l1-intro
-  - title: "L2 - Micro"
-    url: /lectures/l2-micro
+  - title: "L2 - Button"
+    url: /lectures/l2-button
+  - title: "L3 - Timers and Interrupt"
+    url: /lectures/l3-timer-interrupt
+  - title: "L4 - GPIO"
+    url: /lectures/l4-gpio
+  - title: "L5 - ADC"
+    url: /lectures/l5-adc
+  - title: "L6 - DAC and PWM"
+    url: /lectures/l6-dac-pwm
+  - title: "L7 - UART"
+    url: /lectures/l7-uart
+  - title: "L8 - Motor drive"
+    url: /lectures/l8-motordrive
+  - title: "L9 - Ethernet 1"
+    url: /lectures/l9-ethernet1
+  - title: "L10 - Ethernet 2"
+    url: /lectures/l10-ethernet2
+  - title: "L11 - I2C"
+    url: /lectures/l11-i2c
+  - title: "L12 - (Lab)"
+    url: /lectures/l12-lab
+  - title: "L13 - Efficiency"
+    url: /lectures/l13-efficiency
 
 examples:
   - title: "E1 - Blink"

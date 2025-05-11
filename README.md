@@ -51,8 +51,7 @@ The sources of this website are written in markdown syntax. There are **3 steps*
 There are **5 steps** in adding a page:
 
 1. Find the respective folder under `_pages`.
-2. Create the name accordingly such as `lX-TOPICNAME.md`
-3. Copy-paste the course content header:
+2. Create the name accordingly such as `lX-TOPICNAME.md` and copy-paste the course content header:
 ```markdown
 ---
 layout: single
@@ -68,16 +67,18 @@ sidebar:
 taxonomy: markup
 ---
 ```
-4. Change the **title**, **permalink** and **nav** elements.
+3. Change the **title**, **permalink** and **nav** elements.
   - **Title:** is just the name of the page. It can be chosen freely.
   - **Permalink:** is the link to this page. By using this link in anywhere in any page, you can create a reference to this page. For consistency between notes, please keep the rule `/lectures/lx-name` for lecture notes, `/examples/ex-name` for examples and `/projects/px-name` for projects.
   - **Navigation:** is the category of this page belong to. This tag is important for the left navigation bar and `_data/navigation.yml`
-5. Add the title and the permalink under the respective parent folder in `_data/navigation.yml`.
+4. Add the title and the permalink under the respective parent folder in `_data/navigation.yml`.
 
   ```markdown
   - title: "Lecture X"
     url: /lectures/lx-name
   ```
+5. Add the title and the permalink in `_pages/lectures/lectures.md`
+- [Lecture X - Name](/lectures/lx-name)
 
 
 ### Important files

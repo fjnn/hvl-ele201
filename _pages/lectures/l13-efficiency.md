@@ -1,7 +1,7 @@
 ---
 layout: single
-title: "Lecture 2 - Micro"
-permalink: /lectures/l2-micro
+title: "Lecture 13 - Efficiency"
+permalink: /lectures/l12-lab
 toc: false
 breadcrumbs: true
 sidebar:
@@ -12,4 +12,8 @@ sidebar:
 taxonomy: markup
 ---
 
-asdasd
+{: .notice--info}
+Energieffektivitet. Batteridrift av mikrokontroller. Minnebruk og minneteknologi.
+
+
+
