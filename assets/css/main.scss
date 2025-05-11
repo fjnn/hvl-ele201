@@ -1,0 +1,27 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+search: false
+---
+
+@charset "utf-8";
+
+@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
+@import "minimal-mistakes"; // main partials
+
+// Custom TOC styling
+.toc {
+  .nav__title {
+    font-size: 1.0rem !important; // Larger title
+  }
+  
+  .toc__menu {
+    font-size: .7rem !important; // Larger menu items
+    
+    a {
+      padding: 0.5rem 0.75rem; // More padding for better readability
+      line-height: 1.2; // Increased line height
+    }
+  }
+}
+
+      
