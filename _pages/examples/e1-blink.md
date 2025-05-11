@@ -2,7 +2,7 @@
 layout: single
 title: "Example 1 - Blink"
 permalink: /examples/e1-blink
-toc: false
+toc: true
 breadcrumbs: true
 sidebar:
   - title: "Examples"

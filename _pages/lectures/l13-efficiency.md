@@ -2,7 +2,7 @@
 layout: single
 title: "Lecture 13 - Efficiency"
 permalink: /lectures/l12-lab
-toc: false
+toc: true
 breadcrumbs: true
 sidebar:
   - title: "Lectures"

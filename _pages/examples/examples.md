@@ -2,7 +2,7 @@
 layout: single
 title: "Examples"
 permalink: /examples/
-toc: false
+toc: true
 breadcrumbs: true
 sidebar:
   - title: "Examples"

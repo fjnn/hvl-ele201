@@ -57,7 +57,7 @@ There are **5 steps** in adding a page:
 layout: single
 title: "Lecture X - Name"
 permalink: /lectures/lx-name
-toc: false
+toc: true
 breadcrumbs: true
 sidebar:
   - title: "Lectures"

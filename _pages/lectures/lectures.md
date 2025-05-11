@@ -2,7 +2,7 @@
 layout: single
 title: "Lectures"
 permalink: /lectures/
-toc: false
+toc: true
 breadcrumbs: true
 sidebar:
   - title: "Lectures"

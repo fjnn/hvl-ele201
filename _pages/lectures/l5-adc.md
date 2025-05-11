@@ -2,7 +2,7 @@
 layout: single
 title: "Lecture 5 - ADC (Analog-to-Digital Conversion"
 permalink: /lectures/l5-adc
-toc: false
+toc: true
 breadcrumbs: true
 sidebar:
   - title: "Lectures"

@@ -2,7 +2,7 @@
 layout: single
 title: "Lecture 2 - Button read"
 permalink: /lectures/l2-button
-toc: false
+toc: true
 breadcrumbs: true
 sidebar:
   - title: "Lectures"

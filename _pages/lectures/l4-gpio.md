@@ -2,7 +2,7 @@
 layout: single
 title: "Lecture 4 - GPIO (Genereal Purpose Input/Output"
 permalink: /lectures/l4-gpio
-toc: false
+toc: true
 breadcrumbs: true
 sidebar:
   - title: "Lectures"

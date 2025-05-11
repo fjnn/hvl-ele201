@@ -2,7 +2,7 @@
 layout: single
 title: "Lecture 7 - UART: Universal Asynchronous Read and Write"
 permalink: /lectures/l7-uart
-toc: false
+toc: true
 breadcrumbs: true
 sidebar:
   - title: "Lectures"

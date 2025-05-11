@@ -2,7 +2,7 @@
 layout: single
 title: "Lecture 9 - Ethernet 1"
 permalink: /lectures/l9-ethernet1
-toc: false
+toc: true
 breadcrumbs: true
 sidebar:
   - title: "Lectures"

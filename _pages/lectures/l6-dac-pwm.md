@@ -2,7 +2,7 @@
 layout: single
 title: "Lecture 6 - DAC and PWM"
 permalink: /lectures/l6-dac-pwm
-toc: false
+toc: true
 breadcrumbs: true
 sidebar:
   - title: "Lectures"

@@ -2,7 +2,7 @@
 layout: single
 title: "Lecture 12 - (Lab) Microcontrollers Network"
 permalink: /lectures/l12-lab
-toc: false
+toc: true
 breadcrumbs: true
 sidebar:
   - title: "Lectures"

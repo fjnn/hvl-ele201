@@ -2,7 +2,7 @@
 layout: single
 title: "Projects"
 permalink: /projects/
-toc: false
+toc: true
 breadcrumbs: true
 sidebar:
   - title: "Projects"

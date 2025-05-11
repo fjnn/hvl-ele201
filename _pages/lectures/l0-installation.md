@@ -2,7 +2,7 @@
 layout: single
 title: "Lecture 0 - Installation"
 permalink: /lectures/l0-install
-toc: false
+toc: true
 breadcrumbs: true
 sidebar:
   - title: "Lectures"
@@ -13,7 +13,7 @@ taxonomy: markup
 ---
 
 {: .notice--info}
-**Formål**
+**Formål**:
 Installasjon og introduksjon til C++.
 
 

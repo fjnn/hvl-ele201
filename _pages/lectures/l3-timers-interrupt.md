@@ -2,7 +2,7 @@
 layout: single
 title: "Lecture 3 - Timers and Interrupt"
 permalink: /lectures/l3-timer-interrupt
-toc: false
+toc: true
 breadcrumbs: true
 sidebar:
   - title: "Lectures"

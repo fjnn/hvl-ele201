@@ -2,7 +2,7 @@
 layout: single
 title: "Lecture 8 - DC motor drive and H-bridge"
 permalink: /lectures/l8-motordrive
-toc: false
+toc: true
 breadcrumbs: true
 sidebar:
   - title: "Lectures"
