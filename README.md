@@ -89,6 +89,8 @@ This section is for advanced users.
 - All the source files are under `_pages/`. 99% of the time, you don't need to browse anywhere else than this.
 - If you want to modify things on the **Home** page: `_posts/2023-06-24-home.md`
 - The **_config.yml**, **jekyll.yml** and **Gemfile** are responsible in all kind of dependencies and settings. The details can be found [here](https://jekyllrb.com/docs/structure/).
+- If you want to give a clickable link from one page to another: `[Link text]({{ site.baseurl }}/PERMALINK)`
+Example:`[Installation Guide]({{ site.baseurl }}/lectures/l0-install)`
 
 
 ### Useful links
