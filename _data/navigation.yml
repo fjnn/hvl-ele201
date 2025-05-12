@@ -12,7 +12,7 @@ lectures:
   - title: "L2 - Button"
     url: /lectures/l2-button
   - title: "L3 - Timers and Interrupt"
-    url: /lectures/l3-timer-interrupt
+    url: /lectures/l3-timers-interrupt
   - title: "L4 - GPIO"
     url: /lectures/l4-gpio
   - title: "L5 - ADC"
