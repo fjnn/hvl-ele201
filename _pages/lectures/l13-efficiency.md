@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Lecture 13 - Efficiency"
-permalink: /lectures/l12-lab
+permalink: /lectures/l13-efficiency
 toc: true
 breadcrumbs: true
 sidebar:
