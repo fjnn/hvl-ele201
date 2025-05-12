@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Lecture 3 - Timers and Interrupt"
-permalink: /lectures/l3-timer-interrupt
+permalink: /lectures/l3-timers-interrupt
 toc: true
 breadcrumbs: true
 sidebar:
