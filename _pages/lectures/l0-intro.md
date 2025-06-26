@@ -148,7 +148,7 @@ It should be noted that although a microprocessor requires external memory to op
 
 **Microcontroller (UC):** A system of a microprocessor that is packaged with RAM, program storage and interface (I/O) circuitry to make it simple to use.  They're most used in (you guessed it) control applications. They are designed to perform specific tasks. Specific means applications where the relationship of input and output is defined.
 
-A nice video (here)[https://www.youtube.com/watch?v=i_g1dD5fFLo&list=PLCGXHlZcvbOVHdD6hZVXdLzBcFt09UcpK&index=27&ab_channel=OliverSimon].
+A nice video [here](https://www.youtube.com/watch?v=i_g1dD5fFLo&list=PLCGXHlZcvbOVHdD6hZVXdLzBcFt09UcpK&index=27&ab_channel=OliverSimon).
 
 **Embedded System:** The product that uses a microprocessor (or microcontroller) as a component. It consists of both hardware and software.
 

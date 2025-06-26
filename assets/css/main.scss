@@ -54,6 +54,16 @@ $link-color: #007bff;     // Blue links
   }
 }
 
+// Change selected text background to blue
+::selection {
+  background: #007bff;
+  color: #fff;
+}
+::-moz-selection {
+  background: #007bff;
+  color: #fff;
+}
+
 .highlight {
   position: relative;
   
@@ -64,5 +74,10 @@ $link-color: #007bff;     // Blue links
 
 body {
   font-size: 0.9em;
+}
+
+// Override SSH code block text color
+.highlight.ssh, .highlight .language-ssh, pre code.language-ssh, code.language-ssh {
+  color: #228B22 !important; // Example: forest green, change as desired
 }
 
