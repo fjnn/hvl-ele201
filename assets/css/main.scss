@@ -3,6 +3,8 @@
 search: false
 ---
 
+$max-width: 2240px;
+
 @charset "utf-8";
 
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
@@ -51,3 +53,8 @@ search: false
     opacity: 1;
   }
 }
+
+body {
+  font-size: 0.75em;
+}
+
