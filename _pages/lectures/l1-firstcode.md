@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Lecture 1 - Intro"
-permalink: /lectures/l1-intro
+permalink: /lectures/l1-firstcode
 toc: true
 breadcrumbs: true
 sidebar:

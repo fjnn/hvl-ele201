@@ -12,8 +12,9 @@ sidebar:
 taxonomy: markup
 ---
 
-- [Lecture 0 - Installation]({{ site.baseurl }}/lectures/l0-install)
-- [Lecture 1 - Intro]({{ site.baseurl }}/lectures/l1-intro)
+- [Installation]({{ site.baseurl }}/lectures/l0-install)
+- [Lecture 0 - Intro]({{ site.baseurl }}/lectures/l0-intro)
+- [Lecture 1 - First Code]({{ site.baseurl }}/lectures/l1-firstcode)
 - [Lecture 2 - Button read]({{ site.baseurl }}/lectures/l2-button)
 - [Lecture 3 - Timers and Interrupt]({{ site.baseurl }}/lectures/l3-timers-interrupt)
 - [Lecture 4 - GPIO (Genereal Purpose Input/Output)]({{ site.baseurl }}/lectures/l4-gpio)

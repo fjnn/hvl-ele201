@@ -5,10 +5,12 @@ main:
     url: /examples
 
 lectures:
-  - title: "L0 - Installation"
+  - title: "Installation"
     url: /lectures/l0-install
-  - title: "L1 - Introduction"
-    url: /lectures/l1-intro
+  - title: "L0 - Introduction"
+    url: /lectures/l0-intro
+  - title: "L1 - First Code"
+    url: /lectures/l1-firstcode
   - title: "L2 - Button"
     url: /lectures/l2-button
   - title: "L3 - Timers and Interrupt"
