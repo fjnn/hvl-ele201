@@ -4,6 +4,8 @@ search: false
 ---
 
 $max-width: 2240px;
+$background-color: #f5f5f5; // Light gray background
+$link-color: #007bff;     // Blue links
 
 @charset "utf-8";
 
@@ -14,6 +16,7 @@ $max-width: 2240px;
 .toc {
   .nav__title {
     font-size: 1.0rem !important; // Larger title
+    background-color: #0f1965 !important; // Custom background color (mistyrose)
   }
   
   .toc__menu {
@@ -24,6 +27,11 @@ $max-width: 2240px;
       line-height: 1.2; // Increased line height
     }
   }
+}
+
+// Global navigation title background color override
+.nav__title {
+  background-color: #8bcbff !important; // Custom background color (mistyrose)
 }
 
 // Adding copy button
@@ -55,6 +63,6 @@ $max-width: 2240px;
 }
 
 body {
-  font-size: 0.75em;
+  font-size: 0.9em;
 }
 
