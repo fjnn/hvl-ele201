@@ -21,7 +21,7 @@ Make sure that eveything you needed are installed:
 [Installation Guide]({{ site.baseurl }}/lectures/l0-install)
 
 
-## Start your first STM32F767ZI-Nucleo Project
+# Start your first STM32F767ZI-Nucleo Project
 
 1. Click on the PlatformIO icon in the left sidebar
 2. Click on "PIO Home" in the PlatformIO menu
@@ -79,8 +79,8 @@ void SysTick_Handler(void)
 }
 ```
 
-## CubeMX + PlatformIO project
-The code above is simple and easy to write. However, as we progress in the different tasks, it will be very difficult to remember all the configurations. In old times, embedded system engineers have their "own" libraries for various tasks, LCD setup, ADC initialization, PWM parameters etc. They used to copy or include these piece of codes into their projects as they need. Today, we have a tidier solutions. For our development board, we can use STM32CubeMX, which is a graphical tool that allows a very easy configuration of STM32 microcontrollers and microprocessors. Therefore, we don't need to write the code for every single configuration. We will be using STM32CubeMX *extensively* in this course.
+# CubeMX + PlatformIO project
+The code above is simple and easy to write. However, as we progress in the different tasks, it will be very difficult to set all the configurations manually. In old times, embedded system engineers have their "own" libraries for various tasks, LCD setup, ADC initialization, PWM parameters etc. They used to copy or include these piece of codes into their projects as they need. Today, we have a tidier solutions. For our development board, we can use STM32CubeMX, which is a graphical tool that allows a very easy configuration of STM32 microcontrollers and microprocessors. Therefore, we don't need to write the code for every single configuration. We will be using STM32CubeMX *extensively* in this course.
 
 You can watch this video to setup your first blink code using both CubeMX and PlatformIO: [Click here for the video](https://youtu.be/Ty_ekwVimHE).
 
@@ -107,10 +107,7 @@ build_flags =
 
 
 
-## HAL library and registers
-<!-- https://www.youtube.com/watch?v=Hffw-m9fuxc&ab_channel=MitchDavis
-https://www.youtube.com/watch?v=2zjeDWI9W7M&ab_channel=MikrotronicsAcademy
-https://www.youtube.com/watch?v=txnViYePocg&ab_channel=MitchDavis -->
+# Datasheet, reference manual, user manual
 
 We chose STM32F767-Nucleo board for its power and efficiency as well as built-in ethernet module. Unfortunately, it is very hard to find a full plan on how to learn on STM32F767-Nucleo board tutorials online - like there are for Arduino. Therefore, you have to learn how to read datasheet, reference and user manuals:
 - Datasheet for STM32F767xx [link](https://www.st.com/resource/en/datasheet/stm32f765zi.pdf)
@@ -125,7 +122,7 @@ For example, tutorials that demonstrate how to blink an LED, set up UART communi
 
 Therefore, don't hesitate to explore tutorials and example projects for other STM32 boards. As you build your understanding of the microcontroller architecture and the STM32 HAL/LL libraries, you'll find it increasingly easy to port and adapt code, regardless of the specific board in use. This skill will serve you well as you tackle more advanced projects and work with a variety of STM32 hardware in the future.
 
-Some useful links:
+## Some useful links:
 - [Wiki page of STM32](https://wiki.st.com/stm32mcu/wiki/Category:Getting_started_with_STM32_:_STM32_step_by_step)
 - [Blue pill tutorials](https://deepbluembedded.com/)
 
@@ -133,6 +130,7 @@ Some useful links:
 You can program your nucleo board using many different languages/frameworks. You can use Arduino framework, LL library, Bare-metal and HAL library, ARM CMSIS. In this course we will use HAL, but it is essential that you know that is available and have an overview why we chose HAL for this course.
 (PS: Not because it was better, but because it is optimal considering the level of configuration adjustments vs ease of learn as well as commonlality)
 
+{: .notice--info}
 Note that as long as you include right header files, you can use any library, you can even combine them! However, it is smart to stick only one.
 
 <!-- https://www.yahboom.net/public/upload/upload-html/1701776660/Introduction%20to%20HAL%20library%20and%20LL%20library.html -->
@@ -235,3 +233,9 @@ int main (void)
    }
 }
 ```
+
+
+# HAL library and registers
+<!-- https://www.youtube.com/watch?v=Hffw-m9fuxc&ab_channel=MitchDavis
+https://www.youtube.com/watch?v=2zjeDWI9W7M&ab_channel=MikrotronicsAcademy
+https://www.youtube.com/watch?v=txnViYePocg&ab_channel=MitchDavis -->
