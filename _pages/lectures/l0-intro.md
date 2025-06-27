@@ -166,6 +166,7 @@ Microprocessor Processing Structure
 =======================================
 
 ![Batman is awesome!]({{ site.baseurl }}/assets/images/Batman.png)
+
 *Batman is awesome!*
 
 All of you know the stereotype: "computers work with ones and zeros". When I was in the first grade of the engineering class, whenever some bighead told me this sentence, I always wanted to kick their face with a spade. *Everyone* knows that a computer works with ones and zeros but really, *how?*
@@ -179,50 +180,46 @@ Compilation
 
 The program you write usually contains at least two types of instructions. First it typically contains instruction to import other code in the form of libraries which are prepared for your convenience. Secondly your code, and the libraries contains instructions (formally known as statements) which are to be interpreted by the compiler.
 
-For nerds: (Compiler)[https://www.wikiwand.com/en/Compiler>] and for YouTuber nerds: (how does a computer read a code)[https://www.youtube.com/watch?v=QXjU9qTsYCc&ab_channel=FrameofEssence].
+For nerds: [Compiler](https://www.wikiwand.com/en/Compiler>) and for YouTuber nerds: [how does a computer read a code](https://www.youtube.com/watch?v=QXjU9qTsYCc&ab_channel=FrameofEssence).
 
 The compiler is a computer program which translates computer code written in one programming language (the source language) into another language (the target language). There are two versions of your program: the one you wrote but a computer can't read (source code), and the magically generated one that a computer can read (machine code). 
 
-{: .notice--primary}
-Except, a better than magic!
+A compiler fills the gap between a human readable code and a machine readable code. Let's dive into the lovely princaple of a compiler (and assembler).
+Basically, a CPU (or microprocessor) can do a small number of things. They can read from /write to the memory and do some basic math operations (+ - * / & | ~ ^ << >>).
+
 
 The following figure attempts to illustrate this process:
+
+![Compiler illustration]({{ site.baseurl }}/assets/images/Compiler.png)
    
-.. figure:: {{ site.baseurl }}/external/fig/Compiler.png
-          :alt: Compiler illustration
-          :align: center
 
-..
-   A compiler fills the gap between a human readable code and a machine readable code. Let's dive into the lovely princaple of a compiler (and assembler).
-   Basically, a CPU (or microprocessor) can do a small number of things. They can read from /write to the memory and do some basic math operations (+ - * / & | ~ ^ << >>).
-
-And this is the reason why your 32-bit programs don't work on a 64-bit computer (or they are needed to be installed into System32 folder etc). Because the controller divides all those set of 10101101's into the parts that the architecture supports. If the processors are different or the operating systems are different, then they use different machine instructions. Today things works slightly different to overcome these compatibility issues but we are not in computer architecture class now so better to stop here.
+And the reason why your 32-bit programs don't work on a 64-bit computer (or they are needed to be installed into System32 folder etc) is because the controller divides all those set of 10101101's into the parts that the architecture supports. If the processors are different or the operating systems are different, then they use different machine instructions. Today things works slightly different to overcome these compatibility issues but we are not in computer architecture class now so better to stop here.
 
 
 Further down the path of development the generated machine code is transferred to the microcontroller memory. When the microcontroller is started it will read and execute one instruction at a time, while traversing step by step through the memory. Special instruction are also able to instruct the controller to jump to different areas of the memory, allowing the program to take different paths depending on some external factors.
 
-.. figure:: {{ site.baseurl }}/external/fig/microprocessororganization.png
-          :alt: Microprocessor organization
-          :align: center
+![Microprocessor organization]({{ site.baseurl }}/assets/images/microprocessororganization.png)
+
 
 In practice there is usually an intermediate step between the source code, and the machine code. The intermediate step is known as the assembly code, and is a low level language where each statement corresponds to a single operation which is directly supported by the CPU. For some special cases where high performance is needed, or special features not available in the programming language are needed, assembly language is used. It is also used extensively by experienced developers while debugging code, as it is not always obvious how the compiler interpret and translates our instructions.
 
 Traditionally all software was developed using assembly language, but higher level languages (such as C/C++) have been designed to simplify the development process for all but the most advanced or special cases.
 
 
-..
-   How it was like in microprocessor world in the past? That is this famous **assembly** code that many old-genius engineers talk about and at the end of the discussion there is always someone says "but it is really hard". 
+How it was like in microprocessor world in the past? That is this famous **assembly** code that many old-genius engineers talk about and at the end of the discussion there is always someone says "but it is really hard". 
 
-|pic1| |pic2| |pic3|
+<div style="display: flex; gap: 10px; justify-content: center;">
+  <div style="flex: 1; text-align: center;">
+    <img src="{{ site.baseurl }}/assets/images/assembly1.png" alt="Ass1" style="max-width: 100%; height: auto;">
+  </div>
+  <div style="flex: 1; text-align: center;">
+    <img src="{{ site.baseurl }}/assets/images/assembly2.png" alt="Ass2" style="max-width: 100%; height: auto;">
+  </div>
+  <div style="flex: 1; text-align: center;">
+    <img src="{{ site.baseurl }}/assets/images/assembly3.png" alt="Ass3" style="max-width: 100%; height: auto;">
+  </div>
+</div>
 
-.. |pic1| image:: {{ site.baseurl }}/external/fig/assembly1.png
-   :width: 33%
-
-.. |pic2| image:: {{ site.baseurl }}/external/fig/assembly2.png
-   :width: 33%
-
-.. |pic3| image:: {{ site.baseurl }}/external/fig/assembly3.png
-   :width: 33%
 
 
 **Why assembly language?**
@@ -233,25 +230,18 @@ Traditionally all software was developed using assembly language, but higher lev
 * It allows us to exploit hardware features not available in the programming language. One typical example is context switching of threads in a operating system.
 * Provides a deeper understanding of how the system is operating. Invaluable when it comes to understanding the low level details of how the computer operates.
 
-..
-   ***Personal opinion:** it doesn't worth today.*
-   Eirik disagree, but I agree that it is not worth it for a basic course such as ELE102
+***Personal opinion:** it doesn't worth today, but many disagrees.*
 
 The embedded system is a bottomless well. It is impossible to cover everything in this course - and we don't need to. Embedded system world is a charming nerdy black hole that pulls you inside even more as you are willing to learn more. Therefore we limit have to limit for this course at some point.
 
-For the youtubers:  `How do computers read code? <https://www.youtube.com/watch?v=QXjU9qTsYCc>`_ , The Evolution Of CPU Processing Power `Part 1 <https://www.youtube.com/watch?v=sK-49uz3lGg&t=315s>`_ `Part 2 <https://www.youtube.com/watch?v=kvDBJC_akyg>`_ `Part 3 <https://www.youtube.com/watch?v=NTLwMgak3Fk>`_ .
+For more: [How do computers read code](https://www.youtube.com/watch?v=QXjU9qTsYCc>) , The Evolution Of CPU Processing Power [Part 1](https://www.youtube.com/watch?v=sK-49uz3lGg&t=315s) [Part 2](https://www.youtube.com/watch?v=kvDBJC_akyg) [Part 3](https://www.youtube.com/watch?v=NTLwMgak3Fk).
 
-
-
-
-.. rubric:: Footnotes
-.. [#f8] Strictly speaking the computer also reads the source language, but this reading process is more indirect. There is another set of instructions (another program, the compiler) running on the CPU which reads the code. The finalized program will be directly readable by the CPU without this intermediate step. Additionally for our purposes the compiler runs on your PC, while the finished program runs on the microcontroller.
 
 References
 ----------
-.. [#f1] "Microcontroller," Wikipedia, The Free Encyclopedia. [Online]. Available: `http://en.wikipedia.org/wiki/Microcontroller <http://en.wikipedia.org/wiki/Microcontroller>`_. [Accessed: 2024].
-.. [#f2] Marwedel, Peter,  "Embedded System Design"  Springer, Boston, MA,  2006.
-.. [#f3] Izmir Institute of Technology - Department of Electrical and Electronics Engineering *EE443 - Embedded Systems lecture notes - 2013*
-.. [#f4] https://resources.altium.com/pcb-design-blog/plc-vs-embedded-system-when-you-should-choose-a-plc-despite-the-higher-cost-per-unit - 14 January 2020
-.. [#f5] https://www.element14.com/community/groups/fpga-group/blog/2018/02/22/comparing-an-fpga-to-a-microcontroller-microprocessor-or-an-asic - 14 January 2020
-.. [#f6] https://www.elprocus.com/difference-between-avr-arm-8051-and-pic-microcontroller/ - 14 January 2020.
+1. "Microcontroller," Wikipedia, The Free Encyclopedia. [Online Available](http://en.wikipedia.org/wiki/Microcontroller <http://en.wikipedia.org/wiki/Microcontroller) [Accessed: 2024].
+
+2. Marwedel, Peter,  "Embedded System Design"  Springer, Boston, MA,  2006.
+
+3. Izmir Institute of Technology - Department of Electrical and Electronics Engineering *EE443 - Embedded Systems lecture notes - 2013 - Special thanks to Barbaros Özdemirel*
+

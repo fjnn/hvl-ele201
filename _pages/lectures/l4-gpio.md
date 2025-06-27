@@ -16,3 +16,4 @@ taxonomy: markup
 Detaljert om GPIO. Inngang og utgang, push-pull vs open-drain. Pull-up og pull-down. Bruk av tabellar (array) med fleire trykknappar og lysdiodar.
 
 
+Debugging, reading register value using platformIO.

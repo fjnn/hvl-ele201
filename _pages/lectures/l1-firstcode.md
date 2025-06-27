@@ -83,7 +83,6 @@ void SysTick_Handler(void)
 The code above is simple and easy to write. However, as we progress in the different tasks, it will be very difficult to remember all the configurations. In old times, embedded system engineers have their "own" libraries for various tasks, LCD setup, ADC initialization, PWM parameters etc. They used to copy or include these piece of codes into their projects as they need. Today, we have a tidier solutions. For our development board, we can use STM32CubeMX, which is a graphical tool that allows a very easy configuration of STM32 microcontrollers and microprocessors. Therefore, we don't need to write the code for every single configuration. We will be using STM32CubeMX *extensively* in this course.
 
 You can watch this video to setup your first blink code using both CubeMX and PlatformIO: [Click here for the video](https://youtu.be/Ty_ekwVimHE).
-<iframe width="420" height="315" src="https://youtu.be/Ty_ekwVimHE" frameborder="0" allowfullscreen></iframe>
 
 
 The piece of code you need to add after `/*USER CODE BEGIN 3*/` is here:
@@ -91,12 +90,11 @@ The piece of code you need to add after `/*USER CODE BEGIN 3*/` is here:
 ```c
 HAL_GPIO_TogglePin(LD1_GPIO_PORT, LD1_PIN);
 HAL_Delay(500);
-asdasd
 ```
 
 The content of platformio.ini is here:
 
-```ssh
+```c
 [env:nucleo_f767zi]
 platform = ststm32
 board = nucleo_f767zi
@@ -107,3 +105,133 @@ build_flags =
 {: .notice--info}
 **Note that**  there is a new configuration command in platformio.ini file that you didn't have when you generated the project only using PlatformIO, which is `build_flags`. We need this line because the naming convention in STM32CubeMX is different than PlatformIO. PlatformIO generated projects put the necessary header files (aka files with extension .h) are in the folder named **include** whereas the CubeMX generated projects keep the header files under **Inc**.
 
+
+
+## HAL library and registers
+<!-- https://www.youtube.com/watch?v=Hffw-m9fuxc&ab_channel=MitchDavis
+https://www.youtube.com/watch?v=2zjeDWI9W7M&ab_channel=MikrotronicsAcademy
+https://www.youtube.com/watch?v=txnViYePocg&ab_channel=MitchDavis -->
+
+We chose STM32F767-Nucleo board for its power and efficiency as well as built-in ethernet module. Unfortunately, it is very hard to find a full plan on how to learn on STM32F767-Nucleo board tutorials online - like there are for Arduino. Therefore, you have to learn how to read datasheet, reference and user manuals:
+- Datasheet for STM32F767xx [link](https://www.st.com/resource/en/datasheet/stm32f765zi.pdf)
+- Reference manual for STM32F767xx [link](https://www.st.com/resource/en/reference_manual/dm00224583-stm32f76xxx-and-stm32f77xxx-advanced-arm-based-32-bit-mcus-stmicroelectronics.pdf)
+- User manual of Nucleo-144 board [link](https://www.st.com/resource/en/user_manual/um1974-stm32-nucleo144-boards-mb1137-stmicroelectronics.pdf)
+- User manual for STM32F7 HAL and low-layer drivers [link](https://www.st.com/resource/en/user_manual/um1905-description-of-stm32f7-hal-and-lowlayer-drivers-stmicroelectronics.pdf)
+
+
+While comprehensive tutorials specifically tailored for the STM32F767-Nucleo board are rare, there are many resources available for a variety of other STM32 development boards, such as the Discovery series, the popular "blue pill," older Nucleo boards, and the L4 series, among others. The good news is that the fundamental concepts of microcontroller programming especially within the STM32 family are largely transferable between different boards. Once you grasp the core ideas, such as pin configuration, peripheral initialization, and the use of the HAL (Hardware Abstraction Layer) or direct register manipulation, adapting code from one STM32 board to another becomes a straightforward process.
+
+For example, tutorials that demonstrate how to blink an LED, set up UART communication, or configure timers on a Discovery or blue pill board can be readily applied to the STM32F767-Nucleo with only minor adjustments, typically related to pin assignments or specific peripheral names. This flexibility is one of the strengths of the STM32 ecosystem, supported by consistent documentation and a unified set of development tools.
+
+Therefore, don't hesitate to explore tutorials and example projects for other STM32 boards. As you build your understanding of the microcontroller architecture and the STM32 HAL/LL libraries, you'll find it increasingly easy to port and adapt code, regardless of the specific board in use. This skill will serve you well as you tackle more advanced projects and work with a variety of STM32 hardware in the future.
+
+Some useful links:
+- [Wiki page of STM32](https://wiki.st.com/stm32mcu/wiki/Category:Getting_started_with_STM32_:_STM32_step_by_step)
+- [Blue pill tutorials](https://deepbluembedded.com/)
+
+## Different frameworks that you can use with STM32F767
+You can program your nucleo board using many different languages/frameworks. You can use Arduino framework, LL library, Bare-metal and HAL library, ARM CMSIS. In this course we will use HAL, but it is essential that you know that is available and have an overview why we chose HAL for this course.
+(PS: Not because it was better, but because it is optimal considering the level of configuration adjustments vs ease of learn as well as commonlality)
+
+Note that as long as you include right header files, you can use any library, you can even combine them! However, it is smart to stick only one.
+
+<!-- https://www.yahboom.net/public/upload/upload-html/1701776660/Introduction%20to%20HAL%20library%20and%20LL%20library.html -->
+
+How does Arduino code look like:
+
+```c
+#include<Arduino.h>
+
+void setup() {
+  // initialize digital pin PB0 as an output.
+  pinMode(PB0, OUTPUT);
+}
+// the loop function runs over and over again forever
+void loop() {
+  digitalWrite(PB0, HIGH);   // turn the LED on (HIGH is the voltage level)
+  delay(500);              // wait for a second
+  digitalWrite(PB0, LOW);    // turn the LED off by making the voltage LOW
+  delay(500);              // wait for a second
+}
+```
+
+How does LL-library code look like:
+
+```c
+/* Includes ------------------------------------------------------------------*/
+#include "stm32f7xx_ll_bus.h"   // Required for clock enabling
+#include "stm32f7xx_ll_gpio.h"  // Required for GPIO configuration and control
+#include "stm32f7xx_ll_utils.h" // Required for LL_mDelay function
+
+int main(void)
+{
+   LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
+   LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_PWR);
+   NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
+   SystemClock_Config();
+   MX_GPIO_Init();
+   MX_USART2_UART_Init();
+   while (1)
+   {
+      LL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+      LL_mDelay(1000);
+   }
+}
+```
+
+How Bare-metal look like:
+```c
+/* Define base addresses for relevant peripheral registers */
+#define RCC_BASE            0x40023800UL    // Reset and Clock Control (RCC) base address
+#define GPIOB_BASE          0x40020400UL    // GPIO Port B base address
+
+/* RCC Register Offsets */
+#define RCC_AHB1ENR_OFFSET  0x30UL          // AHB1 Peripheral Clock Enable Register
+
+/* GPIOB Register Offsets */
+#define GPIOB_MODER_OFFSET  0x00UL          // GPIO Port Mode Register
+#define GPIOB_ODR_OFFSET    0x14UL          // GPIO Port Output Data Register
+#define GPIOB_OSPEEDR_OFFSET 0x08UL         // GPIO Port Output Speed Register
+#define GPIOB_PUPDR_OFFSET  0x0CUL          // GPIO Port Pull-up/Pull-down Register
+
+void main(void)
+{
+   RCC_APB2ENR |= RCC_IOPCEN;
+   GPIOC_CRH   &= 0xFF0FFFFF;
+   GPIOC_CRH   |= 0x00200000;
+   while(1)
+   {
+      GPIOC_ODR |=  GPIOC13;
+      for (int i = 0; i < 500000; i++); // arbitrary delay
+      GPIOC_ODR &= ~GPIOC13;
+      for (int i = 0; i < 500000; i++); // arbitrary delay
+   }
+}
+```
+
+How ARM CMSIS look like:
+
+```c
+#define STM32F411xE
+#include "stm32f7xx.h"
+
+void __attribute__((optimize("O0"))) delay (uint32_t time) 
+{    
+   static uint32_t i;
+   for (i=0; i<time; i++) {}    
+}
+
+int main (void) 
+{   
+   RCC->AHB1ENR     |= RCC_AHB1ENR_GPIOCEN; //RCC ON
+   GPIOC->MODER    |= GPIO_MODER_MODER13_0; //mode out
+   GPIOC->OTYPER   = 0;
+   GPIOC->OSPEEDR  = 0;
+
+   while (1) 
+   {
+      GPIOC->ODR ^=   GPIO_ODR_OD13;
+      delay(1000000);
+   }
+}
+```

@@ -16,4 +16,4 @@ taxonomy: markup
 Ethernet TODO
 
 
-
+<!-- https://controllerstech.com/stm32-ethernet-1-connection/ -->

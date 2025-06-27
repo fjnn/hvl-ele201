@@ -15,3 +15,19 @@ taxonomy: markup
 {: .notice--info}
 Peikarar forts. Timing og avbrudd.
 
+
+# CLOCK
+Undeniably *the most important thing* in a digital system. Therefore, it is fundamental to understand the concept of clock, to understand how an embedded system works.
+
+In STM32 microcontrollers, SYSCLK (System Clock) is the main clock source for the entire system, while HCLK (AHB Clock) is a derived clock used by the CPU and AHB bus. SYSCLK can be generated from various sources like HSI, HSE, or PLL, and then HCLK is derived from SYSCLK by a configurable prescaler. This means that HCLK runs at a lower frequency than SYSCLK, and it is used to clock the core and other AHB peripherals. 
+
+
+SYSCLK:
+This is the main clock for the STM32 microcontroller. It's the output of the clock multiplexer and can be sourced from the internal high-speed oscillator (HSI), the external high-speed oscillator (HSE), or the PLL (Phase-Locked Loop). The SYSCLK frequency is often the highest frequency the microcontroller can operate at. 
+HCLK:
+This clock is derived from SYSCLK and is typically used to clock the CPU core, the AHB bus, and some AHB peripherals. The HCLK frequency is often lower than the SYSCLK frequency because it's often divided down from the SYSCLK using a prescaler. This division helps to optimize power consumption and allows different peripherals to operate at different clock speeds. 
+Relationship:
+The SYSCLK is the source for the HCLK. A prescaler, configured in the RCC (Reset and Clock Control) registers, divides the SYSCLK to produce the HCLK. For example, if SYSCLK is 100 MHz and the prescaler is set to divide by 2, then HCLK will be 50 MHz. 
+Usage:
+SYSCLK is used to clock the core and the AHB bus. HCLK is used to clock the CPU core and other AHB peripherals. Some peripherals, like those connected to the APB buses (APB1 and APB2), may have their own dedicated clocks derived from HCLK using additional prescalers. 
+

@@ -16,4 +16,5 @@ taxonomy: markup
 ADC. Lesing av spenninga frå eit potmeter. Lesing av temperatursensor. Lesing av datablad for temperatursensor
 
 
-
+<!--https://embeddedthere.com/stm32-adc-interfacing-with-hal-code-example/-->
+  
