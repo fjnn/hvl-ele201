@@ -147,6 +147,8 @@ Steps:
 5. Create a platformio.ini and Copy the necessary content in it.
 6. Open the project using PlatformIO home page.
 7. Do the necessary changes after `/*USER CODE BEGIN 3*/` in **main.c**.
+8. Build and upload.
+9. Observe the three built-in LEDs.
 
 ## Exercise-2: Toggle an external LED
 Connect an LED by following the circuit diagram below and toggle it in every second.
@@ -163,6 +165,8 @@ Connect an LED by following the circuit diagram below and toggle it in every sec
 7. Create a platformio.ini and Copy the necessary content in it.
 8. Open the project using PlatformIO home page.
 9. Do the necessary changes after `/*USER CODE BEGIN 3*/` in **main.c**.
+10. Build and upload.
+11. Observe the external LED state.
 
 
 
