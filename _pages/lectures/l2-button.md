@@ -29,9 +29,7 @@ pass
 # GPIO and registers
 Getting more familiar with registers and reading datasheet.
 
-Let's look at the block diagram of our microcontroller in the [datasheet](https://www.st.com/resource/en/datasheet/stm32f765zi.pdf). In Figure 2 on page 20, you can see how the pins are connected:
 
-![STM32F7XX pinout diagram]({{ site.baseurl }}/assets/images/pinout.png)
 
 
 

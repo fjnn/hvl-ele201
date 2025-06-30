@@ -167,7 +167,7 @@ Connect an LED by following the circuit diagram below and toggle it in every sec
 
 
 ## Different frameworks that you can use with STM32F767
-You can program your nucleo board using many different languages/frameworks. You can use Arduino framework, LL library, Bare-metal and HAL library, ARM CMSIS. In this course we will use HAL, but it is essential that you know that is available and have an overview why we chose HAL for this course.
+You can program your nucleo board using many different languages/frameworks. You can use Arduino framework, LL library, Bare-metal, HAL library and ARM CMSIS. In this course we will use HAL, but it is essential that you know what is available and have an overview why we chose HAL for this course.
 
 *(Note: We are using HAL not because it is necessarily superior, but because it offers a good balance between ease of learning, flexibility in configuration, and widespread use. This makes it the most practical choice for this course.)*
 
