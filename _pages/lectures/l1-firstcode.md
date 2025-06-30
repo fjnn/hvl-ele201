@@ -23,6 +23,11 @@ Make sure that eveything you needed are installed:
 
 # Start your first STM32F767ZI-Nucleo Project
 
+{: .notice--warning}
+**Warning:** Before you upload the code, make sure your board is properly connected and you have selected the correct board and framework in PlatformIO before uploading code. There are two microUSB ports on the board. One is connected to bootloader, the other is connected to the board's serial I/O. MAKE SURE THAT YOU CONNECT THE USB ON THE BOOTLOADER SIDE.
+
+## Using only PlatformIO
+
 1. Click on the PlatformIO icon in the left sidebar
 2. Click on "PIO Home" in the PlatformIO menu
 3. Click on "New Project"
@@ -42,8 +47,8 @@ Make sure that eveything you needed are installed:
    - `include/` - Header files
    - `platformio.ini` - Project configuration file
 
+Now you can copy the content below in your main.c under the **src** folder.
 
-main.c
 
 ```c
 #include "main.h"
@@ -79,7 +84,9 @@ void SysTick_Handler(void)
 }
 ```
 
-# CubeMX + PlatformIO project
+This code blinks an LED on an STM32 microcontroller using the HAL library. It initializes the HAL system and configures a GPIO pin as an output for the LED. In the main loop, it toggles the LED state every 500 ms using HAL_GPIO_TogglePin and HAL_Delay. The SysTick_Handler updates the HAL tick for timing. The LED_Init function sets up the GPIO pin for the LED. 
+
+## Using CubeMX + PlatformIO
 The code above is simple and easy to write. However, as we progress in the different tasks, it will be very difficult to set all the configurations manually. In old times, embedded system engineers have their "own" libraries for various tasks, LCD setup, ADC initialization, PWM parameters etc. They used to copy or include these piece of codes into their projects as they need. Today, we have a tidier solutions. For our development board, we can use STM32CubeMX, which is a graphical tool that allows a very easy configuration of STM32 microcontrollers and microprocessors. Therefore, we don't need to write the code for every single configuration. We will be using STM32CubeMX *extensively* in this course.
 
 You can watch this video to setup your first blink code using both CubeMX and PlatformIO: [Click here for the video](https://youtu.be/Ty_ekwVimHE).
@@ -114,7 +121,10 @@ We chose STM32F767-Nucleo board for its power and efficiency as well as built-in
 - Reference manual for STM32F767xx [link](https://www.st.com/resource/en/reference_manual/dm00224583-stm32f76xxx-and-stm32f77xxx-advanced-arm-based-32-bit-mcus-stmicroelectronics.pdf)
 - User manual of Nucleo-144 board [link](https://www.st.com/resource/en/user_manual/um1974-stm32-nucleo144-boards-mb1137-stmicroelectronics.pdf)
 - User manual for STM32F7 HAL and low-layer drivers [link](https://www.st.com/resource/en/user_manual/um1905-description-of-stm32f7-hal-and-lowlayer-drivers-stmicroelectronics.pdf)
+- Board pinout [link](https://os.mbed.com/platforms/ST-Nucleo-F767ZI/)
+- Nucleo circuit diagram [link](https://www.st.com/en/evaluation-tools/nucleo-f767zi.html#cad-resources)
 
+![Adder circuit]({{ site.baseurl }}/assets/images/nucleo-circuit.png)
 
 While comprehensive tutorials specifically tailored for the STM32F767-Nucleo board are rare, there are many resources available for a variety of other STM32 development boards, such as the Discovery series, the popular "blue pill," older Nucleo boards, and the L4 series, among others. The good news is that the fundamental concepts of microcontroller programming especially within the STM32 family are largely transferable between different boards. Once you grasp the core ideas, such as pin configuration, peripheral initialization, and the use of the HAL (Hardware Abstraction Layer) or direct register manipulation, adapting code from one STM32 board to another becomes a straightforward process.
 
@@ -122,13 +132,44 @@ For example, tutorials that demonstrate how to blink an LED, set up UART communi
 
 Therefore, don't hesitate to explore tutorials and example projects for other STM32 boards. As you build your understanding of the microcontroller architecture and the STM32 HAL/LL libraries, you'll find it increasingly easy to port and adapt code, regardless of the specific board in use. This skill will serve you well as you tackle more advanced projects and work with a variety of STM32 hardware in the future.
 
-## Some useful links:
+## Some useful links
 - [Wiki page of STM32](https://wiki.st.com/stm32mcu/wiki/Category:Getting_started_with_STM32_:_STM32_step_by_step)
 - [Blue pill tutorials](https://deepbluembedded.com/)
 
+## Exercise-1: Toggle all 3 LEDS
+Turn on all three LEDs one by one, and turn them off afterwards.
+
+Steps:
+1. Look at the reference manual which port the user LEDs are connected.
+2. Start a new STM32CubeMX project. If you select the default mode, the LED assignments will be already done.
+3. Skip clock configurations (for now).
+4. Do the necessary changes in the Project Manager tab and generate the source code.
+5. Create a platformio.ini and Copy the necessary content in it.
+6. Open the project using PlatformIO home page.
+7. Do the necessary changes after `/*USER CODE BEGIN 3*/` in **main.c**.
+
+## Exercise-2: Toggle an external LED
+Connect an LED by following the circuit diagram below and toggle it in every second.
+
+[CIRCUIT TODO]
+
+1. Start a new STM32CubeMX project. 
+2. Change the PB1 state from Reset_state to GPIO_Output.
+3. Right click > Edit user label > *give a descriprive name f.ex: LD_EXT*
+4. Pin Configuration > GPIO > PB1 > GPIO Pull-up/Pull-down: Pull-Down
+![Adder circuit]({{ site.baseurl }}/assets/images/ext_led_pinout.png)
+5. Skip clock configurations (for now).
+6. Do the necessary changes in the Project Manager tab and generate the source code.
+7. Create a platformio.ini and Copy the necessary content in it.
+8. Open the project using PlatformIO home page.
+9. Do the necessary changes after `/*USER CODE BEGIN 3*/` in **main.c**.
+
+
+
 ## Different frameworks that you can use with STM32F767
 You can program your nucleo board using many different languages/frameworks. You can use Arduino framework, LL library, Bare-metal and HAL library, ARM CMSIS. In this course we will use HAL, but it is essential that you know that is available and have an overview why we chose HAL for this course.
-(PS: Not because it was better, but because it is optimal considering the level of configuration adjustments vs ease of learn as well as commonlality)
+
+*(Note: We are using HAL not because it is necessarily superior, but because it offers a good balance between ease of learning, flexibility in configuration, and widespread use. This makes it the most practical choice for this course.)*
 
 {: .notice--info}
 Note that as long as you include right header files, you can use any library, you can even combine them! However, it is smart to stick only one.
@@ -236,6 +277,7 @@ int main (void)
 
 
 # HAL library and registers
+pass
 <!-- https://www.youtube.com/watch?v=Hffw-m9fuxc&ab_channel=MitchDavis
 https://www.youtube.com/watch?v=2zjeDWI9W7M&ab_channel=MikrotronicsAcademy
 https://www.youtube.com/watch?v=txnViYePocg&ab_channel=MitchDavis -->

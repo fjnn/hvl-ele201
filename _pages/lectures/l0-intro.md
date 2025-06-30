@@ -223,6 +223,9 @@ How it was like in microprocessor world in the past? That is this famous **assem
 
 
 **Why assembly language?**
+Assembly language is just a bit more human-friendly version of a machine code. Picture below explains it a bit better ([Source](https://youtu.be/HjneAhCy2N4))
+
+![Adder circuit]({{ site.baseurl }}/assets/images/assembly_adder.png)
 
 * It gives us direct access to machine instructions that we cannot use in high-level languages.
 * It can be the best (only) way to generate efficient code in terms of speed and memory usage.
@@ -232,9 +235,11 @@ How it was like in microprocessor world in the past? That is this famous **assem
 
 ***Personal opinion:** it doesn't worth today, but many disagrees.*
 
-The embedded system is a bottomless well. It is impossible to cover everything in this course - and we don't need to. Embedded system world is a charming nerdy black hole that pulls you inside even more as you are willing to learn more. Therefore we limit have to limit for this course at some point.
+The embedded system is a bottomless well. It is impossible to cover everything in this course - and we don't need to. It is a charming nerdy black hole that pulls you inside even more as you are willing to learn more. Therefore we limit have to limit for this course at some point.
 
 For more: [How do computers read code](https://www.youtube.com/watch?v=QXjU9qTsYCc>) , The Evolution Of CPU Processing Power [Part 1](https://www.youtube.com/watch?v=sK-49uz3lGg&t=315s) [Part 2](https://www.youtube.com/watch?v=kvDBJC_akyg) [Part 3](https://www.youtube.com/watch?v=NTLwMgak3Fk).
+
+
 
 
 References

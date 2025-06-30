@@ -17,3 +17,8 @@ Detaljert om GPIO. Inngang og utgang, push-pull vs open-drain. Pull-up og pull-d
 
 
 Debugging, reading register value using platformIO.
+
+sprintf
+
+binary operations: adding, subtracting, compliment
+Example: binary decoders and MUX/DEMUX.

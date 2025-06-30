@@ -15,6 +15,15 @@ taxonomy: markup
 {: .notice--info}
 Peikarar forts. Timing og avbrudd.
 
+# Register reading
+pass
+
+# Bit masking
+pass
+
+# typedef, struct, union
+pass
+
 
 # CLOCK
 Undeniably *the most important thing* in a digital system. Therefore, it is fundamental to understand the concept of clock, to understand how an embedded system works.
@@ -31,3 +40,11 @@ The SYSCLK is the source for the HCLK. A prescaler, configured in the RCC (Reset
 Usage:
 SYSCLK is used to clock the core and the AHB bus. HCLK is used to clock the CPU core and other AHB peripherals. Some peripherals, like those connected to the APB buses (APB1 and APB2), may have their own dedicated clocks derived from HCLK using additional prescalers. 
 
+# Sprintf?
+
+
+
+# Which timer is used
+Let's look at the block diagram of our microcontroller in the [datasheet](https://www.st.com/resource/en/datasheet/stm32f765zi.pdf). In Figure 2 on page 20, you can see how the pins are connected:
+
+![STM32F7XX pinout diagram]({{ site.baseurl }}/assets/images/pinout.png)

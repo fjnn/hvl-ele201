@@ -25,7 +25,6 @@ pass
 ## Pointers
 pass
 
-## Typedef and structs
 
 # GPIO and registers
 Getting more familiar with registers and reading datasheet.
@@ -51,3 +50,4 @@ https://deepbluembedded.com/stm32-gpio-write-pin-digital-output-lab/ -->
 
 <!-- ## Button debounce
 https://deepbluembedded.com/stm32-button-debounce-code-examples-tutorial/ -->
+<!-- https://howtomechatronics.com/how-it-works/electrical-engineering/schmitt-trigger/ -->
