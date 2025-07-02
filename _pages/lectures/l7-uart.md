@@ -15,7 +15,11 @@ taxonomy: markup
 {: .notice--info}
 UART. Lesing av og skriving til serieporten. Forklaring av baudrate.
 
+# UART
+pass
 
+
+# Exercise: Send data from your board to PC
 ## On the STM32CubeMX
 1. Launch STM32CubeMX.
 2. Start a New Project:
@@ -40,13 +44,14 @@ UART. Lesing av og skriving til serieporten. Forklaring av baudrate.
     - **Parity:** `None`
     - **Stop Bits:** `1`
     - **Data Direction:** `Receive and Transmit`
+    ![UART USART settings]({{ site.baseurl }}/assets/images/uart_usart.png)
 
       **Note:** The UART baud rate you set in CubeMX (e.g., 115200) must match the baud rate you use in your serial terminal (such as PuTTY, Tera Term, or PlatformIO Monitor). If they do not match, you will see garbled or no output.
         You can enable **Global Interrupt** for `USART3 global interrupt` in the **NVIC Settings** tab if you plan to use interrupt-driven UART later, but it's not strictly necessary for this basic example.
 
-  6. Adjust the clock settings as needed for your board (typically, the default settings are sufficient for UART at 115200 baud).
+  6. Adjust the clock settings as needed for your board as show in figure.
+    ![UART clock settings]({{ site.baseurl }}/assets/images/uart_clock.png)
   7. Click **Project > Generate Code** to create your project files.
-    ![UART USART settings]({{ site.baseurl }}/assets/images/uart_usart.png)
   8. Give a good project name and generate code.
 
 
@@ -95,3 +100,6 @@ Also observe the Logic analyzer output:
     HAL_UART_Transmit(&huart3, (uint8_t *)message, strlen(message), HAL_MAX_DELAY);
     ```
  ![ASCII 5]({{ site.baseurl }}/assets/images/uart_ascii_5.png)
+
+# Exercise: Send data between two boards
+pass
