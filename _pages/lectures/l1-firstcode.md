@@ -112,6 +112,9 @@ build_flags =
 {: .notice--info}
 **Note that**  there is a new configuration command in platformio.ini file that you didn't have when you generated the project only using PlatformIO, which is `build_flags`. We need this line because the naming convention in STM32CubeMX is different than PlatformIO. PlatformIO generated projects put the necessary header files (aka files with extension .h) are in the folder named **include** whereas the CubeMX generated projects keep the header files under **Inc**.
 
+{: .notice--info}
+**Note that**  the blink rate is a bit slower than 500ms, right? It is because we haven't configured the clock settings properly and we have lots of pins configured by default even if we don't use. We will fix the blink rate issue later on.
+
 
 
 # Datasheet, reference manual, user manual

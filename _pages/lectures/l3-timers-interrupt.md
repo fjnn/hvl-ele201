@@ -70,3 +70,31 @@ debug_server =
 Let's look at the block diagram of our microcontroller in the [datasheet](https://www.st.com/resource/en/datasheet/stm32f765zi.pdf). In Figure 2 on page 20, you can see how the pins are connected:
 
 ![STM32F7XX pinout diagram]({{ site.baseurl }}/assets/images/pinout.png)
+
+
+# LED blink with correct clock settings
+RCC
+In the previous exercises, we haven't done anything with the clock settings. Our code worked just fine but it is time to stop "default settings". As you remember the blink rate is a bit slower than 500ms, right? It is because we haven't configured the clock settings properly and we have lots of pins configured by default even if we don't use. We will fix the blink rate issue NOW!.
+
+1. Open a new STM32CubeMX project.
+2. Select STM32F767 board, start project, but DO NOT SELECT default mode.
+3. You should see some pins are orange. We want these to be gone, as well:` Pinout (at the top) > Clear pinouts`
+4. Set PB0 as GPIO_Output.
+5. On the left ``System Core > RCC > HSE: Crystal/Ceramic Resonator``
+6. Master Clock Output: Checked.
+7. On the left ``System Core > GPIO > Configuration > PB0 >`` Change user label to `LD1`
+8. Go to Clock Configuration. Set these values:
+ ![Timer Clock]({{ site.baseurl }}/assets/images/timer_clock.png)
+10. Go to Project Manager
+  a. Give descriptive name to your project
+  b. Application structure: Basic
+  c. Toolchain/IDE: STM32CubeIDE (Uncheck "Generate under root" box)
+11. Generate project.
+12. Copy platformio.ini file from your prior projects.
+13. Open the project in PlatformIO.
+14. Add this code after `/*USER CODE BEGIN 3*/` in **main.c**:
+  ```c
+    HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
+    HAL_Delay(500);
+  ```
+15. Build and Upload

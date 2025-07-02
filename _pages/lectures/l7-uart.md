@@ -103,3 +103,6 @@ Also observe the Logic analyzer output:
 
 # Exercise: Send data between two boards
 pass
+
+# Bluetooth exercise
+pass (maybe)
