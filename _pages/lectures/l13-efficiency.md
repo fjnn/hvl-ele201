@@ -40,6 +40,8 @@ pass
 ## What does it really mean that everything consists of transistors?
 We have agreed on that everything is ones and zeros. All the process in a digital system is about moving ones and zeros from one memory, but how electronically are they stored? 
 
+Memory is about how to retain information.
+
 How do transistors run code? 
 <!-- https://www.youtube.com/watch?v=HjneAhCy2N4&t=1s&ab_channel=CoreDumped -->
 How do transistors remember data?

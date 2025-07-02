@@ -42,7 +42,27 @@ The SYSCLK is the source for the HCLK. A prescaler, configured in the RCC (Reset
 Usage:
 SYSCLK is used to clock the core and the AHB bus. HCLK is used to clock the CPU core and other AHB peripherals. Some peripherals, like those connected to the APB buses (APB1 and APB2), may have their own dedicated clocks derived from HCLK using additional prescalers. 
 
-# Sprintf?
+# No prinft, yes debugging
+pass
+
+Activate debugger in platformio.ini file:
+
+```c
+[env:nucleo_f767zi]
+platform = ststm32
+board = nucleo_f767zi
+framework = stm32cube
+upload_protocol = stlink
+debug_tool = stlink
+build_flags =
+    -IInc
+
+; --- Full SWO Configuration ---
+debug_server =
+    ${platformio.packages_dir}/tool-openocd/bin/openocd.exe
+    -f interface/stlink.cfg
+    -f target/stm32f7x.cfg
+```
 
 
 

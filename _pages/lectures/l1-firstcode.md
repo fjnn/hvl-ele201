@@ -124,7 +124,8 @@ We chose STM32F767-Nucleo board for its power and efficiency as well as built-in
 - Board pinout [link](https://os.mbed.com/platforms/ST-Nucleo-F767ZI/)
 - Nucleo circuit diagram [link](https://www.st.com/en/evaluation-tools/nucleo-f767zi.html#cad-resources)
 
-![Adder circuit]({{ site.baseurl }}/assets/images/nucleo-circuit.png)
+![Nucleo circuit]({{ site.baseurl }}/assets/images/nucleo-circuit.png)
+![Board pinout]({{ site.baseurl }}/assets/images/board_pinout.png)
 
 While comprehensive tutorials specifically tailored for the STM32F767-Nucleo board are rare, there are many resources available for a variety of other STM32 development boards, such as the Discovery series, the popular "blue pill," older Nucleo boards, and the L4 series, among others. The good news is that the fundamental concepts of microcontroller programming especially within the STM32 family are largely transferable between different boards. Once you grasp the core ideas, such as pin configuration, peripheral initialization, and the use of the HAL (Hardware Abstraction Layer) or direct register manipulation, adapting code from one STM32 board to another becomes a straightforward process.
 
