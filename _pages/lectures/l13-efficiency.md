@@ -18,10 +18,11 @@ Energieffektivitet. Batteridrift av mikrokontroller. Minnebruk og minneteknologi
 # Efficiency
 In the embedded world, we are not as lucky as the software engineers who work with PCs on an operating system when it comes to efficiency. Surely, as a software designer,  either in the embedded side or operative system side, you *have to* think about efficiency. However, we have quite limitted resources when it comes to 2 things: Memory and Battery.
 
-Planning your algorithm such that you will process the data as fast as possible is also efficiency. We care about it in the embedded world a lot, but today we will focus on the 2 types aspects of efficiency when it comes to embedded systems:
+Planning your algorithm such that you will process the data as fast as possible is also efficiency. We care about it in the embedded world a lot, but today we will focus on the 2+1 types aspects of efficiency when it comes to embedded systems:
 
 1. **Memory efficiency**: Don't use the memory unless you *really* need it.
 2. **Power efficiency**: Make things go to sleep unless you use it.
+3. (+1) **Component efficiency**: Explore simpler alternatives - you might not even need a microcontroller sometimes. A simple timer circuit can solve your problems. Cheaper and faster.
 
 To understand intuitively how to be efficient in these two, we should first understand how they work.
 
@@ -67,6 +68,12 @@ On an operating system, you might not worry about how memory is allocated. There
 
 Anyways, let's cut the praise and continue the actual business.
 
+
+# Alternatives to microcontrollers
+I am not going to tell "you can use PLC or FPGA instead". You know that they also capable of processing pretty much all types of data that a simple microcontroller can.
+
+What I highlight here is whether you need a processor component. For instance, you can use a JK flip flop for a toggle task. You can use a NE555 timer for simple interrupt tasks. Those are much cheaper and simpler. In a big company, you try to save even 1 cent whenever you can.
+<!-- https://www.youtube.com/watch?v=PVNAPWUxZ0g&ab_channel=CoreDumped -->
 
 
 

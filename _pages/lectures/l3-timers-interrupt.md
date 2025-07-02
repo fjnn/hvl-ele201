@@ -28,6 +28,8 @@ pass
 # CLOCK
 Undeniably *the most important thing* in a digital system. Therefore, it is fundamental to understand the concept of clock, to understand how an embedded system works.
 
+Why clock is everything?[video](https://www.youtube.com/watch?v=PVNAPWUxZ0g&ab_channel=CoreDumped)
+
 In STM32 microcontrollers, SYSCLK (System Clock) is the main clock source for the entire system, while HCLK (AHB Clock) is a derived clock used by the CPU and AHB bus. SYSCLK can be generated from various sources like HSI, HSE, or PLL, and then HCLK is derived from SYSCLK by a configurable prescaler. This means that HCLK runs at a lower frequency than SYSCLK, and it is used to clock the core and other AHB peripherals. 
 
 
