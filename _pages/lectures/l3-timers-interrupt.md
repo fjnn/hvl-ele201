@@ -21,48 +21,74 @@ pass
 # Bit masking
 pass
 
-# typedef, struct, union
-pass
 
 
-# CLOCK
-Undeniably *the most important thing* in a digital system. Therefore, it is fundamental to understand the concept of clock, to understand how an embedded system works.
+# Clock
+Undeniably *the most important thing* in a digital system. Therefore, it is fundamental to understand the concept of clock, to understand how an embedded system works. A clock is the heartbeat of your controller. Imagine your microcontroller as a tiny orchestra. For every instrument (or peripheral) to play in perfect harmony, they need a conductor keeping the beat. That conductor is the clock.
 
-Why clock is everything?[video](https://www.youtube.com/watch?v=PVNAPWUxZ0g&ab_channel=CoreDumped)
+The clock is essentially an oscillating signal that synchronizes all operations within the microcontroller. Every instruction, every data transfer, every peripheral action happens in sync with this clock signal. The faster the clock, generally, the faster your microcontroller can execute instructions.
+
+{: .notice--info} Nice to watch: [Why clock is everything?](https://www.youtube.com/watch?v=PVNAPWUxZ0g&ab_channel=CoreDumped)
+
+On the STM32F767, we have a sophisticated clock system. It's not just one clock; there's a whole hierarchy:
+
+- HSE (High-Speed External): This is typically an external crystal oscillator. It's very accurate and stable, making it a good choice for the main system clock.
+- HSI (High-Speed Internal): An internal RC oscillator. It's less accurate than an external crystal but is ready to use immediately upon power-up, making it useful for initial startup or applications where high precision isn't critical.
+- LSE (Low-Speed External): Another external crystal, usually for real-time clock (RTC) applications due to its low frequency and power consumption.
+- LSI (Low-Speed Internal): An internal RC oscillator, primarily used for the independent watchdog and the RTC in low-power modes.
+- PLL (Phase-Locked Loop): This is a frequency multiplier. We often use the PLL to take a relatively low-frequency source (like HSE or HSI) and multiply it up to a much higher frequency to drive the main system clock (SYSCLK) and various peripherals.
 
 In STM32 microcontrollers, SYSCLK (System Clock) is the main clock source for the entire system, while HCLK (AHB Clock) is a derived clock used by the CPU and AHB bus. SYSCLK can be generated from various sources like HSI, HSE, or PLL, and then HCLK is derived from SYSCLK by a configurable prescaler. This means that HCLK runs at a lower frequency than SYSCLK, and it is used to clock the core and other AHB peripherals. 
 
+**SYSCLK (System Clock):**
+It is the main clock for the STM32 microcontroller. It's source can be selected from:
+  - Internal high-speed oscillator (**HSI**)
+  - External high-speed oscillator (**HSE**)
+  - **PLL** (Phase-Locked Loop)
 
-SYSCLK:
-This is the main clock for the STM32 microcontroller. It's the output of the clock multiplexer and can be sourced from the internal high-speed oscillator (HSI), the external high-speed oscillator (HSE), or the PLL (Phase-Locked Loop). The SYSCLK frequency is often the highest frequency the microcontroller can operate at. 
-HCLK:
-This clock is derived from SYSCLK and is typically used to clock the CPU core, the AHB bus, and some AHB peripherals. The HCLK frequency is often lower than the SYSCLK frequency because it's often divided down from the SYSCLK using a prescaler. This division helps to optimize power consumption and allows different peripherals to operate at different clock speeds. 
-Relationship:
-The SYSCLK is the source for the HCLK. A prescaler, configured in the RCC (Reset and Clock Control) registers, divides the SYSCLK to produce the HCLK. For example, if SYSCLK is 100 MHz and the prescaler is set to divide by 2, then HCLK will be 50 MHz. 
-Usage:
-SYSCLK is used to clock the core and the AHB bus. HCLK is used to clock the CPU core and other AHB peripherals. Some peripherals, like those connected to the APB buses (APB1 and APB2), may have their own dedicated clocks derived from HCLK using additional prescalers. 
+Usually the highest frequency at which the microcontroller operates.
 
-# No prinft, yes debugging
-pass
+**HCLK (AHB Clock):**
+It is a clock derived from SYSCLK. Clocks the CPU core, the AHB bus, and some AHB peripherals. Its frequency is typically lower than SYSCLK, as it is divided down using a **prescaler**. This helps:
+  - Optimize power consumption
+  - Allow different peripherals to run at different speeds
+If **SYSCLK** = 100 MHz and the prescaler is set to divide by 2, then **HCLK** = 50 MHz.
 
-Activate debugger in platformio.ini file:
+- **APB1 (Advanced Peripheral Bus 1):** This bus typically runs at a lower frequency than HCLK, set by a prescaler. It connects to peripherals like timers (TIM2–TIM7, TIM12–TIM14), USART2/3, I2C1/2/3, SPI2/3, and others. The lower frequency helps reduce power consumption for slower peripherals.
+- **APB2 (Advanced Peripheral Bus 2):** This bus can run at the same frequency as HCLK or at a divided rate, depending on the prescaler setting. It connects to higher-speed peripherals such as TIM1, TIM8, USART1/6, SPI1, and the ADCs.
 
-```c
-[env:nucleo_f767zi]
-platform = ststm32
-board = nucleo_f767zi
-framework = stm32cube
-upload_protocol = stlink
-debug_tool = stlink
-build_flags =
-    -IInc
+The prescaler values for APB1 and APB2 are set in the RCC (Reset and Clock Control) registers. For example, if HCLK is 100 MHz and the APB1 prescaler is set to 4, then the APB1 clock will be 25 MHz. This means that all peripherals on APB1 will operate at 25 MHz.
 
-; --- Full SWO Configuration ---
-debug_server =
-    ${platformio.packages_dir}/tool-openocd/bin/openocd.exe
-    -f interface/stlink.cfg
-    -f target/stm32f7x.cfg
-```
+# Timer
+
+While the clock provides the constant beat, timers are like sophisticated stopwatches or alarm clocks within your microcontroller. They are specialized peripherals designed to:
+- Measure time intervals (e.g., how long did that button press last?)
+- Generate delays (e.g., wait for 500 milliseconds before turning on an LED)
+- Trigger events at regular intervals (e.g., blink an LED every second)
+- Generate PWM (Pulse Width Modulation) signals (e.g., control the brightness of an LED or the speed of a motor)
+- Count external events (e.g., how many times was that sensor tripped?)
+
+The STM32F767 is equipped with a rich set of timers:
+- General-purpose timers (TIMx): very versatile, used for most timing applications
+- Advanced-control timers (TIMx): offer more advanced features, particularly useful for motor control and power conversion
+- Basic timers (TIMx): simpler timers, often used for basic time-base generation
+- SysTick timer: a 24-bit down-counter built into the ARM Cortex-M core, often used for operating system ticks or simple delays
+
+**Why does this matter?**
+- Some peripherals (especially timers) have their own internal logic to compensate for the prescaler. For example, if a timer is on APB1 and the prescaler is not 1, the timer's input clock is automatically doubled to maintain correct timing. This is important when configuring timer frequencies and baud rates for communication peripherals.
+- When you configure peripherals in STM32CubeMX or in your code, you must be aware of which bus they are attached to and what their actual clock frequency is. This ensures that your timing calculations (for delays, baud rates, PWM, etc.) are accurate.
+
+**Summary Table:**
+
+| Bus   | Typical Peripherals           | Derived From | Prescaler | Example Frequency |
+|-------|------------------------------|--------------|-----------|------------------|
+| AHB   | CPU, DMA, RAM, Flash         | SYSCLK       | Yes       | 216 MHz          |
+| APB1  | TIM2–TIM7, USART2/3, I2C1/2  | HCLK         | Yes       | 54 MHz           |
+| APB2  | TIM1/8, USART1/6, ADCs       | HCLK         | Yes       | 108 MHz          |
+
+Always check the reference manual and your clock configuration to know exactly how fast each peripheral is running!
+
+
 
 
 
@@ -98,3 +124,7 @@ In the previous exercises, we haven't done anything with the clock settings. Our
     HAL_Delay(500);
   ```
 15. Build and Upload
+
+{: .notice--info}
+**Notice:** IDK why the default clock configuration doesn't work properly. Let me know if you find out the error.
+
