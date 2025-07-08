@@ -144,7 +144,8 @@ Therefore, don't hesitate to explore tutorials and example projects for other ST
 Turn on all three LEDs one by one, and turn them off afterwards.
 
 Steps:
-1. Look at the reference manual which port the user LEDs are connected.
+1. The name of the 3 pins are:
+   1. LD1, LD2 and LD3
 2. Start a new STM32CubeMX project. If you select the default mode, the LED assignments will be already done.
 3. Skip clock configurations (for now).
 4. Do the necessary changes in the Project Manager tab and generate the source code.
@@ -154,24 +155,8 @@ Steps:
 8. Build and upload.
 9. Observe the three built-in LEDs.
 
-## Exercise-2: Toggle an external LED
-Connect an LED by following the circuit diagram below and toggle it in every second.
-
-[CIRCUIT TODO]
-
-1. Start a new STM32CubeMX project. 
-2. Change the PB1 state from Reset_state to GPIO_Output.
-3. Right click > Edit user label > *give a descriprive name f.ex: LD_EXT*
-4. Pin Configuration > GPIO > PB1 > GPIO Pull-up/Pull-down: Pull-Down
-![Adder circuit]({{ site.baseurl }}/assets/images/ext_led_pinout.png)
-5. Skip clock configurations (for now).
-6. Do the necessary changes in the Project Manager tab and generate the source code.
-7. Create a platformio.ini and Copy the necessary content in it.
-8. Open the project using PlatformIO home page.
-9. Do the necessary changes after `/*USER CODE BEGIN 3*/` in **main.c**.
-10. Build and upload.
-11. Observe the external LED state.
-
+## Exercise-2: Change blink rate
+Adjust your code such that your LED blinks faster and slower.
 
 
 ## Different frameworks that you can use with STM32F767

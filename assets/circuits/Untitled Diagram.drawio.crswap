@@ -1,0 +1,22 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36" version="26.1.0">
+  <diagram name="Page-1" id="4eHRl4CPB6I6Uv9056Hh">
+    <mxGraphModel dx="1313" dy="773" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="BI4gxbUmeSCvFVr5s4Jp-15" value="PB1" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0;dx=10;notch=0;fontSize=25;" vertex="1" parent="1">
+          <mxGeometry x="400" y="160" width="170" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="BI4gxbUmeSCvFVr5s4Jp-16" value="3.3V" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0;dx=10;notch=0;fontSize=25;" vertex="1" parent="1">
+          <mxGeometry x="400" y="230" width="170" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="BI4gxbUmeSCvFVr5s4Jp-17" value="GND" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0;dx=10;notch=0;fontSize=25;" vertex="1" parent="1">
+          <mxGeometry x="400" y="300" width="170" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="BI4gxbUmeSCvFVr5s4Jp-18" value="PB1" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0;dx=10;notch=0;fontSize=25;" vertex="1" parent="1">
+          <mxGeometry x="400" y="90" width="170" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
