@@ -18,7 +18,14 @@ Detaljert om GPIO. Inngang og utgang, push-pull vs open-drain. Pull-up og pull-d
 
 Debugging, reading register value using platformIO.
 
-sprintf
+debouncing, oscilloscope.
 
 binary operations: adding, subtracting, compliment
 Example: binary decoders and MUX/DEMUX.
+
+
+Any port, any pin, SOS exercise with button.
+
+Tilt button example
+
+Look at some digital sensors, IR count maybe?

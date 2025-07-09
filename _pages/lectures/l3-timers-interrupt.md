@@ -92,14 +92,22 @@ Always check the reference manual and your clock configuration to know exactly h
 
 
 
-# Which timer is used
+# Which timer to use?
 Let's look at the block diagram of our microcontroller in the [datasheet](https://www.st.com/resource/en/datasheet/stm32f765zi.pdf). In Figure 2 on page 20, you can see how the pins are connected:
 
 ![STM32F7XX pinout diagram]({{ site.baseurl }}/assets/images/pinout.png)
 
+Section 3.23 explains which timers are available in our microcontroller. Let's have a look at Table 6.
+
+![Timer table]({{site.baseurl}}/assets/images/timer-table.png)
+
+**Overall Structure:**
+There are three main timer types:
+- Advanced-control: These are the most feature-rich timers, typically used for complex applications like motor control, power conversion, and high-resolution PWM.
+- General purpose: These are versatile timers suitable for a wide range of applications, including general-purpose timing, PWM generation, input capture, output compare, and more.
+- Basic: These are simpler timers, primarily used for basic timing and delay generation.
 
 # LED blink with correct clock settings
-RCC
 In the previous exercises, we haven't done anything with the clock settings. Our code worked just fine but it is time to stop "default settings". As you remember the blink rate is a bit slower than 500ms, right? It is because we haven't configured the clock settings properly and we have lots of pins configured by default even if we don't use. We will fix the blink rate issue NOW!.
 
 1. Open a new STM32CubeMX project.
@@ -107,6 +115,7 @@ In the previous exercises, we haven't done anything with the clock settings. Our
 3. You should see some pins are orange. We want these to be gone, as well:` Pinout (at the top) > Clear pinouts`
 4. Set PB0 as GPIO_Output.
 5. On the left ``System Core > RCC > HSE: Crystal/Ceramic Resonator``
+  (RCC: Reset and Clock Control)
 6. Master Clock Output: Checked.
 7. On the left ``System Core > GPIO > Configuration > PB0 >`` Change user label to `LD1`
 8. Go to Clock Configuration. Set these values:
@@ -128,3 +137,15 @@ In the previous exercises, we haven't done anything with the clock settings. Our
 {: .notice--info}
 **Notice:** IDK why the default clock configuration doesn't work properly. Let me know if you find out the error.
 
+# LED blink with timers
+So far we *manually* changed the value of out GPIO pin to blink the LED. Although `HAL_GPIO_WritePin()` function has a very low CPU cycle, it is still a task for our microprocessor. We can blink our LED only using timers.
+
+For this example, we will use TIM3, which is a general-purpose timer. It can count upto 16-bits, both upwards and downwards. It does not intervene with any other features that we need in this project.
+
+{: .notice--info}
+DO NOT MESS WITH SYSTICK TIMER! It sources the main delay. In some cases one might want to use it, especially real-time operations, but then, don't forget to assign your timebase source, as well.
+![TIM3 block diagram]({{ site.baseurl }}/assets/images/systick-change.png)
+
+
+{: .notice--info}
+Any timers current value can be found in TIMx_CNT register.

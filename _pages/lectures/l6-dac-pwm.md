@@ -15,6 +15,7 @@ taxonomy: markup
 {: .notice--info}
 Skriving av analog verdi til utgang ved hjelp av DAC og PWM.
 
+<!-- https://www.youtube.com/watch?v=zkrVHIcLGww&ab_channel=EmbeddedSystemsandDeepLearning -->
 
 
 
