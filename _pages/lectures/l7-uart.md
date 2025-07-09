@@ -49,10 +49,11 @@ pass
       **Note:** The UART baud rate you set in CubeMX (e.g., 115200) must match the baud rate you use in your serial terminal (such as PuTTY, Tera Term, or PlatformIO Monitor). If they do not match, you will see garbled or no output.
         You can enable **Global Interrupt** for `USART3 global interrupt` in the **NVIC Settings** tab if you plan to use interrupt-driven UART later, but it's not strictly necessary for this basic example.
 
-  6. Adjust the clock settings as needed for your board as show in figure.
+  6. To be able to see the serial port output without changing any hardware, using the same USB port we use for uploading code, we must select the right pin numbers. As you activate USART3, the default Tx and Rx pins are PB10 and PB11. However, **ST-Link uses PD8 and PD9** for this. Just click on the pin PB10 as you press Ctrl button, and drag this pin on top of the PD8. Afterwards, do the same for PB11->PD9.
+  7. Adjust the clock settings as needed for your board as show in figure.
     ![UART clock settings]({{ site.baseurl }}/assets/images/uart_clock.png)
-  7. Click **Project > Generate Code** to create your project files.
-  8. Give a good project name and generate code.
+  8. Click **Project > Generate Code** to create your project files.
+  9. Give a good project name and generate code.
 
 
 ## On the Platformio
