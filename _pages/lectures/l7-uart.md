@@ -20,6 +20,7 @@ pass
 
 
 # Exercise: Send data from your board to PC
+<!-- usart_test2.ioc -->
 ## On the STM32CubeMX
 1. Launch STM32CubeMX.
 2. Start a New Project:
@@ -32,31 +33,29 @@ pass
 4. Go to **System Core > RCC**: Set **HSE** to **Crystal/Ceramic Resonator**. 
   ![UART RCC settings]({{ site.baseurl }}/assets/images/uart_rcc.png)
 
-5.Configure UART (USART3) 
+5. Configure UART (USART3) 
   - In the **Pinout & Configuration** tab:
     - Navigate to **Connectivity > USART3**.
     - Set **Mode** to `Asynchronous`.
   - In the **Configuration** tab for USART3, set the following **Parameter Settings**:
     - **Baud Rate:** `115200`  
       (This must match your `platformio.ini` and code.)
-    - **Word Length:** `8 Bits (No Parity)`  
-      (You may also use `8 Bits (+ Parity)`, but for this example, `8 Bits (No Parity)` is fine.)
+    - **Word Length:** `8 Bits (Including parity)`  
     - **Parity:** `None`
     - **Stop Bits:** `1`
     - **Data Direction:** `Receive and Transmit`
-    ![UART USART settings]({{ site.baseurl }}/assets/images/uart_usart.png)
+        ![UART USART settings]({{ site.baseurl }}/assets/images/uart_usart.png)
+6. To be able to see the serial port output without changing any hardware, using the same USB port we use for uploading code, we must select the right pin numbers. As you activate USART3, the default Tx and Rx pins are PB10 and PB11. However, **ST-Link uses PD8 and PD9** for this. Just click on the pin PB10 as you press Ctrl button, and drag this pin on top of the PD8. Afterwards, do the same for PB11->PD9.
+7. Adjust the clock settings as needed for your board as show in figure.
+  ![UART clock settings]({{ site.baseurl }}/assets/images/uart_clock.png)
+8. Click **Project > Generate Code** to create your project files.
+9. Give a good project name and generate code.
 
-      **Note:** The UART baud rate you set in CubeMX (e.g., 115200) must match the baud rate you use in your serial terminal (such as PuTTY, Tera Term, or PlatformIO Monitor). If they do not match, you will see garbled or no output.
-        You can enable **Global Interrupt** for `USART3 global interrupt` in the **NVIC Settings** tab if you plan to use interrupt-driven UART later, but it's not strictly necessary for this basic example.
 
-  6. To be able to see the serial port output without changing any hardware, using the same USB port we use for uploading code, we must select the right pin numbers. As you activate USART3, the default Tx and Rx pins are PB10 and PB11. However, **ST-Link uses PD8 and PD9** for this. Just click on the pin PB10 as you press Ctrl button, and drag this pin on top of the PD8. Afterwards, do the same for PB11->PD9.
-  7. Adjust the clock settings as needed for your board as show in figure.
-    ![UART clock settings]({{ site.baseurl }}/assets/images/uart_clock.png)
-  8. Click **Project > Generate Code** to create your project files.
-  9. Give a good project name and generate code.
-
+  
 
 ## On the Platformio
+
 1. Inside `platformio.ini`:
 ```c
 [env:nucleo_f767zi]
@@ -70,14 +69,22 @@ debug_tool = stlink
 monitor_speed = 115200 ; Set the baud rate for the serial monitor
 ```
 
-2. Inside `main.c`, between `/* USER CODE BEGIN 3 */`
+    {: .notice--warning} 
+      The UART baud rate you set in CubeMX (e.g., 115200) must match the baud rate you use in your serial terminal (such as PuTTY, Tera Term, or PlatformIO Monitor). If they do not match, you will see garbled or no output.
+
+2. Inside `main.c`, between `/* USER CODE BEGIN Includes */`
+    ```c
+    #include<string.h>
+    ```
+
+3. Inside `main.c`, between `/* USER CODE BEGIN 3 */`
 ```c
     uint8_t value = 5;
     HAL_UART_Transmit(&huart3, &value, 1, HAL_MAX_DELAY); 
     HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
     HAL_Delay(500);
 ```
-Also observe the Logic analyzer output:
+Also observe the Logic analyzer output on Rx pin on CN5 connector:
  ![500ms delay]({{ site.baseurl }}/assets/images/logic_analy5.png)
 
 
