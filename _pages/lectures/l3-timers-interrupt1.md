@@ -184,7 +184,7 @@ DO NOT MESS WITH SYSTICK TIMER! It sources the main delay. In some cases one mig
 <img src="{{ site.baseurl }}/assets/images/systick-change.png" alt="TIM3 block diagram" width="400"/>
 <!-- https://www.youtube.com/watch?v=VfbW6nfG4kw&ab_channel=DigiKey -->
 
-
+<!-- timer_led_blink.ioc -->
 1. Open a new STM32CubeMX project.
 2. Select STM32F767 board, start project, but DO NOT SELECT default mode.
 3. You should see some pins are orange. We want these to be gone, as well:` Pinout (at the top) > Clear pinouts`

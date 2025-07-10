@@ -13,9 +13,20 @@ taxonomy: markup
 ---
 
 
-{: .notice--info}
+<!-- {: .notice--info}
 Blinking av lysdiode med HAL-biblioteket. main() funksjonen. Variablar og datatypar. Forskjellen på ein (const) variabel og #define. If-setningar, løkker. Enkel bruk av printf() for skriving til UART.
-(Vise at ein kan velje Arduino rammeverk på Platformio)
+(Vise at ein kan velje Arduino rammeverk på Platformio) -->
+
+{: .notice--info}
+**Formål:**  
+Etter å ha gått gjennom denne sida, skal du kunne:
+
+{: .notice--info}
+- Setje opp eit nytt STM32F767ZI-Nucleo-prosjekt ved hjelp av PlatformIO og STM32Cube-rammeverket.
+- Identifisere hovudkomponentane i eit PlatformIO-prosjekt (slik som `src/`, `include/` og `platformio.ini`).
+- Skrive og laste opp eit enkelt program som blinkar ein LED ved hjelp av HAL-biblioteket, og vise bruk av GPIO og delay-funksjonar i ein innebygd samanheng.
+
+
 
 Make sure that eveything you needed are installed: 
 [Installation Guide]({{ site.baseurl }}/lectures/l0-install)

@@ -12,8 +12,20 @@ sidebar:
 taxonomy: markup
 ---
 
+<!-- {: .notice--info}
+Lesing av trykknapp og skriving til LED. Header-filar og eksterne bibliotek. typedef og struct. Introduksjon til peikerar. Deklarasjon og definisjon av funksjonar, parameter og returtype. -->
+
 {: .notice--info}
-Lesing av trykknapp og skriving til LED. Header-filar og eksterne bibliotek. typedef og struct. Introduksjon til peikerar. Deklarasjon og definisjon av funksjonar, parameter og returtype.
+**Formål:** Etter å ha gått gjennom denne sida, skal du kunne:
+
+{: .notice--info} 
+*   Forstå kva GPIO (General Purpose Input/Output) er og kva rolle det har i mikrokontroller-applikasjonar.
+*   Lese inn frå ein trykknapp og styre ein LED ved hjelp av GPIO-pinnar.
+*   Skilje mellom header-filer og eksterne bibliotek i C-prosjekt.
+*   Bruke `typedef` og `struct` for å definere eigne datatypar.
+*   Forstå det grunnleggande om peikarar og korleis dei blir brukt i C.
+*   Deklarere og definere funksjonar, inkludert forståing av parameter og returtypar.
+
 
 # Some important C concepts
 ## Function definitions

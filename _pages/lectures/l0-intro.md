@@ -13,6 +13,18 @@ taxonomy: markup
 ---
 
 
+{: .notice--info}
+**Formål:**  
+Etter å ha gått gjennom denne sida, skal du kunne:
+
+{: .notice--info}
+- Forklare kva ein mikrokontroller er og kva rolle han har i innebygde system.
+- Identifisere dei viktigaste eigenskapane og namngjevingskonvensjonane til STM32F767ZI Nucleo-144-brettet.
+- Forstå skilnaden mellom mikrokontrollerar, mikroprosessorar og innebygde system.
+- Identifisere hovudkomponentane i eit innebygd system.
+- Forstå korleis ein kompilator fungerer.
+
+
 # About STM32F767ZI Nucleo-144 Board
 STMicroelectronics is a global hightech company based in Geneve,Switzerland. STM32 is a family of 32-bit microcontrollers which we will discuss the details of in a short while. Those STM32 mictocintrollers can have varipus ARM processor core such as Cortex-M0, Cortex-M0+, Cortex-M3, Cortex-M4 etc. You have probably heard about *Samsung uses ARM Cortex cores in their Exynos processors.* Similarly, iPhone uses ARM processors, which are based on ARM architecture. We will learn about different microcontroller architectures later on. For now, just be convinced that you are about the learn one of the most used microcontroller architecture used in todays technology, from PCs to smartphones, robot vacuum cleaners to various home appliances.
 

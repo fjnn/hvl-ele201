@@ -80,5 +80,6 @@ What I highlight here is whether you need a processor component. For instance, y
 
 
 
-
+# Power efficiency
+Talk about ALU, clock cycle etc.
 
