@@ -115,7 +115,19 @@ build_flags =
 {: .notice--info}
 **Note that**  the blink rate is a bit slower than 500ms, right? It is because we haven't configured the clock settings properly and we have lots of pins configured by default even if we don't use. We will fix the blink rate issue later on.
 
+## PlatformIO Buttons
+For those who are a bit familiar with VSCode, the buttons might be easier. However, PlatformIO extension offers a lot. Let's have a quick look at them.
+![Platformio intro]({{site.baseurl}}/assets/images/platformio_intro.png)
 
+1. Here you can see your files; source codes and headers.
+2. You can build your code, upload it from the selections on the arrow icon. You can also open serial monitor with the socket icon.
+3. This opens the home of PlatformIO. The left tab will show up (instead of your file explorer) when you click it.
+4. Another option to build, upload and clean your code. Cleaning in compiled languages mean to delete your built files for you to build again. Sometimes it is very useful!
+5. To open a new project.
+6. For debugging
+7. Alternatively you can change the view into debugging view, which I like better.
+8. Those are the buttons we use the most. From left to right, 1-PIO Home, 2-build, 3-upload, 4-clean, 5-test(we don't use it in this course), 6-open serial monitor, 7-open new terminal, 8-which project you are running right now. The last one (Default(project_name)) is so important to keep an eye on. Especially when you switch between projects in the explorer, it is so easy to forget about swithching platformIO setup, too. Make sure that you are working on the right project.
+9. How many terminals you have opened. Please remember to close unused terminals sometimes...
 
 # Datasheet, reference manual, user manual
 
