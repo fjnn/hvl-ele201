@@ -26,14 +26,6 @@ If you look at `stm32f7xx_hal_gpio.h` or other HAL library headers, you will see
 Even though HAL is written in C, you can use it in C++ projects as well. C++ is fully compatible with C, but you need to tell the C++ compiler that the HAL functions have C linkage. This is done using the `extern "C"` keyword in your code. For example, in your C++ source file:
 
 
-## Register reading 
-pass
-
-## Bit masking
-pass
-
-
-
 # Clock
 Undeniably *the most important thing* in a digital system. Therefore, it is fundamental to understand the concept of clock, to understand how an embedded system works. A clock is the heartbeat of your controller. Imagine your microcontroller as a tiny orchestra. For every instrument (or peripheral) to play in perfect harmony, they need a conductor keeping the beat. That conductor is the clock.
 

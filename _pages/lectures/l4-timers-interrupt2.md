@@ -187,16 +187,83 @@ GPIOA->ODR ^= (1 << 0);
 ```
 
 # External Interrupts
+TODO
 definition
 Debugging, reading register value using platformIO.
+https://ele102.gitlab.io/automatisering-frde/ele102-frde/texts/Lessons/L7_timer_interrupt.html#external-interrupts
 
 # Edge detection
-pass
+When reading a digital input it is often desirable to determine the instant it is changing, and how it is changing. I.e. whether it is a rising, or a falling edge. There are several approaches we can take to solve this problem, but in this section we focus on solutions involving the sampling of the digital input. I.e. we are continuously checking the state of the digital input with a certain time interval. This approach is fine for slowly changing signals such as push buttons. Actually it is not only fine, it is often the recommended way to deal with slow signals.
+
+In order to detect the rising edge of a digital input by the sampling method, we continuously compare the current state of the input, to the state at the previous iteration (the previous time we checked it). If the previous value was low, and the current value is high, we have a rising edge. The same logic can be applied it the reverse direction to detect the falling edge.
+![rising_and_falling_edge]({{site.baseurl}}/assets/images/rising_and_falling_edge.png)
+
+The following pseudocode illustrates the typical way one detects a rising edge in software:
+
+```c
+if(button_state != button_previous_state){
+    // Code to execute when the state of the button changes can be placed here
+
+    if(button_state == PRESSED){
+        // Code to execute on rising edge can be placed here
+        // I.e. state has both changed and is high, this can
+        // only happen if the state used to be low, and just
+        // became high. In other words it must be a rising edge.l
+    }
+}
+```
+
+# Understanding Pull-up/ Pull-down resistors
+Let’s think about what happens when you press a button.
+
+![switchFailure]({{site.baseurl}}/assets/images/switchFailure.png)
+
+As already discussed in terms of push buttons, when using digital inputs it is often required to add resistors to either pull up, or pull down the potential at the input. This is required because the input impedance of the digital input is very high, and the state may change randomly if it is not forced to a known state. For our convenience the STM32CubeMX allows us easy configuration. Alternatively you may add external resistors.
+
+The size of the resistors is not critical, but it should not be selected on random either. A to small resistor may cause excessive current, while a to large resistor will defeat the purpose of trying to pull towards a given potential. I.e. the resistor value should be far away from the value of the input impedance. In practice a 10k resistor is often used, but both 5k and 50k will also work.
+
+![Pull-up-and-Pull-down-Resistor]({{site.baseurl}}/assets/images/Pull-up-and-Pull-down-Resistor.png)
+Source: [circuitdigest.com](https://circuitdigest.com/tutorial/pull-up-and-pull-down-resistor)
+
+The following figure depicts the connection of two push buttons to the Arduino (another development board but the concept is the same). For the leftmost button the resistor in the figure pulls the input low, and the push button is connected in such a way that it can pull it up. For the button to the right the configuration is opposite.
+
+![arduino_two_pb_pull_up_pull_down_bb]({{site.baseurl}}/assets/images/arduino_two_pb_pull_up_pull_down_bb.png)
+
+It is very important to realize that the default state of a digital input depends on whether the input is pulled up, or pulled down. If the input is pulled down by a resistor, and the push button pulls it up, then a push on the button will make the input logical HIGH. If on the other hand the input is pulled up by a resistor, and a push on the button pulls it down, pushing the button will make the input logical LOW
+
+It is not important which of the two you choose, because it is easy to invert the state in software. But it is important to realize the difference, in order to know when you have to invert it in software.
+
 
 # Debouncing
-debouncing, oscilloscope.
+A mechanical switch will often generate spurious open/close transitions in a short period after it has been activated. It is a risk that these spurious transitions are interpreted as multiple signals from the switch. In order to avoid these problems some form of debounce remedy should be applied. This could be a hardware solution, a software solution or a combination of the two.
 
-# Pull-up vs Pull-down
+The graph to the right in the following figure illustrates the spurious changes in voltage level at the node between the resistor and the switch.
+
+![switch_bounce]({{site.baseurl}}/assets/images/switch_bounce.png)
+
+## Exercise: Bounce problem with external interrupts
+TODO
+Check timer register
+
+## Hardware debounce methods
+Hardware solutions include analog filters using resistors and capacitors, or digital circuits as illustrated in the following figure:
+
+![Shift-register_and_a_nand_gate_as_a_debouncer]({{site.baseurl}}/assets/images/Shift-register_and_a_nand_gate_as_a_debouncer.png)
+Source: [e-thinkers.com](https://www.e-tinkers.com/2021/05/the-simplest-button-debounce-solution/)
+
+The button state is clocked in to the d flip-flops, and only when all the flip-flops have registered the same state the output will change. This solution is typically found in programmable logic, but it is rather expensive to realise by using discrete components.
+
+A really efficient and reliable debounce circuit can be built bu using a SR-latch in conjunction with a SPDT switch. In one position the switch is connected to the set input, while the other position of the switch is connected to reset input of the latch. That way you do not have to consider the time you expect the bouncing to last, or the duration between each of the spurious voltage pulses.
+
+## Software debounce methods
+If a software debounce solution is desired, one possibility is to check the button state twice, within a short time windows. I.e. check, delay, check again. The following source code listing illustrates one possibility:
+
+Note that the variables are declared static inside the loop() function. This ensures that the value is persistent between the invocation of the function. Alternatively they could be declared globally, i.e. outside of any function definition.
+
+## Exercise: Software debouncing
+```c
+TODO
+```
 
 # ISR
 NVIC
