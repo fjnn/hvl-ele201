@@ -1,7 +1,7 @@
 ---
 layout: single
-title: "Lecture 2 - Button read"
-permalink: /lectures/l2-button
+title: "Lecture 2 - GPIO (General Purpose Input Output)"
+permalink: /lectures/l2-gpio
 toc: true
 breadcrumbs: true
 sidebar:
@@ -252,7 +252,6 @@ Output:
 (Source: [geeksforgeeks.org](https://www.geeksforgeeks.org/c/c-pointers/))
 
 
-### Size of a pointer
 The size of a pointer in C depends on the architecture (bit system) of the machine, **not the data type it points to**.
 
 - On a 32-bit system, all pointers typically occupy 4 bytes.
@@ -321,7 +320,7 @@ Input can be a button or a sensor, output can be a LED, a motor or another actua
 Now time to get more familiar with registers and reading datasheet.
 
 
-## Exercise (Home/Lab): User button - LED control
+## Exercise: User button - LED control
 1. Look at the [user manual](https://www.st.com/resource/en/user_manual/um1974-stm32-nucleo144-boards-mb1137-stmicroelectronics.pdf) of the board to determine which port the user LEDs are connected.
 2. Start a new STM32CubeMX project. If you select the default mode, the LED assignments will be already done.
 3. Skip clock configurations (for now).
@@ -352,7 +351,7 @@ So now, please check the pin numbers and ports for user LEDs and buttons from th
 
 ![main.h pinout example]({{ site.baseurl }}/assets/images/mainh.png)
 
-## Exercise: Button counter
+## Exercise(Home/Lab): Button counter
 As you see, there are three LEDs and one user button on out STM32F767 Nucleo board. In this exercise, I want you to make a binary counter. Every time you press the button, the counter should change the LEDs accordingly.
 
 ![Binary counter example]({{ site.baseurl }}/assets/images/binary-counter.png)

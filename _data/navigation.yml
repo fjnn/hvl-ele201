@@ -11,12 +11,12 @@ lectures:
     url: /lectures/l0-intro
   - title: "L1 - First Code"
     url: /lectures/l1-firstcode
-  - title: "L2 - Button"
-    url: /lectures/l2-button
-  - title: "L3 - Timers and Interrupt"
-    url: /lectures/l3-timers-interrupt
-  - title: "L4 - GPIO"
-    url: /lectures/l4-gpio
+  - title: "L2 - GPIO"
+    url: /lectures/l2-gpio
+  - title: "L3 - Timers and Interrupt 1"
+    url: /lectures/l3-timers-interrupt1
+  - title: "L4 - Timers and Interrupt 2"
+    url: /lectures/l4-timers-interrupt2
   - title: "L5 - ADC"
     url: /lectures/l5-adc
   - title: "L6 - DAC and PWM"

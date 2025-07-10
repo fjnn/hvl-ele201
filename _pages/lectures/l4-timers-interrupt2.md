@@ -1,7 +1,7 @@
 ---
 layout: single
-title: "Lecture 4 - GPIO (Genereal Purpose Input/Output"
-permalink: /lectures/l4-gpio
+title: "Lecture 4 - Timers and Interrupt 2"
+permalink: /lectures/l4-timers-interrupt2
 toc: true
 breadcrumbs: true
 sidebar:
@@ -29,3 +29,5 @@ Any port, any pin, SOS exercise with button.
 Tilt button example
 
 Look at some digital sensors, IR count maybe?
+
+External interrupts are here
