@@ -15,10 +15,21 @@ taxonomy: markup
 {: .notice--info}
 Peikarar forts. Timing og avbrudd.
 
-# Register reading
+# Some important C concepts
+
+In this course, we are using the **HAL (Hardware Abstraction Layer) libraries** provided by STMicroelectronics for STM32 microcontrollers. They are high-level, user-friendly interface to the hardware features of the microcontroller. Instead of writing low-level code to directly manipulate hardware registers (which can be error-prone and difficult to maintain), the HAL provides functions that abstract away the hardware details. This makes your code more portable, easier to read, and less dependent on the specific microcontroller model. They are often sufficient for many of the projets but sometimes, we might need small modifications on our registers. 
+
+If you look at `stm32f7xx_hal_gpio.h` or other HAL library headers, you will see that all HAL functions are intrinsically do some register manipulations. 
+![HAL_GPIO_TogglePin]({{site.baseurl}}/assets/images/HAL_GPIO_TogglePin.png)
+
+{: .notice--info}
+Even though HAL is written in C, you can use it in C++ projects as well. C++ is fully compatible with C, but you need to tell the C++ compiler that the HAL functions have C linkage. This is done using the `extern "C"` keyword in your code. For example, in your C++ source file:
+
+
+## Register reading 
 pass
 
-# Bit masking
+## Bit masking
 pass
 
 
@@ -92,7 +103,7 @@ Always check the reference manual and your clock configuration to know exactly h
 
 
 
-# Which timer to use?
+## Which timer to use?
 Let's look at the block diagram of our microcontroller in the [datasheet](https://www.st.com/resource/en/datasheet/stm32f765zi.pdf). In Figure 2 on page 20, you can see how the pins are connected:
 
 ![STM32F7XX pinout diagram]({{ site.baseurl }}/assets/images/pinout.png)
@@ -107,7 +118,8 @@ There are three main timer types:
 - General purpose: These are versatile timers suitable for a wide range of applications, including general-purpose timing, PWM generation, input capture, output compare, and more.
 - Basic: These are simpler timers, primarily used for basic timing and delay generation.
 
-# LED blink with correct clock settings
+# Exercise: LED blink with correct clock settings
+<!-- blink_rate_test.ioc -->
 In the previous exercises, we haven't done anything with the clock settings. Our code worked just fine but it is time to stop "default settings". As you remember the blink rate is a bit slower than 500ms, right? It is because we haven't configured the clock settings properly and we have lots of pins configured by default even if we don't use. We will fix the blink rate issue NOW!.
 
 1. Open a new STM32CubeMX project.
@@ -116,10 +128,10 @@ In the previous exercises, we haven't done anything with the clock settings. Our
 4. Set PB0 as GPIO_Output.
 5. On the left ``System Core > RCC > HSE: Crystal/Ceramic Resonator``
   (RCC: Reset and Clock Control)
-6. Master Clock Output: Checked.
+6. Master Clock Output: Checked. *(only for a possible debugging)*
 7. On the left ``System Core > GPIO > Configuration > PB0 >`` Change user label to `LD1`
 8. Go to Clock Configuration. Set these values:
- ![Timer Clock]({{ site.baseurl }}/assets/images/timer_clock.png)
+ ![Timer Prescalars]({{site.baseurl}}/assets/images/timer_led_blink_clock108.png)
 10. Go to Project Manager
   a. Give descriptive name to your project
   b. Application structure: Basic
@@ -137,15 +149,195 @@ In the previous exercises, we haven't done anything with the clock settings. Our
 {: .notice--info}
 **Notice:** IDK why the default clock configuration doesn't work properly. Let me know if you find out the error.
 
-# LED blink with timers
-So far we *manually* changed the value of out GPIO pin to blink the LED. Although `HAL_GPIO_WritePin()` function has a very low CPU cycle, it is still a task for our microprocessor. We can blink our LED only using timers.
+<!-- So far we *manually* changed the value of out GPIO pin to blink the LED. Although `HAL_GPIO_WritePin()` function has a very low CPU cycle, it is still a task for our microprocessor. We can blink our LED only using timers without our CPU wasting cycles for that. -->
+# Interrupts
+In the previous LED blink example, we have done *nothing* between toggles. We put a simple delay with `HAL_Delay(500);`, which literally halted the system for an entire 500 milliseconds! Do you realize how wasteful it is? Well, in such a simple project, it is not an issue. We have some *500 ms* to spend, however, it might not be the case. Therefore, we need to figure our can we do this timed tasks more efficiently.
 
-For this example, we will use TIM3, which is a general-purpose timer. It can count upto 16-bits, both upwards and downwards. It does not intervene with any other features that we need in this project.
+Similarly, in the button-LED example, we checked the button state in every loop. It is called "polling". However, we did it so many unnecessary times. Couldn't it be better if our button *gives us a heads up* if something changes on its side.
 
-{: .notice--info}
+Welcome to the world of INTERRUPTS!
+A interrupt is some form of external signal that interrupts the main process. When an interrupt occurs the current execution state of the main process is stored, before a different process (the ISR, or interrupt service routine) takes over. When the interrupt service routine has completed, execution control is returned to the main process.
+
+Interrupts are useful for making the system responsive to external events while avoiding constant polling of the possible external event sources. Sometimes the ISR may simply set a flag, or publish a message in a event queue such that the main process can take appropriate action when it is ready to do so.
+
+Polling:
+![check phone]({{site.baseurl}}/assets/images/check-phone.gif)
+
+Interrupt:
+![check phone]({{site.baseurl}}/assets/images/phone-rings.gif)
+
+An interrupt is a signal that tells the processor to immediately stop what it is doing and handle some high priority processing. That high priority processing is called an Interrupt Handler. An interrupt handler is like any other void function. If you write one and attach it to an interrupt, it will get called whenever that interrupt signal is triggered. When you return from the interrupt handler, the processor goes back to continue what it was doing before.
+
+Interrupts can be generated from several sources:
+
+1. Timer interrupts from one of the microcontrollers timers.
+2. External Interrupts from a change in state of one of the external interrupt pins.
+3. Pin-change interrupts from a change in state of any one of a group of pins.
+
+# Exercise: LED blink with timers
+In this exercise we willt toggle the LED *when the time is right.* rather than *waiting for the rignt time to come*
+
+For this example, we will use **TIM2**, which is a general-purpose timer. It can count upto 32-bits, both upwards and downwards. It does not intervene with any other features that we need in this project.
+
+{: .notice--warning}
 DO NOT MESS WITH SYSTICK TIMER! It sources the main delay. In some cases one might want to use it, especially real-time operations, but then, don't forget to assign your timebase source, as well.
-![TIM3 block diagram]({{ site.baseurl }}/assets/images/systick-change.png)
+<img src="{{ site.baseurl }}/assets/images/systick-change.png" alt="TIM3 block diagram" width="400"/>
+<!-- https://www.youtube.com/watch?v=VfbW6nfG4kw&ab_channel=DigiKey -->
 
+
+1. Open a new STM32CubeMX project.
+2. Select STM32F767 board, start project, but DO NOT SELECT default mode.
+3. You should see some pins are orange. We want these to be gone, as well:` Pinout (at the top) > Clear pinouts`
+4. Set PB0 as GPIO_Output.
+5. On the left ``System Core > RCC > HSE: Crystal/Ceramic Resonator``
+  (RCC: Reset and Clock Control)
+6. Master Clock Output: Checked. *(only for a possible debugging)*
+7. Find PB0 on the chip, and set it to GPIO_Output. And then, right click on the pin > edit user label
+  - Make sure the settings look like this so far on the left ``System Core > GPIO > Configuration > PB0 >``
+  ![GPIO Settings]({{site.baseurl}}/assets/images/timer_blink.png)
+8. on the left ``Timers > TIM2 > Clock source -> Internal clock `` and in Parameter settings `Prescalar -> 108-1`
+8. Go to Clock Configuration. Set these values:
+ ![Timer Prescalars]({{site.baseurl}}/assets/images/timer_led_blink_clock.png)
+10. Go to Project Manager
+  a. Give descriptive name to your project
+  b. Application structure: Basic
+  c. Toolchain/IDE: STM32CubeIDE (Uncheck "Generate under root" box)
+11. Generate project.
+12. Create a platformio.ini file and copy this:
+    ```c
+    [env:nucleo_f767zi]
+    platform = ststm32
+    board = nucleo_f767zi
+    framework = stm32cube
+    build_flags = 
+    -IInc
+    upload_protocol = stlink
+    debug_tool = stlink
+    debug_build_flags = -O0 -g -ggdb
+    ```
+13. Open the project in PlatformIO.
+14. Add this code after `/* USER CODE BEGIN 1 */` in **main.c**:
+  ```c
+  volatile uint32_t timer_val;
+  ```
+14. Add this code after `/* USER CODE BEGIN 2 */` in **main.c**:
+  ```c
+  // Start timer
+  HAL_TIM_Base_Start(&htim2);
+
+  // Get current time (microseconds)
+  timer_val = __HAL_TIM_GET_COUNTER(&htim2);
+  ```
+14. Add this code after `/* USER CODE BEGIN 3 */` in **main.c**:
+  ```c
+  if (__HAL_TIM_GET_COUNTER(&htim2) - timer_val >= 100000)
+    {
+      HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
+      timer_val = __HAL_TIM_GET_COUNTER(&htim2);
+    }
+  ```
+15. Build and Upload
+
+
+
+# Timer modes explanations
+As you might have realized, timers have various purposes, and therefore, they are used extensively! By setting the timer into correct mode, the majority of your task will be done. Here you will find what those modes are and when to use them.
+### Slave modes:
+  A timer operating in a slave mode does not simply count on its own. Instead, its behavior (starting, stopping, resetting, or operating as an external clock) is dictated by an external trigger signal, which comes from a "Trigger Source" (as shown in the line below "Slave Mode").
+
+  ![Slave Modes]({{site.baseurl}}/assets/images/slave-modes.png)
+
+  - Disable: The timer is not operating in any slave mode. It functions independently, based solely on its internal clock source and its own configuration (e.g., counting up continuously, generating PWM, etc.). It does not respond to external triggers as a slave. We use it for basic timer operations where no external synchronization or control is needed.
+  - External Clock Mode 1: The timer's internal counter is clocked by an external signal provided via a specific timer input pin (often referred to as TIx, where x is the channel number). Each active edge of the external signal (e.g., rising edge) increments (or decrements) the timer's counter. The internal clock (from the APB bus) is effectively ignored for counting. We use it to use the timer as an event counter, where we want to count pulses or events from an external source (e.g., a sensor, a quadrature encoder, a frequency meter).
+  - Reset Mode: When the selected trigger signal occurs, the timer's internal counter (CNT) is immediately reset to 0. It then continues counting from 0. We use it to synchronize the start of the timer's counting period with an external event. For example, resetting a timer on the start of a new frame in a communication protocol, or resetting multiple timers simultaneously with a single trigger.
+  - Gated Mode: The timer's counter only increments (or decrements) when the selected trigger signal is active (e.g., high or low, depending on configuration). When the trigger signal is inactive, the counter pauses and holds its current value. We use it to measure the duration of an external signal, or to gate the timer's operation based on an enable/disable signal from another peripheral. For example, counting pulses only when a specific enable signal is present.
+  - Trigger Mode: The timer starts counting when the selected trigger signal occurs. Once started, it continues counting independently until it's explicitly stopped or reset by software, or it reaches its auto-reload value. It only reacts to the first trigger, or subsequent triggers only after it has stopped. We use it to initiate a timing sequence based on an external event. For example, starting a delay timer when a button is pressed, or beginning a measurement period when a sensor goes active.
+  - Combined Reset Trigger Mode: This is a combination of Reset Mode and Trigger Mode, often found on advanced timers. We will not do anything with these timers in this course. It is often used when you want to both reset and start (or restart) the timer's counting sequence on a single trigger event.
+
+### Channel modes:
+  It is about how that particular channel will behave on this timer. A channel refers to an independent, configurable sub-unit within a single timer peripheral. Think of a timer as a multi-lane highway, and each channel as a separate lane that can handle its own specific traffic (timing-related operations).
+  ![Channel Modes]({{site.baseurl}}/assets/images/channel-modes.png)
+  - **Disable**: Completely deactivates the specific channel.
+  - **Input Capture direct mode**: Configures the channel for Input Capture (IC). In "direct mode," the timer directly captures the value of its internal counter when an event (e.g., a rising edge, falling edge, or both) occurs on the associated input pin. The captured value is stored in the channel's Capture/Compare Register (CCR). We use this mode for measuring the period, frequency, or pulse width of an external signal that is directly connected to the timer input pin. This is the most common Input Capture setup.
+  - **Input Capture indirect mode**: Also configures for Input Capture, but in an "indirect mode." This typically means that one channel is configured as the active input, and another channel is configured to capture based on the same input signal but with a different trigger. This allows for measuring both high and low pulse durations or the period using a single input signal and two channels. Not as often used.
+  - **Input Capture triggered by TRC**: This is another variation of Input Capture where the capture event is not directly tied to a specific input pin, but rather to an internal trigger event (TRC stands for Trigger Controller). This allows the timer to capture its counter value when an event occurs from another internal peripheral (e.g., a trigger output from another timer, an ADC conversion complete event, etc.). We use this mode for advanced synchronization scenarios where the timer needs to timestamp an event that is generated by another part of the microcontroller, rather than an external pin.
+  - **Output Compare No Output**: Configures the channel for Output Compare (OC) mode, but without directly affecting an external output pin. When the counter matches the channel's CCR value, an internal event is generated (e.g., an interrupt, or a DMA request), but no change occurs on the physical output pin associated with that channel. We use this mode when we need a precise internal timing event or trigger without driving an external pin. For example, to trigger an ADC conversion at a specific time, or to schedule a software task.
+  - **Output Compare CH1**: Configures the channel for Output Compare (OC) mode, and critically, it will use the settings of Channel1 for its output behavior. This implies a scenario where multiple channels might be linked or synchronized to Channel1's settings or its output. This option might be available if channels can be grouped or if a channel's output can be driven based on another channel's comparison. Note: This specific phrasing is a bit unusual; typically, you'd configure a channel to directly produce an output based on its own CCR. It could suggest a slave mode where this channel mirrors or is controlled by Channel1's output compare event, or it might be a simplified selection for an initial configuration to use CH1 settings. It is not as often used. Sometimes in specific synchronization or linked-channel scenarios defined by the STM32's timer architecture.
+  - **PWM Generation No Output**: Configures the channel for Pulse Width Modulation (PWM) generation, but similar to "Output Compare No Output," it does not drive an external pin. The PWM signal is generated internally (based on the timer's counter and the channel's CCR value), but its effect is only on internal events (interrupts, DMA). Next mode is more often used compared to this one.
+  - **PWM Generation CH1**: Configures the channel for PWM generation. We will learn more about PWM in [L6 DAC and PWM](https://fjnn.github.io/hvl-ele201/lectures/l6-dac-pwm) later on. We use this mode when we want to generate a *fake analog output* for example to control a DC motor, changing the brightness of an LED etc.
 
 {: .notice--info}
 Any timers current value can be found in TIMx_CNT register.
+
+## Exercise (ADVANCED): Measure time and print
+<!-- internal_timer_uart2.ioc -->
+In this exercise we will learn how to measure the time of events and print the elapsed time on the terminal. In fact, this exercise will make more sense after Lecture-7 since we are using serial print. However, we can give a try to set up UART without going into details yet.
+
+
+1. Create a new project without using the default mode.
+2. On the left, go to `System Core > RCC > HSE: Crystal/Ceramic Resonator`.
+3. Set `TIM2 > Clock source > Internal clock` so that we use the HCLK. Also change the prescaler in the configurations. Set it to 108 - 1 as shown in the figure below.  
+   ![timer-prescalar.png]({{site.baseurl}}/assets/images/timer-prescalar.png)
+4. Go to `Connectivity > USART3 > Mode > Asynchronous`.  
+   - In this exercise, we will print something on the screen. Therefore, we use UART for only visualization. We will learn more about it later in [Lecture 7 - UART: Universal Asynchronous Read and Write](https://fjnn.github.io/hvl-ele201/lectures/l7-uart).
+5. Replace PB10->PD8 and PB11->PD9 by dragging the pin while holding Ctrl.
+6. Make sure the clock configurations look like this:  
+   ![timer-uart-clock.png]({{site.baseurl}}/assets/images/timer-uart-clock.png)
+7. Give a good name to your project, do the necessary project settings and generate the code.
+8. Create a `platformio.ini` file in your project and paste the following content in it.
+    ```c
+    [env:nucleo_f767zi]
+    platform = ststm32
+    board = nucleo_f767zi
+    framework = stm32cube
+    build_flags = 
+      -IInc
+    upload_protocol = stlink
+    debug_tool = stlink
+    debug_build_flags = -O0 -g -ggdb
+    monitor_speed = 115200
+    ```
+9. Paste this code after `/* USER CODE BEGIN Includes */`
+    ```c
+    #include<string.h> // for strlen()
+    #include<stdio.h> // for sprintf()
+    ```
+10. Paste this code after `/* USER CODE BEGIN 1 */`
+    ```c
+    char uart_buf[50];
+    int uart_buf_len;
+    uint16_t timer_val;
+    ```
+11. Paste this code after  `/* USER CODE BEGIN 2 */`
+    ````c
+    // Initial text on the screen
+    uart_buf_len = sprintf(uart_buf, "Timer Test\r\n");
+    HAL_UART_Transmit(&huart3, (uint8_t *)uart_buf, uart_buf_len, 100);
+
+    // Start timer
+    HAL_TIM_Base_Start(&htim2);
+    ````
+12. Paste this code after  `/* USER CODE BEGIN 3 */`
+    ```c
+    // Get current time (microseconds)
+    timer_val = __HAL_TIM_GET_COUNTER(&htim16);
+
+    // Wait for 50 ms
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+    HAL_Delay(50);
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+
+    // Get time elapsed
+    timer_val = __HAL_TIM_GET_COUNTER(&htim16) - timer_val;
+
+    // Show elapsed time
+    uart_buf_len = sprintf(uart_buf, "%u us\r\n", timer_val); // unfortunately there is no str() func. in C.
+    HAL_UART_Transmit(&huart2, (uint8_t *)uart_buf, uart_buf_len, 100);
+
+    // Wait again so we don't flood the Serial terminal
+    HAL_Delay(1000);
+    ```
+
+
+{: .notice--info}
+This exercise is taken from [www.digikey.com](https://www.digikey.com/en/maker/projects/getting-started-with-stm32-timers-and-timer-interrupts/d08e6493cefa486fb1e79c43c0b08cc6). Check it out if you want to learn more in depth. However, pay attention that the board is different than the one we use.

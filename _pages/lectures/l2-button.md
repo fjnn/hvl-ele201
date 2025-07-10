@@ -370,7 +370,7 @@ You can have a look at the positions of the PB1 and PA4 on the [user manual](htt
 
 
 ## Exercise-1: Toggle an external LED
-
+<!-- ext_led_blink_3006.ioc -->
 1. Start a new STM32CubeMX project. 
 2. Change the PB1 state from Reset_state to GPIO_Output.
 3. Right click > Edit user label > *give a descriprive name f.ex: EXT_LED*
@@ -424,6 +424,7 @@ Choose the next standard resistor value above your calculation (e.g., 100 Ω) to
 **Notice:** For high power LED’s you should also make sure that the power dissipated in the resistor does nod exceed the ratings of the resistor. For very high power applications a simple current limiting resistor is not suitable, and you should instead use power electronics. This however is a entire field of engineering on it’s own, and way outside the scope of what we will be covering here.
 
 ## Exercise-2: Toggle an external LED with external button
+<!-- ext_btn_led.ioc -->
 You may think that “just to connect a button, what can it go wrong?” but unfortunately when it comes to push buttons, a common beginner mistake root from connecting the button wrong. For now, as a rule of thumb, keep in mind these two figures and check these:
 ![Correct button wiring]({{ site.baseurl }}/assets/images/arduino_button_correct.png)
 ![Incorrect button wiring]({{ site.baseurl }}/assets/images/arduino_button_fail.png)
