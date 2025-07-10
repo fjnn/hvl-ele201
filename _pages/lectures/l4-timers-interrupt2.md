@@ -31,3 +31,6 @@ Tilt button example
 Look at some digital sensors, IR count maybe?
 
 External interrupts are here
+
+# Exercise (Home/Lab): Tilt sensor with LED blink
+Make a project that your where you will blink two LEDs. One green one red. Additionally you will have a tilt sensor. As the project stays horizontal, a only green LED will blink at 2 Hz. As the project tilted, the only red LED will blink at 5 Hz.

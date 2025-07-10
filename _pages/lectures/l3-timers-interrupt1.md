@@ -12,8 +12,8 @@ sidebar:
 taxonomy: markup
 ---
 
-{: .notice--info}
-Peikarar forts. Timing og avbrudd.
+<!-- {: .notice--info}
+Peikarar forts. Timing og avbrudd. -->
 
 # Some important C concepts
 
@@ -195,9 +195,9 @@ DO NOT MESS WITH SYSTICK TIMER! It sources the main delay. In some cases one mig
 7. Find PB0 on the chip, and set it to GPIO_Output. And then, right click on the pin > edit user label
   - Make sure the settings look like this so far on the left ``System Core > GPIO > Configuration > PB0 >``
   ![GPIO Settings]({{site.baseurl}}/assets/images/timer_blink.png)
-8. on the left ``Timers > TIM2 > Clock source -> Internal clock `` and in Parameter settings `Prescalar -> 108-1`
-8. Go to Clock Configuration. Set these values:
- ![Timer Prescalars]({{site.baseurl}}/assets/images/timer_led_blink_clock.png)
+8. On the left ``Timers > TIM2 > Clock source -> Internal clock `` and in Parameter settings `Prescalar -> 108-1`
+9. Go to Clock Configuration. Set these values:
+ ![Timer Prescalars]({{site.baseurl}}/assets/images/timer_led_blink_clock108.png)
 10. Go to Project Manager
   a. Give descriptive name to your project
   b. Application structure: Basic
@@ -218,17 +218,22 @@ DO NOT MESS WITH SYSTICK TIMER! It sources the main delay. In some cases one mig
 13. Open the project in PlatformIO.
 14. Add this code after `/* USER CODE BEGIN 1 */` in **main.c**:
   ```c
+  // volatile keyword is very important!
+  // it is not the MCU but a timer responsible in changing this variable
+  // So your compiler optimizes this variable out
+  // thinking that it is unused. Yeah, pretty stupid.
   volatile uint32_t timer_val;
   ```
-14. Add this code after `/* USER CODE BEGIN 2 */` in **main.c**:
-  ```c
-  // Start timer
-  HAL_TIM_Base_Start(&htim2);
 
-  // Get current time (microseconds)
-  timer_val = __HAL_TIM_GET_COUNTER(&htim2);
-  ```
-14. Add this code after `/* USER CODE BEGIN 3 */` in **main.c**:
+15. Add this code after `/* USER CODE BEGIN 2 */` in **main.c**:
+    ```c
+    // Start timer
+    HAL_TIM_Base_Start(&htim2);
+
+    // Get current time (microseconds)
+    timer_val = __HAL_TIM_GET_COUNTER(&htim2);
+    ```
+16. Add this code after `/* USER CODE BEGIN 3 */` in **main.c**:
   ```c
   if (__HAL_TIM_GET_COUNTER(&htim2) - timer_val >= 100000)
     {
@@ -236,11 +241,63 @@ DO NOT MESS WITH SYSTICK TIMER! It sources the main delay. In some cases one mig
       timer_val = __HAL_TIM_GET_COUNTER(&htim2);
     }
   ```
-15. Build and Upload
+17. Build and Upload
 
 
+# Timer calculations
+As you realized, we wrote down some numbers like 108 Hz for HCLK, 108-1 for prescalar, `(__HAL_TIM_GET_COUNTER(&htim2) - timer_val >= 100000)` in our code, but how can we decide what to write? How can we calculate them? Let's break down the essential components for accurate timer configurations.
 
-# Timer modes explanations
+## Timer Frequency Calculation
+Note that HCLK is our main clock. It means that this clock will ignite other busses like APB (Advanced Perpheral Bus) to set PCLKs (Peripheral Clocks). Look at the clock configuration on CubeMX. By setting it to 108 MHz, our main clock generates $$108\times 10^6$$ ticks every second!
+
+Each timer has an internal counter that increments based on a clock source. The rate at which this counter increments is the "timer tick frequency." The timer's input clock is first divided by the Prescaler and then used to increment the counter.
+
+The relationship between HCLK and PCLK is like this:
+ $$PCLKx = \dfrac{HCLK}{APBx\_Prescaler}$$
+
+which means that if you set your HCLK = 108 Mhz, and AHBx Prescalar to /2, then your peripheral clock will work at half speed of your main clock.
+
+## Prescalar
+
+A Prescaler Value (PSC) is a 16-bit or 32-bit register value. The timer's input clock is divided by (PSC+1) before it increments the counter.
+  - Example: If PSC = 107, the division factor is (107+1)=108.
+
+Each timer has its own prescalar. This is what we adjusted in timer configurations. We sat it 108-1. We could have set it 107 directly but writing like is a bit more obvious how we come up there.
+
+Based on the datasheet TIM2 is connected to ABP1:
+  ![Slave Modes]({{site.baseurl}}/assets/images/apb1-tim2.png)
+
+We can see that we sat APB1 Timer clocks to 108 Mhz.
+
+With ``Prescaler = 108 - 1 = 107``, the timer clock frequency will be:
+
+ $$108,000,000 Hz / (107 + 1) = 108,000,000 Hz / 108 = 1,000,000 Hz$$.
+
+This means each tick of the counter is $$1 / 1,000,000 Hz = 1 us$$.
+
+Our condition if ``(__HAL_TIM_GET_COUNTER(&htim2) - timer_val >= 100000)`` checks for 100,000 timer ticks.
+
+Therefore, the delay will be 100000 ticks * 1 us/tick = 100000 us = 100 milliseconds. The LED will toggle every 100ms, so a full blink cycle (on and off) will be 200ms. We can see that by checking the positive side of LD1 on our logic analyzer.
+![Slave Modes]({{site.baseurl}}/assets/images/timer_led_blink_logic.png)
+
+## Timer overload
+So, we know that our timer counter has a limited capacity. The counter value is stored in a 32-bits register. It is obvious (at least I hope) that after the register ``0xFF``, it will restart counting from ``0x00`` again. The highest bit (33th bit) will overflow and we will lose it *forever*.
+
+Then the question: what is the maximum time that we can measure with this timer?
+
+  $$2^32 - 1 = 4,294,967,295$$
+
+and each tick was calculated 1 us, so converting to Larger Units (for better understanding):
+
+- **Milliseconds (ms):** 4,294,967,295 µs ÷ 1,000 µs/ms = 4,294,967.295 ms
+- **Seconds (s):** 4,294,967.295 ms ÷ 1,000 ms/s = 4,294.967295 s
+- **Minutes (min):** 4,294.967295 s ÷ 60 s/min ≈ 71.58 minutes
+- **Hours (h):** 71.58 min ÷ 60 min/h ≈ 1.19 hours
+
+Therefore, we need to choose a different prescalar if we want to measure longer time.
+
+
+# Timer modes
 As you might have realized, timers have various purposes, and therefore, they are used extensively! By setting the timer into correct mode, the majority of your task will be done. Here you will find what those modes are and when to use them.
 ### Slave modes:
   A timer operating in a slave mode does not simply count on its own. Instead, its behavior (starting, stopping, resetting, or operating as an external clock) is dictated by an external trigger signal, which comes from a "Trigger Source" (as shown in the line below "Slave Mode").
@@ -269,7 +326,7 @@ As you might have realized, timers have various purposes, and therefore, they ar
 {: .notice--info}
 Any timers current value can be found in TIMx_CNT register.
 
-## Exercise (ADVANCED): Measure time and print
+## Exercise (Home/Lab): Measure time and print
 <!-- internal_timer_uart2.ioc -->
 In this exercise we will learn how to measure the time of events and print the elapsed time on the terminal. In fact, this exercise will make more sense after Lecture-7 since we are using serial print. However, we can give a try to set up UART without going into details yet.
 
