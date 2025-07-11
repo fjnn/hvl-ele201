@@ -78,6 +78,29 @@ What I highlight here is whether you need a processor component. For instance, y
 <!-- https://www.youtube.com/watch?v=PVNAPWUxZ0g&ab_channel=CoreDumped -->
 
 
+## Where is main.c
+
+the main.c file, after it's compiled and linked, absolutely ends up stored in the Flash memory of a microcontroller.
+
+Here's the breakdown of why and how:
+
+Source Code (.c files): Your main.c file (and all other .c and .h files) are human-readable text files. They are stored on your development computer's hard drive.
+
+Compilation: When you build your project, a compiler (like GCC for ARM) converts your .c files into machine code (object files, typically .o or .obj). This machine code is specific instructions that the microcontroller's CPU can understand.
+
+Linking: A linker then takes all these object files, along with any necessary library files (like the STM32 HAL library, CMSIS, etc.), and combines them into a single executable file. This executable file contains:
+
+Program Code (Instructions): The actual machine instructions derived from your main.c and other source files.
+
+Initialized Data: Global and static variables that have an initial value (e.g., int x = 10;).
+
+Read-Only Data: Constants, string literals, etc.
+
+Flash Memory (Non-Volatile Storage): Microcontrollers use Flash memory (also known as Program Flash or Code Flash) as their primary non-volatile storage for the program. "Non-volatile" means it retains its contents even when power is removed. This is crucial because you want your microcontroller to execute your program as soon as it powers on.
+
+Programming/Flashing: When you "flash" or "program" the microcontroller (e.g., using an ST-Link debugger, J-Link, or a programmer in your IDE like STM32CubeIDE), you are essentially transferring this executable file from your development computer and writing it into the microcontroller's internal Flash memory.
+
+Execution: When the microcontroller powers up or is reset, its CPU's program counter is typically initialized to the start of the Flash memory where your program's reset handler is located. The CPU then fetches instructions directly from Flash memory and executes them.
 
 
 # Power efficiency

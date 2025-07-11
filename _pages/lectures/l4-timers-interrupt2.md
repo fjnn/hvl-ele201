@@ -192,6 +192,9 @@ definition
 Debugging, reading register value using platformIO.
 https://ele102.gitlab.io/automatisering-frde/ele102-frde/texts/Lessons/L7_timer_interrupt.html#external-interrupts
 
+Interrupts are in the core of our PCs. All keyboard press, mouse input etc, are all handled with exceptions. See this website for more:
+https://www.cs.emory.edu/~cheung/Courses/355/Syllabus/6-io/0-External/interupt.html
+
 # Edge detection
 When reading a digital input it is often desirable to determine the instant it is changing, and how it is changing. I.e. whether it is a rising, or a falling edge. There are several approaches we can take to solve this problem, but in this section we focus on solutions involving the sampling of the digital input. I.e. we are continuously checking the state of the digital input with a certain time interval. This approach is fine for slowly changing signals such as push buttons. Actually it is not only fine, it is often the recommended way to deal with slow signals.
 
@@ -234,6 +237,75 @@ It is very important to realize that the default state of a digital input depend
 It is not important which of the two you choose, because it is easy to invert the state in software. But it is important to realize the difference, in order to know when you have to invert it in software.
 
 
+# Exercise: Bounce problem with external interrupts
+<!-- ext_interrupt_test.ioc but software debounce implemented -->
+1. Open a new STM32CubeMX project.
+1. Select STM32F767 board, start project, but DO NOT SELECT default mode.
+1. You should see some pins are orange. We want these to be gone, as well:` Pinout (at the top) > Clear pinouts`
+1. Set PC13 as ``GPIO_EXTI13`` and leave the first two configurations unchanged, but rename the pin to `USER_BTN`. This is the pin to which our user button connected. Alternatively, you can select another pin where your external button is connected.
+  ![pc13_interrupt_settings]({{site.baseurl}}/assets/images/pc13_interrupt_settings.png)
+1. Open The NVIC Tab And Enable The EXTI line 13 interrupt. This is where we adjust the priorities of multiple ISRs.
+  ![nvic_line13]({{site.baseurl}}/assets/images/nvic_line13.png)
+1. Set PB0 as ``GPIO_Output``.
+1. On the left ``System Core > GPIO > Configuration > PB0 >`` Change user label to `LD1`
+1. On the left ``System Core > RCC > HSE: Crystal/Ceramic Resonator``
+  (RCC: Reset and Clock Control)
+1. Master Clock Output: Checked. *(only for a possible debugging)*
+1. Go to Clock Configuration. Set these values:
+ ![Timer Prescalars]({{site.baseurl}}/assets/images/timer_led_blink_clock108.png)
+1. Create a platformio.ini file and copy these in it:
+```c
+[env:nucleo_f767zi]
+platform = ststm32
+board = nucleo_f767zi
+framework = stm32cube
+build_flags = 
+ -IInc
+upload_protocol = stlink
+debug_tool = stlink
+debug_build_flags = -O0 -g -ggdb
+```
+
+Now we are done with the setup. It is time to modify the code. What we want is to toggle `LD1` as we press the `USER_BTN`. Before implementing anything, let's analyze the generated code.
+
+At the end of `stm32f7xx_it.c`, you will see that a new function is generated for us: ``EXTI15_10_IRQHandler()``. This function handles external interrupts for lines 10 to 15. We call call it as "entry points for interrupts on EXTI lines 10-15. This function's address is stored in the microcontroller's interrupt vector table. When an interrupt occurs on any of EXTI lines 10-15, the CPU will automatically jump to this function to handle it. Our `USER_BTN` pin was PC13. So far so good.
+
+There is one line of code in this function and it is just a function call for `HAL_GPIO_EXTI_IRQHandler()`. This is a raw **interrupt handler**. Raw handlers, which are often weakly defined in the HAL library's source files (e.g., ``stm32f4xx_it.c``), then call ``HAL_GPIO_EXTI_IRQHandler()`` and pass the specific ``GPIO_Pin`` that caused the interrupt.
+
+If you go into `HAL_GPIO_EXTI_IRQHandler()`, you will see what that there is some code inside in this function. The critical line for us is `HAL_GPIO_EXTI_Callback()`. The definition is a weak function definition `__weak void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)`, which means that it can be overwritten. In other words weak function definitions provide default, overridable implementations. However, it is located under Drivers > STM32F7xx_HAL_Driver > Src > stm32f7xx_hal_gpio.c. This path is in the core or the HAL libraries and we DON'T WANT TO MODIFY THEM!
+
+What we can to is that, if we define a `HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)` function in our `main.c`, we overwrite the functionality of its weak definition. Therefore, we won't be changing the core drivers, keep our code tidy, since our interrupt vector already calling *a `HAL_GPIO_EXTI_Callback()*.
+
+1. Place this code after `/* USER CODE BEGIN 4 */` in your `main.c`:
+```c
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
+  if(GPIO_Pin == GPIO_PIN_13){ // Check whether the interrupt source is EXTI Line13 (PC13 Pin)
+    HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin); // Toggle LD1
+  }
+}
+```
+2. Build and upload the code.
+3. Observe `LD1` as you press the 
+
+## How does it work?
+One might think that we haven't written anything inside `int main()`. We haven't checked if USER_BTN is SET or RESET. How does it work?
+
+Well, this is my friend, the magic of ISR. As you define an interrupt, your ISR handler know that if the interrupt event occurs, an exception will occur and your program counter will jump directly where your interrupt callback function is defined in the memory. It will run and complete it *unless another interrupt occurs*, and jump back to main.c. Since we don't have anything in our main function, there is not much to do there in this exercise. The process look like this:
+![exception_in_memory]({{site.baseurl}}/assets/images/exception_in_memory.png)
+Source: [deepbluembedded.com](https://deepbluembedded.com/stm32-interrupts-tutorial-nvic-exti/)
+1. When an exception occurs, the current instruction stream is stopped and the processor accesses the exceptions vector table.
+2. The vector address of that exception is loaded from the vector table.
+3. The exception handler starts to be executed in handler mode.
+4. The exception handler returns back to main (assuming no further nesting).
+
+{: .notice--info}
+Please check [this link](https://deepbluembedded.com/stm32-interrupts-tutorial-nvic-exti/) to learn more in depth about how interrupts work. It is extensive and not all are in the scope of this course, but very nicely explained.
+
+## Why it is not reliable?
+Because of debouncing! If you look at the logic analyzer you will see some of the presses are registered twice or triple. If we zoom in, we see a jutter around 140 us. 
+![debouncing1]({{site.baseurl}}/assets/images/debouncing1.png)
+![debouncing2]({{site.baseurl}}/assets/images/debouncing2.png)
+
 # Debouncing
 A mechanical switch will often generate spurious open/close transitions in a short period after it has been activated. It is a risk that these spurious transitions are interpreted as multiple signals from the switch. In order to avoid these problems some form of debounce remedy should be applied. This could be a hardware solution, a software solution or a combination of the two.
 
@@ -241,37 +313,86 @@ The graph to the right in the following figure illustrates the spurious changes 
 
 ![switch_bounce]({{site.baseurl}}/assets/images/switch_bounce.png)
 
-## Exercise: Bounce problem with external interrupts
-TODO
-Check timer register
-
 ## Hardware debounce methods
-Hardware solutions include analog filters using resistors and capacitors, or digital circuits as illustrated in the following figure:
+Hardware solutions include analog filters using resistors and capacitors, or digital circuits. The simplest one is probably applying a low-pass filter at the output:
+
+![LPF debounce]({{site.baseurl}}/assets/images/Switch_Debounce_4.jpg)
+Source: [www.geeksforgeeks.org](https://www.geeksforgeeks.org/digital-logic/switch-debounce-in-digital-circuits/)
+
+A low-pass filter is designed to pass low-frequency signals (like the intended steady voltage from the switch) while attenuating high-frequency signals (like the bouncing noise). 
+
+Another alternative is clocking the button state in to the d flip-flops, and only when all the flip-flops have registered the same state the output will change. This solution is typically found in programmable logic, but it is rather expensive to realise by using discrete components.
 
 ![Shift-register_and_a_nand_gate_as_a_debouncer]({{site.baseurl}}/assets/images/Shift-register_and_a_nand_gate_as_a_debouncer.png)
 Source: [e-thinkers.com](https://www.e-tinkers.com/2021/05/the-simplest-button-debounce-solution/)
 
-The button state is clocked in to the d flip-flops, and only when all the flip-flops have registered the same state the output will change. This solution is typically found in programmable logic, but it is rather expensive to realise by using discrete components.
-
 A really efficient and reliable debounce circuit can be built bu using a SR-latch in conjunction with a SPDT switch. In one position the switch is connected to the set input, while the other position of the switch is connected to reset input of the latch. That way you do not have to consider the time you expect the bouncing to last, or the duration between each of the spurious voltage pulses.
+
+![SR debounce]({{site.baseurl}}/assets/images/Switch_Debounce_3.jpg)
+Source: [www.geeksforgeeks.org](https://www.geeksforgeeks.org/digital-logic/switch-debounce-in-digital-circuits/)
 
 ## Software debounce methods
 If a software debounce solution is desired, one possibility is to check the button state twice, within a short time windows. I.e. check, delay, check again. The following source code listing illustrates one possibility:
 
 Note that the variables are declared static inside the loop() function. This ensures that the value is persistent between the invocation of the function. Alternatively they could be declared globally, i.e. outside of any function definition.
 
-## Exercise: Software debouncing
+# Exercise: Software debouncing
+<!-- ext_interrupt_test.ioc -->
+Software debouncing is an algorithm to filter out the rapid, unwanted changes (bounces) in a button's signal caused by its mechanical contacts. It typically involves checking the button state multiple times over a short period and only accepting a change if the state remains stable, ensuring that only intentional presses are registered.
+
+We can modify our previous code and implement a software debouncer:
+
+1. Paste this code after `/* USER CODE BEGIN PV */`:
 ```c
-TODO
+// --- Global Variables for Debouncing ---
+volatile uint32_t lastDebounceTime = 0;
+const uint32_t debounceDelay = 10; // 10 milliseconds
 ```
 
+2. Modify your interrupt callback after `/* USER CODE BEGIN 4 */`:
+```c
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
+  if (GPIO_Pin == GPIO_PIN_13){
+    // Get the current tick time
+    uint32_t currentTime = HAL_GetTick();
+
+    // Check if enough time has passed since the last valid press
+    if ((currentTime - lastDebounceTime) > debounceDelay){
+      // If yes, this is a valid button press/release
+      HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
+
+      // Update the last debounce time
+      lastDebounceTime = currentTime;
+    }
+    // If not enough time has passed, ignore this interrupt (it's bounce)
+  }
+}
+```
+
+Observe that it it not perfect, but much better :) You can adjust the delay duration for better results.
+
+Pay attention that `HAL_GetTick()` function gives you the current time in milliseconds after `HAL_Init()` is called. Therefore, our debouncer ignores any second changes within 10 ms after the first press detected.
+
 # ISR
-NVIC
-Interrupr priorities
-Interrupt nesting
-Enabling/Disabling interrupts
-<!-- https://deepbluembedded.com/stm32-interrupts-tutorial-nvic-exti/ -->
-<!-- https://deepbluembedded.com/stm32-external-interrupt-example-lab/ -->
+Each microcontroller company offers a procedure to handle multiple exceptions. Arm® Cortex®-M7 microcontrollers are great in handling exceptions and interrupts. They offer some the Nested Vectored Interrupt Controller (NVIC). This is what we played with in CubeMX when we were setting our external interrupt exercise.
+
+NVIC is responsible for managing all the interrupts and exceptions in the system, ensuring they are handled efficiently and in the correct order based on their assigned priorities.
+![nvic]({{site.baseurl}}/assets/images/nvic.png)
+Source: [microcontrollerslab.com](https://microcontrollerslab.com/nested-vectored-interrupt-controller-nvic-arm-cortex-m/)
+
+The processor mode can change when exceptions occur. And it can be in one of the following modes:
+
+1. Thread Mode: Entered on reset.
+2. Handler Mode: Entered on all other exceptions.
+![exceptions_in_arm_core]({{site.baseurl}}/assets/images/exceptions_in_arm_core.png)
+Source: [deepbluembedded.com](https://deepbluembedded.com/stm32-interrupts-tutorial-nvic-exti/)
+
+Those exceptions can be internal (from timers, ADC, PWM) or external (from swithces or communication protocols).
+
+Inherently, there are many exceptions are implemented in a project. Interrupt vector handles execution of those interrupts. In [reference manual](https://www.st.com/resource/en/reference_manual/dm00224583-stm32f76xxx-and-stm32f77xxx-advanced-arm-based-32-bit-mcus-stmicroelectronics.pdf), you can see all the interrupts and their default priority.
+
+![interrupt_vector]({{site.baseurl}}/assets/images/interrupt_vector.png)
+
 
 ## Key Considerations in interrupt usage
 - **Keep ISRs Short and Fast:** This is the most crucial rule for any interrupt handler. Avoid:
@@ -287,8 +408,74 @@ Enabling/Disabling interrupts
 - **Interrupt Priority:** In STM32CubeMX, configure the NVIC (Nested Vectored Interrupt Controller) priority for your EXTI line. Higher priority interrupts can preempt lower priority ones.
 - **Re-entrancy:** Be careful if your ISR modifies variables that are also accessed by the main loop or other ISRs. Use appropriate synchronization mechanisms (like briefly disabling interrupts, or using RTOS semaphores/mutexes) if necessary, but generally, keep it simple for GPIO toggling.
 
-# Exercise: SOS
-Any port, any pin, SOS exercise with button.
+
+# Exercise (Home/Lab): Button press counter
+Create a simple project where every time you press a button (connected to an external interrupt pin), a counter increases and debug your counter variable.
+
+# Exercise: Interrupt counter
+Let's make a counter using our interrupt. This time, instead of counting the number of button presses, we would like to measure the duration of the button press. As long as your button is pressed, the counter will increase, as soon as you release the button, the counter will stop counting.
+
+Set up button circuit with a pull-up resistor like so:
+![interrup_counter_btn_pullup.png]({{site.baseurl}}/assets/images/interrup_counter_btn_pullup.png)
+
+For this task, we can use **Gated mode**, which was mentioned in [Lesson 3](https://fjnn.github.io/hvl-ele201/lectures/l3-timers-interrupt1#slave-modes).
+
+1. Open a new STM32CubeMX project.
+1. Select STM32F767 board, start project, but DO NOT SELECT default mode.
+1. You should see some pins are orange. We want these to be gone, as well:` Pinout (at the top) > Clear pinouts`
+1. First set the clock On the left ``System Core > RCC > HSE: Crystal/Ceramic Resonator``
+  (RCC: Reset and Clock Control)
+1. Master Clock Output: Checked. *(only for a possible debugging)*
+1. This time we can use TIM3, just because our heart desires so, and set its slave mode Gated Mode.
+1. Since we want the timer to be triggered by an external input, we will choose the trigger mode TI1FP1. This will enable `PA6` for us.
+1. As before, we set the prescalar to 108-1 so that each tick will be 1 us for this timer.
+1. Since we have a pull-up resistor on our button, the default state of `PA6` will be `SET`. When we press the button, the signal will be low. Therefore, we must select "Falling Edge" as trigger polarity. If we had a pull-down resistor, then we would have chosen "Rising Edge". 
+1. Enable the **TIM3 global interrupt** in TIM3's NVIC settings.
+1. Also set LD1 on pin `PB0` just for debugging later on.
+1. The Pinout should look like this:
+![interrup_counter_btn_settings.png]({{site.baseurl}}/assets/images/interrup_counter_btn_settings.png)
+1. In clock configuration, set the clock as before: 8 MHz input and 108 MHz HCLK.
+1. Give a proper name, do the necessary changes and generate the code.
+1. Create a platformio.ini file and copy these in it:
+    ```c
+    [env:nucleo_f767zi]
+    platform = ststm32
+    board = nucleo_f767zi
+    framework = stm32cube
+    build_flags = 
+    -IInc
+    upload_protocol = stlink
+    debug_tool = stlink
+    debug_build_flags = -O0 -g -ggdb
+    ```
+1. We would like to see the timer counter value. Therefore let's create a variable for that after `/* USER CODE BEGIN 0 */`.
+    ```c
+    volatile uint16_t tim3_cnt;
+    ```
+1. Start the timer after `/* USER CODE BEGIN 2 */`.
+    ```c
+      // We replace this now
+      // It was just starting the timer counter.
+      // HAL_TIM_Base_Start(&htim3); 
+
+      //But we need this one.
+      // It starts the timer counter and enables the update interrupt (if configured) 
+      HAL_TIM_Base_Start_IT(&htim3);
+    ```
+1. Store the TIM3's counter value in our variable after `/* USER CODE BEGIN 3 */`.
+    ```c
+    tim3_cnt = TIM3->CNT;
+    ```
+1. And finally add this line in your `MX_TIM3_Init()` after `/* USER CODE BEGIN TIM3_Init 2 */`. This tells the timer to generate an interrupt request to the NVIC whenever a trigger event occurs.
+    ```c
+    __HAL_TIM_ENABLE_IT(&htim3, TIM_IT_TRIGGER);
+    ```
+1. Build and upload.
+1. Observe the LD1 as you press and hold the external button.
+1. Debug the code and see the `tim3_cnt` updates as you press and hold the button, and keeps the same value when you release it.
+
+    {: .notice--info}
+    You can also observe directly the register value under the register tab in the debugger. Check ``TIM3->CNT``.
 
 # Exercise (Home/Lab): Tilt sensor with LED blink
 <!-- Look at some digital sensors, IR count maybe? -->
