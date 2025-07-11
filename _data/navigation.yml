@@ -1,8 +1,8 @@
 main:
   - title: "Lectures"
     url: /lectures
-  - title: "Examples"
-    url: /examples
+  - title: "Exercises"
+    url: /exercises
 
 lectures:
   - title: "Installation"

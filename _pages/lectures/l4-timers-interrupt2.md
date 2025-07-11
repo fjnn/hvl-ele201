@@ -413,6 +413,7 @@ Inherently, there are many exceptions are implemented in a project. Interrupt ve
 Create a simple project where every time you press a button (connected to an external interrupt pin), a counter increases and debug your counter variable.
 
 # Exercise: Interrupt counter
+<!-- interrup_counter_with_btn.ioc -->
 Let's make a counter using our interrupt. This time, instead of counting the number of button presses, we would like to measure the duration of the button press. As long as your button is pressed, the counter will increase, as soon as you release the button, the counter will stop counting.
 
 Set up button circuit with a pull-up resistor like so:
