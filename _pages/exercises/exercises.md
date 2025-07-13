@@ -22,3 +22,5 @@ taxonomy: markup
 - [L4 - Bounce problem with external interrupts](https://github.com/fjnn/stm32-lecture-projects/tree/main/ext_interrupt_test)
 - [L4 - Software debouncing](https://github.com/fjnn/stm32-lecture-projects/tree/main/ext_interrupt_soft_debounce)
 - [L4 - Interrupt counter](https://github.com/fjnn/stm32-lecture-projects/tree/main/interrupt_counter_with_btn)
+- [L5 - Read potentiometer value](https://github.com/fjnn/stm32-lecture-projects/tree/main/adc_test)
+- [L5 - Measure A/D conversion duration](https://github.com/fjnn/stm32-lecture-projects/tree/main/adc_duration_test)

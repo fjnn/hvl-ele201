@@ -131,6 +131,7 @@ In this exercise, we will read the value of a potentiometer and convert it into 
 
 1. Connect your potentiometer as shown in the figure.
   ![pot_connection]({{site.baseurl}}/assets/images/pot_connection.png)
+1. Create a new project without default mode and connect ceramic/crystal resonator on the `System Core > RCC > HSE`.
 1. Find `PA3` on the chip and set it to `ADC1_IN3`. Change the label to `POT_IN`.
 1. At this step, we won't change anything in the ADC setup and see how efficient it is with the default settings. Your default settings should look like that:
   ![adc_default_config]({{site.baseurl}}/assets/images/adc_default_config.png)
@@ -168,3 +169,74 @@ In this exercise, we will read the value of a potentiometer and convert it into 
 1. Build and upload. 
 1. Open the debugger and add both `adc_value` and `voltage` to your watch list. You can add a breakpoint at the `HAL_ADC_Start`.
 1. Observe that `voltage` changes between 0-3.3V and `adc_value` changes between 0-4095.
+
+# Exercise: Measure A/D conversion duration
+I claimed that ADC takes *so long*, but please don't believe me. Just check yourself!
+
+So, in this exercise, we will combine timers and ADC concept and measure how much it takes to finish the A/D conversion. You can either do changes on your previous project or create a new one and do the necessary pinout & clock configurations. I will explain the steps related to the timer here.
+
+1. We will use `TIM3` for this exercise just because it is a general-purpose timer. We could use another timer but we MUST BE CAREFUL in choosing the timer to measure time. If you check the [datasheet](https://www.st.com/resource/en/datasheet/stm32f765zi.pdf), you see that `PA3` can serve several purposes and it is connected to `TIM2_CH4`, `TIM5_CH4` and `TIM9_CH2`. You must avoid using those channels, but it is easier to avoid those timers in this exercise altogether not to cause any conflicts.
+  ![pa3_alternate_func_map]({{site.baseurl}}/assets/images/pa3_alternate_func_map.png)
+1. Select Internal Clock for the Clock Source and set the prescalar to 108-1. Therefore our 1 tick will take 1us since our HCLK os set to 108 Mhz. We don't need to generate interrupt or set a pin as input or output. *We just want to measure time. Simple.* The `TIM3` settings should look like this:
+  ![adc_tim3_config]({{site.baseurl}}/assets/images/adc_tim3_config.png)
+1. Give a proper name to your project. Do the necessary changes and generate your code.
+1. Create a platformio.ini with the previous content.
+1. Update the necessary variables in `main.c` after `/* USER CODE BEGIN 1 */`:
+  ```c
+  uint32_t adc_value = 0;
+  float voltage = 0.0;
+  uint32_t start_time = 0;
+  uint32_t end_time = 0;
+  uint32_t conversion_duration_us = 0;
+  ```
+1. Start the timer before the infinite loop starts. Place this after `/* USER CODE BEGIN 2 */`:
+  ```c
+  HAL_TIM_Base_Start(&htim3); // Start the timer
+  ```
+1. Update the code after `/* USER CODE BEGIN 3 */`:
+
+    ```c
+      start_time = __HAL_TIM_GET_COUNTER(&htim3); // Get current timer value
+
+      // Our ADC conversion starts
+      HAL_ADC_Start(&hadc1);
+      HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
+      adc_value = HAL_ADC_GetValue(&hadc1);
+      // Our ADC conversion ends
+
+      end_time = __HAL_TIM_GET_COUNTER(&htim3); // Get timer value after conversion
+
+      // Calculate duration, handling potential timer overflow (for simplicity, assuming no overflow within conversion time)
+      if (end_time >= start_time) {
+          conversion_duration_us = end_time - start_time;
+      } else {
+          // Handle timer overflow if conversion takes longer than timer period (unlikely for single ADC conv)
+          conversion_duration_us = (65535 - start_time) + end_time; // For a 16-bit timer
+      }
+
+      voltage = (float)adc_value * (3.3f / 4095.0f);
+
+      HAL_Delay(500);
+    ```
+
+1. Build and upload.
+1. Observe `conversion_duration_us` in debugger's watchlist. It will be in the order of microseconds.
+
+
+
+
+{% capture notice-text %}
+ You will see that `conversion_duration_us` value fluctuates a lot. Especially when trying to measure very short durations (~500ns) with polling methods and system overhead. It's not necessarily that the ADC conversion itself is unreliable, but rather that your measurement method is picking up noise from other CPU activities and the overhead of the HAL functions. The primary goal with this exercise wasn't to give you an *oscilloscope-accurate measurement* of the ADC hardware's conversion time. Instead, it was to demonstrate that ``HAL_ADC_PollForConversion()`` is a blocking function and that the CPU spends a measurable amount of time waiting for the conversion to complete. Seeing a non-zero, varying, number in ``conversion_duration_us`` confirms that the processor is indeed "stuck" there for a period. If you want to have a more precise time measuring for very short durations, you can use a LED that turns ON/OFF before/after the process, and measure the ON time on an oscilloscope or a logic analyzer. The code would look like that then:
+  ```c
+  /* USER CODE BEGIN 3 */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET); // Assuming PB0 (LD1) is configured as output for debugging
+  HAL_ADC_Start(&hadc1);
+  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
+  adc_value = HAL_ADC_GetValue(&hadc1);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET);
+  ```
+{% endcapture %}
+
+<div class="notice">
+  {{ notice-text | markdownify }}
+</div>
