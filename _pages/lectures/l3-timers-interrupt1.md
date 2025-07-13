@@ -110,6 +110,22 @@ There are three main timer types:
 - General purpose: These are versatile timers suitable for a wide range of applications, including general-purpose timing, PWM generation, input capture, output compare, and more.
 - Basic: These are simpler timers, primarily used for basic timing and delay generation.
 
+## SysTick timer
+The SysTick timer on the STM32F767 microcontroller is a 24-bit down-counting timer embedded within the Cortex-M7 core itself, making it a highly integrated and essential component for real-time operating systems (RTOS) and general-purpose timing. It offers a simple yet effective mechanism for generating periodic interrupts, typically configured to fire at a regular interval (e.g., every millisecond) to drive the OS tick. Its preloader value is derived directly from the system clock (HCLK), ensuring precise and synchronized timing. 
+
+{: .notice--warning}
+DO NOT MESS WITH SYSTICK TIMER! It sources the main delay. In some cases one might want to use it, especially real-time operations, but then, don't forget to assign your timebase source, as well.
+<img src="{{ site.baseurl }}/assets/images/systick-change.png" alt="TIM3 block diagram" width="600"/>
+<!-- https://www.youtube.com/watch?v=VfbW6nfG4kw&ab_channel=DigiKey -->
+
+## Watchdog timer
+A watchdog timer (WDT) is a crucial hardware or software component designed to enhance the reliability and robustness of embedded systems. It acts like a "watchdog" (hence the name) that constantly monitors the microcontroller's (or your PC's in this matther) operation to detect and recover from malfunctions, such as software crashes, infinite loops, or system hangs.
+
+Imagine you have a computer or a device that needs to run continuously, like a medical device, a factory robot, or even your car's engine control unit. What if the software inside it gets "stuck" or freezes, maybe due to a tiny glitch or a bug? If it just stops, it could cause big problems or even be dangerous. That's where a watchdog timer comes in! Think of it like a loyal guard dog for your computer. This "dog" is always watching to make sure the computer is doing its job.
+
+The STM32F767 microcontroller incorporates two types of watchdog timers to enhance system reliability and prevent software malfunctions: the Independent Watchdog (IWDG) and the Window Watchdog (WWDG). Both are designed to reset the microcontroller if the application code enters an undesirable state, such as an infinite loop or a deadlock. The IWDG operates from its own independent low-speed internal RC oscillator (LSI), making it robust against failures of the main system clock. It's a simple down-counter that triggers a reset if not "fed" (reloaded) within a defined timeout period. In contrast, the WWDG offers more sophisticated control, requiring the application to refresh it only within a specific "window" of time. If the WWDG is refreshed too early or too late, it will trigger a system reset, allowing detection of both abnormally slow and abnormally fast execution, which can be crucial for safety-critical applications. If you are curious about the details, [controllerstech.com](https://controllerstech.com/iwdg-and-wwdg-in-stm32/) has a nice tutorial. However, the details of the SysTick and Watchdog timer are outside the scope of this course.
+
+
 # Exercise: LED blink with correct clock settings
 <!-- blink_rate_test.ioc -->
 In the previous exercises, we haven't done anything with the clock settings. Our code worked just fine but it is time to stop "default settings". As you remember the blink rate is a bit slower than 500ms, right? It is because we haven't configured the clock settings properly and we have lots of pins configured by default even if we don't use. We will fix the blink rate issue NOW!.
@@ -170,11 +186,6 @@ Interrupts can be generated from several sources:
 In this exercise we willt toggle the LED *when the time is right.* rather than *waiting for the rignt time to come*
 
 For this example, we will use **TIM2**, which is a general-purpose timer. It can count upto 32-bits, both upwards and downwards. It does not intervene with any other features that we need in this project.
-
-{: .notice--warning}
-DO NOT MESS WITH SYSTICK TIMER! It sources the main delay. In some cases one might want to use it, especially real-time operations, but then, don't forget to assign your timebase source, as well.
-<img src="{{ site.baseurl }}/assets/images/systick-change.png" alt="TIM3 block diagram" width="400"/>
-<!-- https://www.youtube.com/watch?v=VfbW6nfG4kw&ab_channel=DigiKey -->
 
 <!-- timer_led_blink.ioc -->
 1. Open a new STM32CubeMX project.
