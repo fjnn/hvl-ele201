@@ -472,7 +472,7 @@ For this task, we can use **Gated mode**, which was mentioned in [Lesson 3](http
     __HAL_TIM_ENABLE_IT(&htim3, TIM_IT_TRIGGER);
     ```
 1. Build and upload.
-1. Observe the LD1 as you press and hold the external button.
+1. To debug if you timer interrupt work, we have set LD1 to toggle inside the ISR callback function. Observe the LD1 as you press and hold the external button. If so, your interrupt is set properly. Blinking a LED is a very common way to debug in embedded system development since printing a log is much more difficult.
 1. Debug the code and see the `tim3_cnt` updates as you press and hold the button, and keeps the same value when you release it.
 
     {: .notice--info}
