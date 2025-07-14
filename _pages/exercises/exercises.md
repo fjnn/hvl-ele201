@@ -24,3 +24,4 @@ taxonomy: markup
 - [L4 - Interrupt counter](https://github.com/fjnn/stm32-lecture-projects/tree/main/interrupt_counter_with_btn)
 - [L5 - Read potentiometer value](https://github.com/fjnn/stm32-lecture-projects/tree/main/adc_test)
 - [L5 - Measure A/D conversion duration](https://github.com/fjnn/stm32-lecture-projects/tree/main/adc_duration_test)
+- [L5 -ADC single-continuous mode with interruptPermalink](https://github.com/fjnn/stm32-lecture-projects/tree/main/adc_interrupt_test)
