@@ -308,7 +308,7 @@ Configure ADC: Set up the ADC for continuous conversion, scan mode, or any mode 
 
 Select DMA Stream and Channel: The STM32F767 has multiple DMA controllers (DMA1, DMA2), each with several "streams." Each stream can be connected to a specific peripheral request (e.g., ADC1, ADC2, ADC3). You need to select the correct DMA stream and channel that corresponds to your ADC.
 
-## Performance Comparison (Example Case)
+## DMA vs Interrupt
 
 <div style="overflow-x:auto;">
   <table>
@@ -340,6 +340,10 @@ Select DMA Stream and Channel: The STM32F767 has multiple DMA controllers (DMA1,
 </div>
 
 (Source: [blog.embeddedexpert.io](https://blog.embeddedexpert.io/?p=3481))
+
+So with DMA, you can modify the memory without using CPU cycles at all!
+
+![dma_vs_int]({{site.baseurl}}/assets/images/dma_vs_int.png)
 
 
 # Exercise: ADC single-continuous mode with interrupt
@@ -386,14 +390,77 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc){
 1. Build and upload.
 1. Observe `count`, `adc_value` and `voltage` in debugger's watchlist. 
 
-
-HAL_Delay and count in the while.
-Continuous mode = starting ADC right after again.
-
-
-
-# Exercise: ADC single-channel with DMA
+# Exercise: ADC Multi-channel with DMA
 <!-- https://www.youtube.com/watch?v=zf6L7oUoqm8&ab_channel=ControllersTech -->
-DMA in single channel is useless because the conversion complete interrupt will be triggered in the same rate as in the interrupt mode. However, for simplicity of the demonstration of DMA, we will still use single channel ADC-
+In this exercise, we will have more than one inputs in our ADC. In fact, we *don't have to* use DMA as soon as we connect more than one analog input, but it is a much more efficient way to handle multi-channel ADC with DMA.
 
-# Exercise: Multi-channel ADC.
+DMA (Direct Memory Access) is a hardware feature that allows certain peripherals to directly read from or write to memory without requiring constant intervention from the CPU.
+
+To start, you can either do changes on your previous project or create a new one and do the necessary pinout & clock configurations. I will explain the steps on top of the first ADC exercis here.
+
+
+1. Add an LDR or a temperature sensor, or another potentiometer to your existing circuit and connect it to `PA4`.
+  ![pot_ldr_circuit]({{site.baseurl}}/assets/images/pot_ldr_circuit.png)
+1. Find ``PA4`` on the chip and set it to ``ADC1_IN4``. Change the label to `LDR_IN`.
+1. Change these in ADC1 Parameter Settings:
+  ![adc_dma_parameters]({{site.baseurl}}/assets/images/adc_dma_parameters.png)
+  We want high sampling rate because we don't want to stuck at the callback constantly. Also higher sampling rate means better accuracy in ADC.
+1. Go to ADC1 DMA Settings:
+  ![adc_dma_parameters2]({{site.baseurl}}/assets/images/adc_dma_parameters2.png)
+  The meaning of continuous modes:
+  - ContinuousConvMode (ADC): "Hey ADC, keep converting non-stop!"
+  - DMAContinuousRequests (ADC): "Hey ADC, every time you have new data, tell the DMA to come get it!"
+
+    {: .notice--info}
+    When all three are in sync (ContinuousConvMode = ENABLE, DMAContinuousRequests = ENABLE, and DMA Stream Mode = Circular), you achieve a very efficient, hands-off continuous data stream from the ADC to your memory buffer. The CPU only needs to process the data in the buffer when it's ready. 
+
+1. Adjust the NVIC settings on the left:
+  ![adc_dma_nvic_settings]({{site.baseurl}}/assets/images/adc_dma_nvic_settings.png)
+1. Keep the clock configurations the same: 8 MHz input frequency and HCLK 108 Mhz.
+1. Give a proper name to your project. Do the necessary changes and generate your code.
+1. Create a platformio.ini with the previous content.
+1. (Optional) I want to define a bool flag for debugging. That's why I include the ``stdbool.h`` library at the beginning where`/* USER CODE BEGIN Includes */`:
+  ```c
+  # include <stdbool.h>
+  ```
+1. Here are our variables which will be placed after ``:
+  ```c
+  float pot_adc_volt = 0;
+  float ldr_adc_volt = 0;
+  volatile uint16_t pot_adc_val = 0;
+  volatile uint16_t ldr_adc_val = 0;
+  volatile uint16_t raw_adc_vals[2];
+  volatile bool conv_completed = false;
+  uint16_t count = 0;
+  ```
+1. This time we will start the ADC in DMA mode. This will be before our infinite loop. Place this after `/* USER CODE BEGIN 2 */`:
+  ```c
+  HAL_ADC_Start_DMA(&hadc1, (uint32_t*)raw_adc_vals, 2);
+  ```
+1. Our main loop is like this. You can do whatever you want with the values, this is just for demo. The `count` variable is only for debugging.
+  ```c
+  count++;
+  if(conv_completed){
+    // Do whatever calculations/actions you want to do with the ADC readings
+    pot_adc_volt = (float)pot_adc_val * (3.3f / 4095.0f);
+    ldr_adc_volt = (float)ldr_adc_val * (3.3f / 4095.0f);
+    conv_completed = false;
+  }
+  HAL_Delay(5);
+  ```
+1. In our `HAL_ADC_ConvCpltCallback()` which we define after `/* USER CODE BEGIN 4 */`, we might skip doing anything there. `raw_adc_vals` will be updated periodically anyways. We could have used it as it is in our main loop without assigning to any other variable.
+  ```c
+  void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc){
+    ldr_adc_val = raw_adc_vals[0];
+    pot_adc_val = raw_adc_vals[1];
+    conv_completed = true;
+    // __NOP(); // Only for debugging to check if the callback is triggered correctly. It is like "pass" keyword in Python.
+  }
+  ```
+
+1. Build and upload.
+1. Observe `count` and `raw_adc_vals`in debugger's watchlist. 
+
+{: .notice--warning}
+If your debugger does not increment `count` properly, it might be about your stack size. [More about stack overflows and increasing stack size]({{ site.baseurl }}/stack)
+
