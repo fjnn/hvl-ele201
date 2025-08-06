@@ -106,7 +106,7 @@ You can watch this video to setup your first blink code using both CubeMX and Pl
 The piece of code you need to add after `/*USER CODE BEGIN 3*/` is here:
 
 ```c
-HAL_GPIO_TogglePin(LD1_GPIO_PORT, LD1_PIN);
+HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
 HAL_Delay(500);
 ```
 
