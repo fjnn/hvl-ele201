@@ -3,6 +3,10 @@ main:
     url: /lectures
   - title: "Exercises"
     url: /exercises
+  - title: "Network Lectures"
+    url: /Network-Lectures
+  - title: "Network Practice"
+    url: /network-practice
 
 lectures:
   - title: "Installation"
@@ -36,8 +40,42 @@ lectures:
   - title: "L13 - Efficiency"
     url: /lectures/l13-efficiency
   
-network:
-  - Laurenz
+network-lectures:
+  - title: "L1 - Introduction and Basic Concepts"
+    url: /network-lectures/l1-intro
+  - title: "L2 - Data Link and Network Layer"
+    url: /network-lectures/l2-data-link-and-network-layer
+  - title: "L3 - IP Address Part 1"
+    url: /network-lectures/l3-ip-address-p1
+  - title: "L4 - Switch Lab"
+    url: /network-lectures/l4-switch-lab
+  - title: "L5 - IP Address Part 2"
+    url: /network-lectures/l5-ip-address-p2
+  - title: "L6 - IP Network Case Study"
+    url: /network-lectures/l6-ip-network-case-study
+  - title: "L7 - Router Lab"
+    url: /network-lectures/l7-router-lab
+  - title: "L8 - Physical Layer"
+    url: /network-lectures/l8-physical-layer
+  - title: "L9 - Transport Layer"
+    url: /network-lectures/l9-transport-layer
+  - title: "L10 - Network Security"
+    url: /network-lectures/l10-network-security
+  - title: "L11 - Microcontroller Network Lab Part 1"
+    url: /network-lectures/l11-microcontroller-network-lab-p1
+  - title: "L12 - Microcontroller Network Lab Part 2"
+    url: /network-lectures/l12-microcontroller-network-lab-p2
+  - title: "L13 - Industrial Networks"
+    url: /network-lectures/l13-industrial-networks
+  - title: "Acronyms"
+    url: /network-lectures/acronyms
+
+network-practice:
+  - title: "General Information"
+    url: /network-practice/p0-info
+  - title: "Installations"
+    url: /network-practice/p1-install
+
 
 examples:
   - title: "E1 - Blink"

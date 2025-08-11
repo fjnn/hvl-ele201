@@ -18,10 +18,10 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: HVL - ELE201 Microcontrollers and Computer Network
+title: HVL - ELE201 Microcontrollers and Data Networks
 email: gizem.ates@hvl.no
 description: >- # this means to ignore newlines until "baseurl:"
-  This website is for HVL ELE201 Microcontrollers and Computer Network (ELE201 Mikrokontrollere og datanett) course. The content in this website is only for the microcontrollers part.
+  This website is for HVL ELE201 Microcontrollers and Data Networks (ELE201 Mikrokontrollere og datanett) course.
 baseurl: "/hvl-ele201" # the subpath of your site, e.g. /blog
 url: "https://fjnn.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: None
