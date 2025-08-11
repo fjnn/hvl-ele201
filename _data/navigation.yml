@@ -35,6 +35,9 @@ lectures:
     url: /lectures/l12-lab
   - title: "L13 - Efficiency"
     url: /lectures/l13-efficiency
+  
+network:
+  - Laurenz
 
 examples:
   - title: "E1 - Blink"
