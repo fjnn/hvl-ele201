@@ -75,6 +75,10 @@ network-practice:
     url: /network-practice/p0-info
   - title: "Installations"
     url: /network-practice/p1-install
+  - title: "Switch CLI Commands"
+    url: /network-practice/p2-switch-config
+  - title: "Router CLI Commands"
+    url: /network-practice/p3-router-config
 
 
 examples:
