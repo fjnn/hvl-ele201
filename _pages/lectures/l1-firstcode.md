@@ -97,6 +97,22 @@ void SysTick_Handler(void)
 
 This code blinks an LED on an STM32 microcontroller using the HAL library. It initializes the HAL system and configures a GPIO pin as an output for the LED. In the main loop, it toggles the LED state every 500 ms using HAL_GPIO_TogglePin and HAL_Delay. The SysTick_Handler updates the HAL tick for timing. The LED_Init function sets up the GPIO pin for the LED. 
 
+Now you can copy the content below in your main.h under the **include** folder.
+
+```c
+#ifndef MAIN_H
+#define MAIN_H
+
+#include "stm32f7xx_hal.h"
+
+#define LED_PIN                                GPIO_PIN_0
+#define LED_GPIO_PORT                          GPIOB
+#define LED_GPIO_CLK_ENABLE()                  __HAL_RCC_GPIOB_CLK_ENABLE()
+
+#endif // MAIN_H
+```
+
+
 ## Using CubeMX + PlatformIO
 The code above is simple and easy to write. However, as we progress in the different tasks, it will be very difficult to set all the configurations manually. In old times, embedded system engineers have their "own" libraries for various tasks, LCD setup, ADC initialization, PWM parameters etc. They used to copy or include these piece of codes into their projects as they need. Today, we have a tidier solutions. For our development board, we can use STM32CubeMX, which is a graphical tool that allows a very easy configuration of STM32 microcontrollers and microprocessors. Therefore, we don't need to write the code for every single configuration. We will be using STM32CubeMX *extensively* in this course.
 
