@@ -42,7 +42,7 @@ This naming convention helps engineers quickly identify the key characteristics 
 According to the [user manual](https://www.st.com/resource/en/user_manual/um1974-stm32-nucleo144-boards-mb1137-stmicroelectronics.pdf), the STM32 Nucleo-144 boards offer the following features:
 
 **Common Features**
-- STM32 Arm® Cortex® core-based microcontroller in an LQFP144 package
+- STM32 Arm® Cortex® core-based microcontroller in an LQFP144 package (plastic, low profile quad flat package; 144 terminals)
 - 3 user LEDs
 - 2 user and reset push-buttons
 - 32.768 kHz crystal oscillator
