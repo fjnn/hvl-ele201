@@ -18,7 +18,7 @@ taxonomy: markup
 - [Lecture 6 - IP Network Case Study]({{ site.baseurl }}/network-lectures/l6-ip-network-case-study)
 - [Lecture 7 - Router Lab]({{ site.baseurl }}/network-lectures/l7-router-lab)
 - [Lecture 8 - Physical Layer]({{ site.baseurl }}/network-lectures/l8-physical-layer)
-- [Lecture 9 - Transport Layer]({{ site.baseurl }}/network-lectures/l9-transport-layer)
+- [Lecture 9 - Transport Layer and Protocols]({{ site.baseurl }}/network-lectures/l9-transport-layer)
 - [Lecture 10 - Network Security]({{ site.baseurl }}/network-lectures/l10-network-security)
 - [Lecture 11 - Microcontroller Network Lab Part 1]({{ site.baseurl }}/network-lectures/l11-microcontroller-network-lab-p1)
 - [Lecture 12 - Microcontroller Network Lab Part 2]({{ site.baseurl }}/network-lectures/l12-microcontroller-network-lab-p2)

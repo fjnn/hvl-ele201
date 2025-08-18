@@ -57,7 +57,7 @@ network-lectures:
     url: /network-lectures/l7-router-lab
   - title: "L8 - Physical Layer"
     url: /network-lectures/l8-physical-layer
-  - title: "L9 - Transport Layer"
+  - title: "L9 - Transport Layer and Protocols"
     url: /network-lectures/l9-transport-layer
   - title: "L10 - Network Security"
     url: /network-lectures/l10-network-security
