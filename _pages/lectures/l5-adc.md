@@ -464,3 +464,19 @@ To start, you can either do changes on your previous project or create a new one
 {: .notice--warning}
 If your debugger does not increment `count` properly, it might be about your stack size. [More about stack overflows and increasing stack size]({{ site.baseurl }}/stack)
 
+# Exercise: Temperature sensor TMP36(Home/Lab)
+In this example we will be reading the temperature from the TMP36 sensor that is included in the kit. The TMP36 has a voltage output linearly proportional to the temperature, and thus makes it easy to measure temperatures without any curve fitting that must be used with nonlinear sensing elements.
+
+The details of how the TMP35 operates are available in the [datasheet](https://www.analog.com/media/en/technical-documentation/data-sheets/tmp35_36_37.pdf)
+
+Connect the sensor according to the following diagram:
+![tmp35]({{site.baseurl}}/assets/images/tmp35.png)
+
+
+```c
+int sensorVal = analogRead(A0);
+float sensorVolt = (sensorVal/1023.0)*5;
+float temperature = (sensorVolt - 0.5)*100;
+```
+
+<!-- Exercise: https://www.youtube.com/watch?v=zipjCtiHYr8&ab_channel=BINARYUPDATES do it in our card. -->
