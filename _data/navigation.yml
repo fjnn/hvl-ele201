@@ -4,7 +4,7 @@ main:
   - title: "Exercises"
     url: /exercises
   - title: "Network Lectures"
-    url: /Network-Lectures
+    url: /network-lectures
   - title: "Network Practice"
     url: /network-practice
 
