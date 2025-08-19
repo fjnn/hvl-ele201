@@ -35,9 +35,49 @@ Make sure that eveything you needed are installed:
 # Start your first STM32F767ZI-Nucleo Project
 
 {: .notice--warning}
-**Warning:** Before you upload the code, make sure your board is properly connected and you have selected the correct board and framework in PlatformIO before uploading code. There are two microUSB ports on the board. One is connected to bootloader, the other is connected to the board's serial I/O. MAKE SURE THAT YOU CONNECT THE USB ON THE BOOTLOADER SIDE.
+**Warning:** Before you upload the code, make sure your board is properly connected. There are two microUSB ports on the board. One is connected to bootloader, the other is connected to the board's serial I/O. MAKE SURE THAT YOU CONNECT THE USB ON THE BOOTLOADER SIDE.
+
+
+## Using CubeMX + PlatformIO
+In this course, we will use STM32CubeMX to **generate** projects, and PlatformIO to **modify projects**. It is possible to both generate and modify the code only using PlatformIO ([as explained here](#using-only-platformio)), however, as we progress in the different tasks, it will be very difficult to set all the configurations manually. In old times, embedded system engineers had their "own" libraries for various tasks, LCD setup, ADC initialization, PWM parameters etc. They used to copy or include these pieces of code into their projects as they needed. Today, we have tidier solutions. For our development board, we can use STM32CubeMX, which is a graphical tool that allows a very easy configuration of STM32 microcontrollers and microprocessors. Therefore, we don't need to write the code for every single configuration. We will be using STM32CubeMX *extensively* in this course.
+
+You can watch this video to setup your first blink code using both CubeMX and PlatformIO: [Click here for the video](https://youtu.be/Ty_ekwVimHE) or follow the steps below:
+
+1. Start a new STM32CubeMX project. If you select the default mode, the LED assignments will be already done.
+2. Skip clock configurations (for now).
+3. Do the necessary changes in the Project Manager tab and generate the source code.
+   a. Give a descriptive project name
+   b. Choose where you want to locate your projects. You can use this location during this course. It might be smart to make a new folder under /Documents named ELE201, and gather all your future projects, including this one.
+   c. Change Application Structure from Advanced to Basic.
+   d. Change Toolchain/IDE to STM32CubeIDE
+   e. Remove the tick in front of the Generate Under Root.
+4. Make sure that your setup looks similar to this:
+   ![cubemx-firstblink]({{site.baseurl}}/assets/images/cubemx-firstblink.png)
+5. Go to File Explorer on your P **OR** VSCode>File>Open Folder and find where your new project is. Create a **platformio.ini** file and copy the content below in it.
+   ```c
+   [env:nucleo_f767zi]
+   platform = ststm32
+   board = nucleo_f767zi
+   framework = stm32cube
+   build_flags =
+      -IInc
+   ```
+   Please make sure that platformio.ini does not have another extension like *platformio.ini.txt* if you created it as a text document.
+6. Now you can open it as a project using PlatformIO. 
+   ![Platformio-open]({{site.baseurl}}/assets/images/platformio-open.png)
+7. The piece of code you need to add after `/*USER CODE BEGIN 3*/` is here:
+
+   ```c
+   HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
+   HAL_Delay(500);
+   ```
+8. Build and upload.
+9. Observe the blue LED state as you press user button (blue button) on your board.
+
 
 ## Using only PlatformIO
+
+This is an alternative method and we won't be using it, but it is nice to know.
 
 1. Click on the PlatformIO icon in the left sidebar
 2. Click on "PIO Home" in the PlatformIO menu
@@ -112,35 +152,6 @@ Now you can copy the content below in your main.h under the **include** folder.
 #endif // MAIN_H
 ```
 
-
-## Using CubeMX + PlatformIO
-The code above is simple and easy to write. However, as we progress in the different tasks, it will be very difficult to set all the configurations manually. In old times, embedded system engineers have their "own" libraries for various tasks, LCD setup, ADC initialization, PWM parameters etc. They used to copy or include these piece of codes into their projects as they need. Today, we have a tidier solutions. For our development board, we can use STM32CubeMX, which is a graphical tool that allows a very easy configuration of STM32 microcontrollers and microprocessors. Therefore, we don't need to write the code for every single configuration. We will be using STM32CubeMX *extensively* in this course.
-
-You can watch this video to setup your first blink code using both CubeMX and PlatformIO: [Click here for the video](https://youtu.be/Ty_ekwVimHE).
-
-
-The piece of code you need to add after `/*USER CODE BEGIN 3*/` is here:
-
-```c
-HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
-HAL_Delay(500);
-```
-
-The content of platformio.ini is here:
-
-```c
-[env:nucleo_f767zi]
-platform = ststm32
-board = nucleo_f767zi
-framework = stm32cube
-build_flags =
-   -IInc
-```
-{: .notice--info}
-**Note that**  there is a new configuration command in platformio.ini file that you didn't have when you generated the project only using PlatformIO, which is `build_flags`. We need this line because the naming convention in STM32CubeMX is different than PlatformIO. PlatformIO generated projects put the necessary header files (aka files with extension .h) are in the folder named **include** whereas the CubeMX generated projects keep the header files under **Inc**.
-
-{: .notice--info}
-**Note that**  the blink rate is a bit slower than 500ms, right? It is because we haven't configured the clock settings properly and we have lots of pins configured by default even if we don't use. We will fix the blink rate issue later on.
 
 ## PlatformIO Buttons
 For those who are a bit familiar with VSCode, the buttons might be easier. However, PlatformIO extension offers a lot. Let's have a quick look at them.
