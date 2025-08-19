@@ -43,8 +43,10 @@ In this course, we will use STM32CubeMX to **generate** projects, and PlatformIO
 
 You can watch this video to setup your first blink code using both CubeMX and PlatformIO: [Click here for the video](https://youtu.be/Ty_ekwVimHE) or follow the steps below:
 
-1. Start a new STM32CubeMX project. If you select the default mode, the LED assignments will be already done.
-2. Skip clock configurations (for now).
+1. Start a new STM32CubeMX project. 
+    ![cubemx-start]({{site.baseurl}}/assets/images/cubemx-start.png)
+    After you click Start Project if you **select the default mode**, the LED assignments will be already done.
+2. Do nothing in pinout and skip clock configurations (for now).
 3. Do the necessary changes in the Project Manager tab and generate the source code.
    a. Give a descriptive project name
    b. Choose where you want to locate your projects. You can use this location during this course. It might be smart to make a new folder under /Documents named ELE201, and gather all your future projects, including this one.
