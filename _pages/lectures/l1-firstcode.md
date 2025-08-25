@@ -76,6 +76,11 @@ You can watch this video to setup your first blink code using both CubeMX and Pl
 8. Build and upload.
 9. Observe the blue LED state as you press user button (blue button) on your board.
 
+{: .notice--warning}
+If you can build the code, but cannot upload it, and getting this error:
+![Driver-error]({{site.baseurl}}/assets/images/driver-error-image1.png)
+Then you need to update your ST-Link drivers. You can use [this link](https://zadig.akeo.ie/).
+
 
 ## Using only PlatformIO
 
