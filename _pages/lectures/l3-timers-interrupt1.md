@@ -305,32 +305,167 @@ Therefore, we need to choose a different prescalar if we want to measure longer 
 
 # Timer modes
 As you might have realized, timers have various purposes, and therefore, they are used extensively! By setting the timer into correct mode, the majority of your task will be done. Here you will find what those modes are and when to use them.
-### Slave modes:
+
+
+## STM32 Timer Modes - Functional Modes (what the timer does)
+We can group STM32 timer modes into core modes (time base), output modes, input modes, and special modes:
+
+![Functional timer modes]({{site.baseurl}}/assets/images/functional-timer-modes.png)
+
+1. **Time Base Mode (a.k.a. "Up/Down Counter Mode")**
+   - **What it does:**  
+     - Timer just counts (up, down, or center-aligned).
+     - Generates an interrupt when it overflows (ARR reached).
+   - **When to use:**  
+     - Create delays.
+     - Periodic interrupts (e.g., 1 ms tick for an RTOS).
+     - Trigger other peripherals (ADC, DAC).
+
+     ![Timerbase mode]({{site.baseurl}}/assets/images/timerbase-mode.png) (Source: [visualgdb.com](https://visualgdb.com/tutorials/arm/stm32/timers/))
+
+2. **Output Compare Mode (OC)**
+   - **What it does:**  
+     - Compares counter value with CCRx register.
+     - At a match, an action happens on the output pin (toggle, set, reset).
+   - **When to use:**  
+     - Generate square waves without CPU overhead.
+     - Precise event timing (e.g., toggle pin every 10 µs).
+     - Create multiple output events from the same timer.
+
+3. **PWM Mode (Pulse Width Modulation)**
+   - **What it does:**  
+     - Special case of Output Compare.
+     - Pin stays HIGH until counter == CCRx, then goes LOW (or vice versa).
+   - **When to use:**  
+     - Control motor speed (DC, BLDC).
+     - Control LED brightness.
+     - Generate audio, communication pulses (e.g., IR remote signals).
+
+     ![PWM mode]({{site.baseurl}}/assets/images/pwm-mode.png) (Source: [mathworks.com](https://www.mathworks.com/help/sps/ref/pwmgenerator.html))
+
+4. **Input Capture Mode (IC)**
+   - **What it does:**  
+     - Captures the timer counter value when an input edge occurs.
+   - **When to use:**  
+     - Measure signal frequency (time between rising edges).
+     - Measure pulse width (e.g., ultrasonic sensor echo).
+     - Decode protocols where timing matters (IR remote, PWM input).
+
+     ![IC mode]({{site.baseurl}}/assets/images/ic-mode.png) (Source: [microcontrollerslab.com](https://microcontrollerslab.com/stm32-nucleo-timer-input-capture-mode-frequency-measurement-example/))
+
+5. **One-Pulse Mode (OPM)**
+   - **What it does:**  
+     - Timer generates a single output pulse when triggered.
+   - **When to use:**  
+     - Generate a precise single trigger pulse.
+     - Ultrasonic sensor (send one “ping”).
+     - Test equipment (precise timed pulse).
+
+6. **Encoder Interface Mode**
+   - **What it does:**  
+     - Timer is configured to read two quadrature signals (A/B) from a rotary encoder.
+     - Counter increases/decreases depending on rotation direction.
+   - **When to use:**  
+     - Read position/speed of rotary encoders.
+     - Motor control (servo/BLDC).
+     - Robotics (wheel encoders for odometry).
+
+7. **Hall Sensor Interface Mode**
+   - **What it does:**  
+     - Specialized mode (on advanced timers) for reading 3-phase Hall sensors in motors.
+   - **When to use:**  
+     - BLDC motor commutation.
+
+8. **Advanced Control Features (TIM1, TIM8 only)**
+   - **Features:**
+     - Dead-time Insertion: Prevents shoot-through in MOSFET half-bridges.
+     - Complementary PWM: Outputs PWM with inverted phases.
+     - Break Input: Emergency stop if something goes wrong.
+   - **When to use:**  
+     - Motor drives (inverters, BLDC, PMSM).
+     - Power electronics (DC-DC converters, UPS).
+
+
+
+## Slave Modes (how the timer is *controlled* or *triggered*)
   A timer operating in a slave mode does not simply count on its own. Instead, its behavior (starting, stopping, resetting, or operating as an external clock) is dictated by an external trigger signal, which comes from a "Trigger Source" (as shown in the line below "Slave Mode").
 
   ![Slave Modes]({{site.baseurl}}/assets/images/slave-modes.png)
 
-  - Disable: The timer is not operating in any slave mode. It functions independently, based solely on its internal clock source and its own configuration (e.g., counting up continuously, generating PWM, etc.). It does not respond to external triggers as a slave. We use it for basic timer operations where no external synchronization or control is needed.
-  - External Clock Mode 1: The timer's internal counter is clocked by an external signal provided via a specific timer input pin (often referred to as TIx, where x is the channel number). Each active edge of the external signal (e.g., rising edge) increments (or decrements) the timer's counter. The internal clock (from the APB bus) is effectively ignored for counting. We use it to use the timer as an event counter, where we want to count pulses or events from an external source (e.g., a sensor, a quadrature encoder, a frequency meter).
-  - Reset Mode: When the selected trigger signal occurs, the timer's internal counter (CNT) is immediately reset to 0. It then continues counting from 0. We use it to synchronize the start of the timer's counting period with an external event. For example, resetting a timer on the start of a new frame in a communication protocol, or resetting multiple timers simultaneously with a single trigger.
-  - Gated Mode: The timer's counter only increments (or decrements) when the selected trigger signal is active (e.g., high or low, depending on configuration). When the trigger signal is inactive, the counter pauses and holds its current value. We use it to measure the duration of an external signal, or to gate the timer's operation based on an enable/disable signal from another peripheral. For example, counting pulses only when a specific enable signal is present.
-  - Trigger Mode: The timer starts counting when the selected trigger signal occurs. Once started, it continues counting independently until it's explicitly stopped or reset by software, or it reaches its auto-reload value. It only reacts to the first trigger, or subsequent triggers only after it has stopped. We use it to initiate a timing sequence based on an external event. For example, starting a delay timer when a button is pressed, or beginning a measurement period when a sensor goes active.
-  - Combined Reset Trigger Mode: This is a combination of Reset Mode and Trigger Mode, often found on advanced timers. We will not do anything with these timers in this course. It is often used when you want to both reset and start (or restart) the timer's counting sequence on a single trigger event.
+  When you open CubeMX and select Slave Mode, you see options like:
 
-### Channel modes:
-  It is about how that particular channel will behave on this timer. A channel refers to an independent, configurable sub-unit within a single timer peripheral. Think of a timer as a multi-lane highway, and each channel as a separate lane that can handle its own specific traffic (timing-related operations).
-  ![Channel Modes]({{site.baseurl}}/assets/images/channel-modes.png)
-  - **Disable**: Completely deactivates the specific channel.
-  - **Input Capture direct mode**: Configures the channel for Input Capture (IC). In "direct mode," the timer directly captures the value of its internal counter when an event (e.g., a rising edge, falling edge, or both) occurs on the associated input pin. The captured value is stored in the channel's Capture/Compare Register (CCR). We use this mode for measuring the period, frequency, or pulse width of an external signal that is directly connected to the timer input pin. This is the most common Input Capture setup.
-  - **Input Capture indirect mode**: Also configures for Input Capture, but in an "indirect mode." This typically means that one channel is configured as the active input, and another channel is configured to capture based on the same input signal but with a different trigger. This allows for measuring both high and low pulse durations or the period using a single input signal and two channels. Not as often used.
-  - **Input Capture triggered by TRC**: This is another variation of Input Capture where the capture event is not directly tied to a specific input pin, but rather to an internal trigger event (TRC stands for Trigger Controller). This allows the timer to capture its counter value when an event occurs from another internal peripheral (e.g., a trigger output from another timer, an ADC conversion complete event, etc.). We use this mode for advanced synchronization scenarios where the timer needs to timestamp an event that is generated by another part of the microcontroller, rather than an external pin.
-  - **Output Compare No Output**: Configures the channel for Output Compare (OC) mode, but without directly affecting an external output pin. When the counter matches the channel's CCR value, an internal event is generated (e.g., an interrupt, or a DMA request), but no change occurs on the physical output pin associated with that channel. We use this mode when we need a precise internal timing event or trigger without driving an external pin. For example, to trigger an ADC conversion at a specific time, or to schedule a software task.
-  - **Output Compare CH1**: Configures the channel for Output Compare (OC) mode, and critically, it will use the settings of Channel1 for its output behavior. This implies a scenario where multiple channels might be linked or synchronized to Channel1's settings or its output. This option might be available if channels can be grouped or if a channel's output can be driven based on another channel's comparison. Note: This specific phrasing is a bit unusual; typically, you'd configure a channel to directly produce an output based on its own CCR. It could suggest a slave mode where this channel mirrors or is controlled by Channel1's output compare event, or it might be a simplified selection for an initial configuration to use CH1 settings. It is not as often used. Sometimes in specific synchronization or linked-channel scenarios defined by the STM32's timer architecture.
-  - **PWM Generation No Output**: Configures the channel for Pulse Width Modulation (PWM) generation, but similar to "Output Compare No Output," it does not drive an external pin. The PWM signal is generated internally (based on the timer's counter and the channel's CCR value), but its effect is only on internal events (interrupts, DMA). Next mode is more often used compared to this one.
-  - **PWM Generation CH1**: Configures the channel for PWM generation. We will learn more about PWM in [L6 DAC and PWM](https://fjnn.github.io/hvl-ele201/lectures/l6-dac-pwm) later on. We use this mode when we want to generate a *fake analog output* for example to control a DC motor, changing the brightness of an LED etc.
+1. **Disabled**
+   - Timer runs normally, free-running with PSC/ARR.
+
+2. **Reset Mode**
+   - Counter is reset whenever a trigger input occurs.
+   - **Use case:** Measure time between external events (e.g., stopwatch resets on each external pulse).
+
+3. **Gated Mode**
+   - Timer counts only while the trigger input is active (high).
+   - **Use case:** Measure pulse width (counter runs only while input is high).
+
+4. **Trigger Mode**
+   - Timer starts counting on a trigger event (instead of always running).
+   - **Use case:** One-shot measurements, synchronized timing between peripherals.
+
+5. **External Clock Mode 1**
+   - Counter increments using an external signal (instead of internal clock).
+   - **Use case:** Count external pulses (e.g., how many pulses from a sensor in 1s).
+
+6. **Encoder Mode**
+   - Special wiring of two inputs for quadrature encoder signals.
+   - **Use case:** Read motor encoder position/direction.
+
+
+## How to Link “Functional Modes” and “CubeMX Options”
+Think of it like this:
+
+1. **First, choose the functional mode:**
+   - Do you want **PWM**? **Input Capture**? **Encoder**? **Output Compare**?
+
+2. **Then, choose the slave mode (trigger behavior):**
+   - Does the timer run freely?
+   - Or should it start/reset/gate based on another signal or timer?
+
+**Example:**  
+You want to measure the width of a PWM input signal.
+
+- **Functional mode:** Input Capture  
+- **Slave mode:** Gated mode (counter runs only while signal is HIGH)
+
+## Timer modes summary
+Here is a kind of summary table (?) I would say the highlighted ones are most relevant to this course, but depending on your project, you might want to choose a non-highlighted mode as well.
+
+| **Functional Mode**                         | **Typical Slave Mode (CubeMX)**  | **What It Means**                                                      | **Example Use Case**                              |
+| ------------------------------------------- | -------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------- |
+| <span style="background-color:#ffe599"><b>Time Base (periodic interrupt)</b></span>          | <span style="background-color:#ffe599">Disabled</span>                         | <span style="background-color:#ffe599">Timer runs freely with PSC/ARR</span>                                         | <span style="background-color:#ffe599">Blink LED, RTOS tick, periodic ADC trigger</span>        |
+| <span style="background-color:#ffe599"><b>Output Compare</b></span>                          | <span style="background-color:#ffe599">Disabled / Reset Mode</span>            | <span style="background-color:#ffe599">Toggle/Set pin on compare. Reset mode resets counter on external event</span> | <span style="background-color:#ffe599">Square wave generation, synchronized pulses</span>       |
+| <span style="background-color:#ffe599"><b>PWM</b></span>                                     | <span style="background-color:#ffe599">Disabled</span>                         | <span style="background-color:#ffe599">Counter runs freely, CCR defines duty</span>                                  | <span style="background-color:#ffe599">LED dimming, motor speed control</span>                  |
+| **PWM (synchronized)**                      | Trigger Mode / Reset Mode        | PWM starts/reset on master trigger                                     | Multi-phase PWM for motor drives, DAC sync        |
+| <span style="background-color:#ffe599"><b>Input Capture (frequency measurement)</b></span>   | <span style="background-color:#ffe599">Reset Mode</span>                       | <span style="background-color:#ffe599">Counter resets on each input edge, capture value gives period</span>          | <span style="background-color:#ffe599">Measure frequency of external signal</span>              |
+| <span style="background-color:#ffe599"><b>Input Capture (pulse width measurement)</b></span> | <span style="background-color:#ffe599">Gated Mode</span>                       | <span style="background-color:#ffe599">Counter runs only while signal is HIGH, captured value = pulse width</span>   | <span style="background-color:#ffe599">Ultrasonic sensor echo timing, PWM input decoding</span> |
+| **Input Capture (event timestamp)**         | Trigger Mode                     | Capture timer value at external event, counter runs continuously       | Timestamp external events, protocol decoding      |
+| **One-Pulse Mode**                          | Trigger Mode                     | Timer generates one pulse when triggered                               | Ultrasonic trigger pulse, precise test pulses     |
+| **External Clock Mode**                     | External Clock Mode 1            | Timer counts based on external pulses                                  | Count rotations, events, or sensor ticks          |
+| **Encoder Interface**                       | Encoder Mode (TI1, TI2, TI1+TI2) | Timer counts quadrature encoder signals                                | Motor shaft position/speed measurement            |
+| **Hall Sensor Interface**                   | Encoder Mode (special config)    | Works with 3-phase Hall sensors                                        | BLDC motor commutation                            |
+| **Advanced PWM (motor control)**            | Trigger/Reset + Break Input      | PWM sync, dead-time, emergency stop                                    | 3-phase inverter, PMSM/BLDC drives                |
 
 {: .notice--info}
 Any timers current value can be found in TIMx_CNT register.
+
+## Master/Slave Synchronization (linking timers together)
+Timers can work together:
+
+- **One timer = master** (produces trigger event)
+- **Another = slave** (starts, resets, or gates counting based on master)
+
+This lets you build complex waveforms, synchronized ADC sampling, or cascaded timers.
+
+**Examples:**
+- **TIM1** generates PWM, **TIM2** resets every PWM cycle -> TIM2 measures PWM duty timing.
+- **TIM6** runs as DAC trigger, **TIM7** delays another event.
 
 ## Exercise (Home/Lab): Measure time and print
 <!-- internal_timer_uart2.ioc -->
