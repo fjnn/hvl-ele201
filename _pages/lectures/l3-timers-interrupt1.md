@@ -31,7 +31,8 @@ Undeniably *the most important thing* in a digital system. Therefore, it is fund
 
 The clock is essentially an oscillating signal that synchronizes all operations within the microcontroller. Every instruction, every data transfer, every peripheral action happens in sync with this clock signal. The faster the clock, generally, the faster your microcontroller can execute instructions.
 
-{: .notice--info} Nice to watch: [Why clock is everything?](https://www.youtube.com/watch?v=PVNAPWUxZ0g&ab_channel=CoreDumped)
+{: .notice--info}
+Nice to watch: [Why clock is everything?](https://www.youtube.com/watch?v=PVNAPWUxZ0g&ab_channel=CoreDumped)
 
 On the STM32F767, we have a sophisticated clock system. It's not just one clock; there's a whole hierarchy:
 
@@ -90,7 +91,6 @@ The STM32F767 is equipped with a rich set of timers:
 | APB2  | TIM1/8, USART1/6, ADCs       | HCLK         | Yes       | 108 MHz          |
 
 Always check the reference manual and your clock configuration to know exactly how fast each peripheral is running!
-
 
 
 

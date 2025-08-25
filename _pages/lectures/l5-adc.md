@@ -125,6 +125,11 @@ The STM32Cube HAL (Hardware Abstraction Layer) provides a set of user-friendly f
 - `HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)`: A weak callback function that gets called automatically by the HAL driver when an ADC conversion (or sequence of conversions in scan mode) completes in interrupt or DMA mode. You should override this in your `main.c` or another source file to implement your custom logic.
 - `HAL_ADC_ErrorCallback(ADC_HandleTypeDef* hadc)`: A weak callback function that gets called when an ADC error occurs.
 
+# A common circuit
+A common circuit for almost all exercises for a few weeks.
+![common_circuit]({{site.baseurl}}/assets/images/common-circuit.png)
+<!-- https://ele102.gitlab.io/automatisering-frde/ele102-frde/texts/Lessons-additional/Handson_exercises.html#common-circuit -->
+
 
 # Exercise: Read potentiometer value
 In this exercise, we will read the value of a potentiometer and convert it into voltage. It is a fundamental step to be able to read many different sensors later on.
@@ -467,16 +472,54 @@ If your debugger does not increment `count` properly, it might be about your sta
 # Exercise: Temperature sensor TMP36(Home/Lab)
 In this example we will be reading the temperature from the TMP36 sensor that is included in the kit. The TMP36 has a voltage output linearly proportional to the temperature, and thus makes it easy to measure temperatures without any curve fitting that must be used with nonlinear sensing elements.
 
-The details of how the TMP35 operates are available in the [datasheet](https://www.analog.com/media/en/technical-documentation/data-sheets/tmp35_36_37.pdf)
+The details of how the TMP36 operates are available in the [datasheet](https://www.analog.com/media/en/technical-documentation/data-sheets/tmp35_36_37.pdf)
 
 Connect the sensor according to the following diagram:
 ![tmp35]({{site.baseurl}}/assets/images/tmp35.png)
 
+Create a new ADC project with ADC1, which is connected to PA3, with 12-bit resolution. Generate your code and modify your `main.c` according to the code below. For simplicity, I used ``HAL_ADC_PollForConversion()``, without interrupts or DMA. You can modify it and make it more efficient.
+
 
 ```c
-int sensorVal = analogRead(A0);
-float sensorVolt = (sensorVal/1023.0)*5;
-float temperature = (sensorVolt - 0.5)*100;
+// PA3 is connected to ADC1
+ADC_HandleTypeDef hadc1;
+
+// We define a new function to read the temperature
+// We call it later in the main.
+float read_temperature(void) {
+    uint32_t sensorVal;
+    float sensorVolt;
+    float temperature;
+
+    HAL_ADC_Start(&hadc1); // Start ADC conversion
+    HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY); // Wait for conversion to complete
+    sensorVal = HAL_ADC_GetValue(&hadc1); // Get the converted value between 0-4095
+
+    // Convert the digital value to voltage
+    sensorVolt =  (float)sensorVal * (VREF / ADC_MAX_VALUE); // Calculate the voltage between 0-3.3V
+
+    // Convert the voltage to temperature using the sensor's formula
+    // This formula is based on TMP36 datasheet
+    temperature = (sensorVolt - 0.5f) * 100.0f;
+
+    return temperature;
+}
+
+// Example usage in your main loop
+int main(void) {
+    // ... all your initialization code from CubeMX ...
+
+    while (1) {
+        float currentTemp = read_temperature();
+
+        // Now you can use 'currentTemp' for display or other logic.
+        // For example, print it to a serial console.
+        // printf("Temperature: %.2f C\n", currentTemp);
+        // but we haven't set UART yet. So, you can debug it instead-
+
+        HAL_Delay(1000); // Wait for a second before the next reading
+    }
+}
 ```
 
 <!-- Exercise: https://www.youtube.com/watch?v=zipjCtiHYr8&ab_channel=BINARYUPDATES do it in our card. -->
