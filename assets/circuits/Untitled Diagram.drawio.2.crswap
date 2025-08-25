@@ -2625,29 +2625,8 @@
             <mxPoint x="2390" y="-1513" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BKrDw7uoNDOOOV-wrnLa-2" value="Our main clock" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#FF0707;" vertex="1" parent="1">
+        <mxCell id="BKrDw7uoNDOOOV-wrnLa-2" value="Our main clock" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=default;" vertex="1" parent="1">
           <mxGeometry x="2337" y="-1525" width="107" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="BKrDw7uoNDOOOV-wrnLa-3" value="" style="endArrow=classic;html=1;rounded=0;strokeColor=#FF0707;" edge="1" parent="1" target="BKrDw7uoNDOOOV-wrnLa-4">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="2691.5" y="-1605" as="sourcePoint" />
-            <mxPoint x="2691.5" y="-1530" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="BKrDw7uoNDOOOV-wrnLa-4" value="An integer value" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#FF0707;" vertex="1" parent="1">
-          <mxGeometry x="2638.5" y="-1542" width="107" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="BKrDw7uoNDOOOV-wrnLa-5" value="" style="endArrow=classic;html=1;rounded=0;strokeColor=#FF0707;" edge="1" parent="1" target="BKrDw7uoNDOOOV-wrnLa-6">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="3278" y="-1701" as="sourcePoint" />
-            <mxPoint x="3278" y="-1626" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="BKrDw7uoNDOOOV-wrnLa-6" value="Max value that the timer register will reach" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#FF0707;" vertex="1" parent="1">
-          <mxGeometry x="3331" y="-1651" width="107" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="BKrDw7uoNDOOOV-wrnLa-8" value="`f_{PCLKx} = \frac{f_{HCLK}}{Prescalar + 1}`" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;strokeColor=default;fillColor=#B9E0A5;" vertex="1" parent="1">
-          <mxGeometry x="2601" y="-1776" width="172" height="64" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

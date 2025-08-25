@@ -251,12 +251,15 @@ For this example, we will use **TIM2**, which is a general-purpose timer. It can
 As you realized, we wrote down some numbers like 108 Hz for HCLK, 108-1 for prescalar, `(__HAL_TIM_GET_COUNTER(&htim2) - timer_val >= 100000)` in our code, but how can we decide what to write? How can we calculate them? Let's break down the essential components for accurate timer configurations.
 
 ## Timer Frequency Calculation
+
+![Prescalar diagram]({{site.baseurl}}/assets/images/prescalar_diagram.png)
+
 Note that HCLK is our main clock. It means that this clock will ignite other busses like APB (Advanced Perpheral Bus) to set PCLKs (Peripheral Clocks). Look at the clock configuration on CubeMX. By setting it to 108 MHz, our main clock generates $$108\times 10^6$$ ticks every second!
 
 Each timer has an internal counter that increments based on a clock source. The rate at which this counter increments is the "timer tick frequency." The timer's input clock is first divided by the Prescaler and then used to increment the counter.
 
 The relationship between HCLK and PCLK is like this:
- $$PCLKx = \dfrac{HCLK}{APBx\_Prescaler}$$
+ $$PCLKx = \dfrac{HCLK}{APBx\_Prescaler + 1}$$
 
 which means that if you set your HCLK = 108 Mhz, and AHBx Prescalar to /2, then your peripheral clock will work at half speed of your main clock.
 
@@ -288,7 +291,7 @@ So, we know that our timer counter has a limited capacity. The counter value is 
 
 Then the question: what is the maximum time that we can measure with this timer?
 
-  $$2^32 - 1 = 4,294,967,295$$
+  $$2^{32} - 1 = 4,294,967,295$$
 
 and each tick was calculated 1 us, so converting to Larger Units (for better understanding):
 
