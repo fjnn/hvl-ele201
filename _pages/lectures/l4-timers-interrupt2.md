@@ -15,6 +15,15 @@ taxonomy: markup
 <!-- {: .notice--info}
 Detaljert om GPIO. Inngang og utgang, push-pull vs open-drain. Pull-up og pull-down. Bruk av tabellar (array) med fleire trykknappar og lysdiodar. -->
 
+# Some important C concepts
+
+In this course, we are using the **HAL (Hardware Abstraction Layer) libraries** provided by STMicroelectronics for STM32 microcontrollers. They are high-level, user-friendly interface to the hardware features of the microcontroller. Instead of writing low-level code to directly manipulate hardware registers (which can be error-prone and difficult to maintain), the HAL provides functions that abstract away the hardware details. This makes your code more portable, easier to read, and less dependent on the specific microcontroller model. They are often sufficient for many of the projets but sometimes, we might need small modifications on our registers. 
+
+If you look at `stm32f7xx_hal_gpio.h` or other HAL library headers, you will see that all HAL functions are intrinsically do some register manipulations. 
+![HAL_GPIO_TogglePin]({{site.baseurl}}/assets/images/HAL_GPIO_TogglePin.png)
+
+{: .notice--info}
+Even though HAL is written in C, you can use it in C++ projects as well. C++ is fully compatible with C, but you need to tell the C++ compiler that the HAL functions have C linkage. This is done using the `extern "C"` keyword in your code. For example, in your C++ source file:
 
 # Binary operations
 ## The Basics: Bits, Bytes, and Hexadecimal
