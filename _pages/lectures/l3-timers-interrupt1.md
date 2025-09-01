@@ -15,17 +15,6 @@ taxonomy: markup
 <!-- {: .notice--info}
 Peikarar forts. Timing og avbrudd. -->
 
-# Some important C concepts
-
-In this course, we are using the **HAL (Hardware Abstraction Layer) libraries** provided by STMicroelectronics for STM32 microcontrollers. They are high-level, user-friendly interface to the hardware features of the microcontroller. Instead of writing low-level code to directly manipulate hardware registers (which can be error-prone and difficult to maintain), the HAL provides functions that abstract away the hardware details. This makes your code more portable, easier to read, and less dependent on the specific microcontroller model. They are often sufficient for many of the projets but sometimes, we might need small modifications on our registers. 
-
-If you look at `stm32f7xx_hal_gpio.h` or other HAL library headers, you will see that all HAL functions are intrinsically do some register manipulations. 
-![HAL_GPIO_TogglePin]({{site.baseurl}}/assets/images/HAL_GPIO_TogglePin.png)
-
-{: .notice--info}
-Even though HAL is written in C, you can use it in C++ projects as well. C++ is fully compatible with C, but you need to tell the C++ compiler that the HAL functions have C linkage. This is done using the `extern "C"` keyword in your code. For example, in your C++ source file:
-
-
 # Clock
 Undeniably *the most important thing* in a digital system. Therefore, it is fundamental to understand the concept of clock, to understand how an embedded system works. A clock is the heartbeat of your controller. Imagine your microcontroller as a tiny orchestra. For every instrument (or peripheral) to play in perfect harmony, they need a conductor keeping the beat. That conductor is the clock.
 
@@ -198,7 +187,7 @@ For this example, we will use **TIM2**, which is a general-purpose timer. It can
 7. Find PB0 on the chip, and set it to GPIO_Output. And then, right click on the pin > edit user label
   - Make sure the settings look like this so far on the left ``System Core > GPIO > Configuration > PB0 >``
   ![GPIO Settings]({{site.baseurl}}/assets/images/timer_blink.png)
-8. On the left ``Timers > TIM2 > Clock source -> Internal clock `` and in Parameter settings `Prescalar -> 108-1`
+8. On the left ``Timers > TIM2 > Clock source -> Internal clock `` and in Parameter settings `Prescalar -> 54-1`
 9. Go to Clock Configuration. Set these values:
  ![Timer Prescalars]({{site.baseurl}}/assets/images/timer_led_blink_clock108.png)
 10. Go to Project Manager
@@ -238,13 +227,20 @@ For this example, we will use **TIM2**, which is a general-purpose timer. It can
     ```
 16. Add this code after `/* USER CODE BEGIN 3 */` in **main.c**:
   ```c
-  if (__HAL_TIM_GET_COUNTER(&htim2) - timer_val >= 100000)
+  if (__HAL_TIM_GET_COUNTER(&htim2) - timer_val >= 1000000)
     {
       HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
       timer_val = __HAL_TIM_GET_COUNTER(&htim2);
     }
   ```
 17. Build and Upload
+
+## Explanation
+- Total Blink Period: 500ms (ON) + 500ms (OFF) = 1000ms = 1 second.
+- Blink Frequency: 1 Hz.
+- Our ``SystemClock_Config`` sets the ``SYSCLK`` to 108 MHz. The ``APB1CLKDivider`` is ``RCC_HCLK_DIV2``, which makes the ``APB1`` bus clock $108 MHz / 2 = 54 MHz$. This is the clock for ``TIM2``.
+- When we set the prescalar fot `TIM2` as $54-1$, we actually set the counter for `TIM2` to tick every 1us.
+- Therefore `if (__HAL_TIM_GET_COUNTER(&htim2) - timer_val >= 1000000)` means "blink every second"!
 
 
 # Timer calculations
