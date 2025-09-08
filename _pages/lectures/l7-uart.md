@@ -114,3 +114,5 @@ pass
 
 # Bluetooth exercise
 pass (maybe)
+
+https://deepbluembedded.com/stm32-debugging-with-uart-serial-print/
