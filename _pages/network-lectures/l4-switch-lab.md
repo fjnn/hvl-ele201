@@ -11,3 +11,9 @@ sidebar:
     nav: network-lectures
 taxonomy: markup
 ---
+
+Check Assignment 2 in Canvas for more information on the lab.
+
+
+# References
+If you want to learn more about topics covered in the lab you can check out Module 7 and 9 in the netacad course (CCNA: Introduction to Networks).
