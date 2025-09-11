@@ -298,6 +298,14 @@ and each tick was calculated 1 us, so converting to Larger Units (for better und
 
 Therefore, we need to choose a different prescalar if we want to measure longer time.
 
+{: .notice--info}
+**Note:** 
+What is the maximum minutes that you can count with TIM3 with prescalar 27-1?
+
+What prescalar you should choose to be able to count with TIM3 for more than one-day?
+
+Can you count more than 1-week with TIM3? If so, which prescalar? If not, what would you do to change to be able to count upto a week?
+
 
 # Timer modes
 As you might have realized, timers have various purposes, and therefore, they are used extensively! By setting the timer into correct mode, the majority of your task will be done. Here you will find what those modes are and when to use them.
