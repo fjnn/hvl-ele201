@@ -306,7 +306,15 @@ When an ADC conversion completes, it can generate an interrupt. This is a common
 One possible disadvantage of using ADC with interrupts might be overhead for high rates. If you need to acquire data very frequently (e.g., in continuous or high-speed scan modes), generating an interrupt for every single conversion (or even every sequence of conversions) can lead to significant CPU overhead. The CPU spends a lot of time entering and exiting the ISR, which can impact performance and introduce jitter.
 
 ## ADC with DMA
-DM (Direct Memory Access) is a hardware feature that allows data transfers between peripherals (like the ADC) and memory, or between different memory locations, without CPU intervention. This is incredibly powerful for high-speed or continuous data acquisition.
+DMA stands for "Direct Memory Access." Imagine you want to move a lot of books from one shelf to another. Normally, you (the CPU) would have to pick up each book and carry it over, one by one, which takes a lot of your time. But if you have a helper (DMA), you can just tell them what to move and where, and they do it for you while you do something else. 
+
+In microcontrollers, DMA allows data to be transferred between memory and peripherals (like the DAC or ADC) automatically, without the CPU having to handle every single piece of data. This makes things much faster and frees up the CPU to do other tasks. In this exercise, DMA will send the sine wave data to the DAC automatically, so the microcontroller doesn't have to send each value one by one.
+
+This is incredibly powerful for high-speed or continuous data acquisition. 
+
+{: .notice--info}
+Details about the DMA setting are not in the scope of this course. It is just that you should know what DMA is and how to set up simple DMA with ADC and DAC applications. But if you want to learn more about the details of the settings, you can follow [this link](URL), but it will probably make more sense after you learn about DAC.
+
 
 **How it works:**
 Configure ADC: Set up the ADC for continuous conversion, scan mode, or any mode where multiple conversions will occur.
