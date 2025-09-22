@@ -39,6 +39,8 @@ lectures:
     url: /lectures/l12-lab
   - title: "L13 - Efficiency"
     url: /lectures/l13-efficiency
+  - title: "Miscellaneous"
+    url: /lectures/miscellaneous
   
 network-lectures:
   - title: "L1 - Introduction and Basic Concepts"

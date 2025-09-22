@@ -25,3 +25,6 @@ taxonomy: markup
 - [L5 - Read potentiometer value](https://github.com/fjnn/stm32-lecture-projects/tree/main/adc_test)
 - [L5 - Measure A/D conversion duration](https://github.com/fjnn/stm32-lecture-projects/tree/main/adc_duration_test)
 - [L5 - ADC single-continuous mode with interrupt](https://github.com/fjnn/stm32-lecture-projects/tree/main/adc_interrupt_test)
+- [L6 - Basic DAC](https://github.com/fjnn/stm32-lecture-projects/tree/main/dac-simple)
+- [L6 - DAC DMA Sine wave](https://github.com/fjnn/stm32-lecture-projects/tree/main/dac-dma-sinusoidal)
+- [L6 - LED Dimmer](https://github.com/fjnn/stm32-lecture-projects/tree/main/pwm-led-dimmer)
