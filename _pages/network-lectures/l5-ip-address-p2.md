@@ -198,10 +198,7 @@ When a client makes a query, the server DNS process first looks at its own recor
 <!-- 15.4. -->
 
 
-<!-- ## Variable Length Subnet Mask (VLSM)
-A standard /16 subnetting scheme creates subnets that each have the same number of hosts. Not every subnet you create will need this many hosts, leaving many IPv4 addresses unused. Perhaps you will need one subnet that contains many more hosts. This is why the variable-length subnet mask (VLSM) was developed. In all of the previous subnetting examples, the same subnet mask was applied for all the subnets. This means that each subnet has the same number of available host addresses. As illustrated in the left side of the figure, traditional subnetting creates subnets of equal size. Each subnet in a traditional scheme uses the same subnet mask. As shown in the right side of the figure, VLSM allows a network space to be divided into unequal parts. With VLSM, the subnet mask will vary depending on how many bits have been borrowed for a particular subnet, thus the “variable” part of the VLSM.
 
-<img src="{{ site.baseurl }}/assets/images/vlsm.png" alt="VLSM" width="1000"/> -->
 
 
 
