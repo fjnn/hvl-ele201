@@ -75,6 +75,8 @@ network-practice:
     url: /network-practice/p0-info
   - title: "Installations"
     url: /network-practice/p1-install
+  - title: "Cisco IOS Navigation"
+    url: /network-practice/p4-cisco-ios-navigation
   - title: "Switch CLI Commands"
     url: /network-practice/p2-switch-config
   - title: "Router CLI Commands"
