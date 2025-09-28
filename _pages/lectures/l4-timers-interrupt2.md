@@ -438,7 +438,7 @@ For this task, we can use **Gated mode**, which was mentioned in [Lesson 3](http
 1. Master Clock Output: Checked. *(only for a possible debugging)*
 1. This time we can use TIM3, just because our heart desires so, and set its slave mode Gated Mode.
 1. Since we want the timer to be triggered by an external input, we will choose the trigger mode TI1FP1. This will enable `PA6` for us.
-1. As before, we set the prescalar to 54-1 so that each tick will be 1 us for this timer.
+1. As before, we set the prescalar to 108-1 so that each tick will be 1 us for this timer.
 1. Since we have a pull-up resistor on our button, the default state of `PA6` will be `SET`. When we press the button, the signal will be low. Therefore, we must select "Falling Edge" as trigger polarity. If we had a pull-down resistor, then we would have chosen "Rising Edge". 
 1. Enable the **TIM3 global interrupt** in TIM3's NVIC settings.
 1. Also set LD1 on pin `PB0` just for debugging later on.

@@ -380,7 +380,7 @@ Note that  It is better to use the 5V pin as source for your servo.
   - Set the Clock Source to `Internal Clock`.
   - Set Channel 4 to `PWM Generation CH4`. You will see that `PD15` is activated.
 1. In the timer configuration below:
-  - Knowing that APB1 Timer Clock Frequency: 108 MHz (Although the peripheral max frequency for APB1 is 54 MHz. I know it is a bit confusing with timer calculations, and I believe that I did a mistake with `54-1` in some exercises priorly, I will fix it!)
+  - Knowing that APB1 Timer Clock Frequency: 108 MHz (Although the peripheral max frequency for APB1 is 54 MHz. I know it is a bit confusing with timer calculations, and I did a mistake before `54-1` in some exercises priorly, I have fixed it by adding ARR into formula!)
   - Set prescaler (PSC) to `108-1` to generate an easily calculatable 1μs resolution (1 MHz counter frequency):
     $$ PSC = (108 MHz / 1 MHz) - 1 = 108 - 1$$
   - Set Counter Period (ARR) to $$10 000 - 1$$ to get a 20 ms period (50 Hz) with a $1 \mu s$ resolution.

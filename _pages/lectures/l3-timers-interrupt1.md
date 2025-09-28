@@ -187,7 +187,7 @@ For this example, we will use **TIM2**, which is a general-purpose timer. It can
 7. Find PB0 on the chip, and set it to GPIO_Output. And then, right click on the pin > edit user label
   - Make sure the settings look like this so far on the left ``System Core > GPIO > Configuration > PB0 >``
   ![GPIO Settings]({{site.baseurl}}/assets/images/timer_blink.png)
-8. On the left ``Timers > TIM2 > Clock source -> Internal clock `` and in Parameter settings `Prescalar -> 54-1`
+8. On the left ``Timers > TIM2 > Clock source -> Internal clock `` and in Parameter settings `Prescalar -> 108-1`
 9. Go to Clock Configuration. Set these values:
  ![Timer Prescalars]({{site.baseurl}}/assets/images/timer_led_blink_clock108.png)
 10. Go to Project Manager
@@ -238,8 +238,8 @@ For this example, we will use **TIM2**, which is a general-purpose timer. It can
 ## Explanation
 - Total Blink Period: 500ms (ON) + 500ms (OFF) = 1000ms = 1 second.
 - Blink Frequency: 1 Hz.
-- Our ``SystemClock_Config`` sets the ``SYSCLK`` to 108 MHz. The ``APB1CLKDivider`` is ``RCC_HCLK_DIV2``, which makes the ``APB1`` bus clock $108 MHz / 2 = 54 MHz$. This is the clock for ``TIM2``.
-- When we set the prescalar fot `TIM2` as $54-1$, we actually set the counter for `TIM2` to tick every 1us.
+- Our ``SystemClock_Config`` sets the ``SYSCLK`` to 108 MHz. It makes makes the ``APB1`` bus clock for peripherals $$54 MHz$$ and for timers $$108 MHz$$, including for ``TIM2``.
+- When we set the prescalar fot `TIM2` as $108-1$, we actually set the counter for `TIM2` to tick every 1us.
 - Therefore `if (__HAL_TIM_GET_COUNTER(&htim2) - timer_val >= 1000000)` means "blink every second"!
 
 
@@ -248,16 +248,18 @@ As you realized, we wrote down some numbers like 108 Hz for HCLK, 108-1 for pres
 
 ## Timer Frequency Calculation
 
-![Prescalar diagram]({{site.baseurl}}/assets/images/prescalar_diagram.png)
+![Prescalar diagram]({{site.baseurl}}/assets/images/prescalar_diagram_updated.png)
 
 Note that HCLK is our main clock. It means that this clock will ignite other busses like APB (Advanced Perpheral Bus) to set PCLKs (Peripheral Clocks). Look at the clock configuration on CubeMX. By setting it to 108 MHz, our main clock generates $$108\times 10^6$$ ticks every second!
 
 Each timer has an internal counter that increments based on a clock source. The rate at which this counter increments is the "timer tick frequency." The timer's input clock is first divided by the Prescaler and then used to increment the counter.
 
 The relationship between HCLK and PCLK is like this:
- $$PCLKx = \dfrac{HCLK}{APBx\_Prescaler + 1}$$
+ $$PCLKx = \dfrac{HCLK}{(APBx\_Prescaler + 1)(AutoReloadRegister + 1)}$$
 
-which means that if you set your HCLK = 108 Mhz, and AHBx Prescalar to /2, then your peripheral clock will work at half speed of your main clock.
+which means that if you set your HCLK = 108 Mhz, and AHBx Prescalar to /2, then your peripheral clock will work at half speed of your main clock, but with x2 multiplier before the APB1 timer clocks, your timers connected to APB1 with have 108MHz internal clock. 
+
+Note that we are not modifying the Auto-reload register counter yet, so you can basically ignore this part in the formula for now.
 
 ## Prescalar
 
@@ -281,6 +283,8 @@ Our condition if ``(__HAL_TIM_GET_COUNTER(&htim2) - timer_val >= 100000)`` check
 
 Therefore, the delay will be 100000 ticks * 1 us/tick = 100000 us = 100 milliseconds. The LED will toggle every 100ms, so a full blink cycle (on and off) will be 200ms. We can see that by checking the positive side of LD1 on our logic analyzer.
 ![Slave Modes]({{site.baseurl}}/assets/images/timer_led_blink_logic.png)
+
+You can also use this [online timer calculator for STM32](https://deepbluembedded.com/stm32-timer-calculator/).
 
 ## Timer overload
 So, we know that our timer counter has a limited capacity. The counter value is stored in a 32-bits register. It is obvious (at least I hope) that after the register ``0xFF``, it will restart counting from ``0x00`` again. The highest bit (33th bit) will overflow and we will lose it *forever*.
