@@ -191,7 +191,7 @@ In our board: Up to 16 PWMs available from the four full-featured general-purpos
 
 For more details [check here](https://deepbluembedded.com/stm32-pwm-example-timer-pwm-mode-tutorial/).
 
-## Exercise-3: LED Dimmer
+## Exercise-3: LED Dimmer with PWM
 Let's translate our DAC knowledge to the world of PWM to control the brightness of the blue LED (LD1). The principle is similar: we're using a timer to generate a signal, but this time, the output is a fast-switching digital signal that mimics a changing analog value.
 
 If you check the [datasheet](https://www.st.com/resource/en/datasheet/stm32f765zi.pdf), you see that TIM1 and TIM8 are advanced-control timers and perfect for PWM output generations. 
@@ -283,7 +283,7 @@ long map(long x, long in_min, long in_max, long out_min, long out_max)
 
 Hence to map an analog input value, which ranges from 0 to 1023 to a PWM output signal, which ranges from 0 - 999, you can use the :code:`map(value, 0, 1023, 0, 999)` function. This function has five parameters, one is the variable in which the analog value is stored, while the others are 0, 1023, 0 and 999 respectively. Be careful! These values will be different based on how you set ADC and PWM configurations.
 
-## Exercise-4: Potentiometer and LED dimmer
+## Exercise-4: Potentiometer and LED dimmer with PWM
 1. Create a new project without using the default mode.
 1. On the left, go to `System Core > RCC > HSE: Crystal/Ceramic Resonator`. Set your clock configurations as usual.
 1. Configure ADC:
@@ -359,7 +359,7 @@ To control a servo motor, you need to generate a specific type of PWM signal:
 By precisely configuring our STM32 timer to hit this 50 Hz period and then manipulating the pulse width between 1ms and 2ms using the CCR (Capture/Compare Register), we gain full control over the servo's position.
 
 
-## Exercise: Simple servo motor angle set
+## Exercise-5: Simple servo motor angle set
 In this exercise, you will learn how to set up a 50 Hz PWM signal to control a standard hobby servo motor. 
 
 ![Servo-Motor-Wires.png]({{site.baseurl}}/assets/images/Servo-Motor-Wires.png)

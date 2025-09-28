@@ -27,4 +27,6 @@ taxonomy: markup
 - [L5 - ADC single-continuous mode with interrupt](https://github.com/fjnn/stm32-lecture-projects/tree/main/adc_interrupt_test)
 - [L6 - Basic DAC](https://github.com/fjnn/stm32-lecture-projects/tree/main/dac-simple)
 - [L6 - DAC DMA Sine wave](https://github.com/fjnn/stm32-lecture-projects/tree/main/dac-dma-sinusoidal)
-- [L6 - LED Dimmer](https://github.com/fjnn/stm32-lecture-projects/tree/main/pwm-led-dimmer)
+- [L6 - LED Dimmer with PWM](https://github.com/fjnn/stm32-lecture-projects/tree/main/pwm-led-dimmer)
+- [L6 - Potentiometer LED Dimmer with PWM](https://github.com/fjnn/stm32-lecture-projects/tree/main/pwm-led-dimmer)
+- [L6 - Simple servo motor angle set](https://github.com/fjnn/stm32-lecture-projects/tree/main/servo_simple)
