@@ -485,7 +485,12 @@ The details of how the TMP36 operates are available in the [datasheet](https://w
 Connect the sensor according to the following diagram:
 ![tmp35]({{site.baseurl}}/assets/images/tmp35.png)
 
+The rest is in your Assignment-3 :)
+
+<!-- 
 Create a new ADC project with ADC1, which is connected to PA3, with 12-bit resolution. Generate your code and modify your `main.c` according to the code below. For simplicity, I used ``HAL_ADC_PollForConversion()``, without interrupts or DMA. You can modify it and make it more efficient.
+
+
 
 
 ```c
@@ -529,5 +534,6 @@ int main(void) {
     }
 }
 ```
+-->
 
 <!-- Exercise: https://www.youtube.com/watch?v=zipjCtiHYr8&ab_channel=BINARYUPDATES do it in our card. -->

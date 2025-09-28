@@ -341,4 +341,81 @@ Hence to map an analog input value, which ranges from 0 to 1023 to a PWM output 
 
 
 # Part 3: Servo motor control
-Coming soon.
+Servo motors are so fundamental, especially in mini hobby projects and in small-robotics comunity. They provide precise angular movement between 0 and 180 degrees. Unlike standard DC motors, you don't just turn them on or off; you tell them *exactly* what position to hold.
+
+We will learn more about motor control in ... but actually a servo motor is a simple DC motor with a bunch of gears and a feedback circuit. It does have an H-bridge (it will also come in DC motor control lecture). If you are curious, you can watch this youtube video about how servo motors work and what it is inside this blue/black box :)
+
+![maxresdefault.jpg]({{site.baseurl}}/assets/images/maxresdefault.jpg)
+(Source:[youtube.com/How To Mechatronics](https://www.youtube.com/watch?v=LXURLvga8bQ))
+
+
+To control a servo motor, you need to generate a specific type of PWM signal:
+- Fixed Frequency (Period): Servos require the control signal to repeat every 20 milliseconds, which translates to a frequency of 50 Hz. This is the timer's total period (our ARR value).
+- Variable Pulse Width (Duty Cycle): The angle is determined by the short high-time pulse within that 20 ms window:
+  - A pulse width of 1.0 ms typically corresponds to 0 degrees (minimum angle).
+  - A pulse width of 1.5 ms typically corresponds to 90 degrees (center).
+  - A pulse width of 2.0 ms typically corresponds to 180 degrees (maximum angle).
+
+By precisely configuring our STM32 timer to hit this 50 Hz period and then manipulating the pulse width between 1ms and 2ms using the CCR (Capture/Compare Register), we gain full control over the servo's position.
+
+
+## Exercise: Simple servo motor angle set
+In this exercise, you will learn how to set up a 50 Hz PWM signal to control a standard hobby servo motor. 
+
+![Servo-Motor-Wires.png]({{site.baseurl}}/assets/images/Servo-Motor-Wires.png)
+(Source:[components101.com/](https://components101.com/motors/servo-motor-basics-pinout-datasheet))
+
+Note that  It is better to use the 5V pin as source for your servo.
+
+### Hardware Connections:
+- Servo Signal Pin (Yellow/White(Orange)): Connect to `PD15` (`TIM4_CH4`) (`D9`).
+- Servo Power (Red): Connect to VCC. Although we often use 3.3V as our source (VCC) in STM32F767 projects, Nucleo's 3.3V/5V rail may not provide enough current. If you have more sensors and motor are connected, then you might consider using external bateries. For this tutorial, just use the 5V pin oon the board (next to the 3.3V pin).
+- Servo Ground (Brown/Black): Connect to GND.
+
+### Software Setup:
+1. Create a new project without using the default mode.
+1. On the left, go to `System Core > RCC > HSE: Crystal/Ceramic Resonator`. Set your clock configurations as usual.
+1. Configure `TIM4`.
+  - We will use `TIM4` for this as it is a general-purpose 16-bit timer.
+  - Set the Clock Source to `Internal Clock`.
+  - Set Channel 4 to `PWM Generation CH4`. You will see that `PD15` is activated.
+1. In the timer configuration below:
+  - Knowing that APB1 Timer Clock Frequency: 108 MHz (Although the peripheral max frequency for APB1 is 54 MHz. I know it is a bit confusing with timer calculations, and I believe that I did a mistake with `54-1` in some exercises priorly, I will fix it!)
+  - Set prescaler (PSC) to `108-1` to generate an easily calculatable 1μs resolution (1 MHz counter frequency):
+    $$ PSC = (108 MHz / 1 MHz) - 1 = 108 - 1$$
+  - Set Counter Period (ARR) to $$10 000 - 1$$ to get a 20 ms period (50 Hz) with a $1 \mu s$ resolution.
+    $$ ARR = (20 ms / 1 us) - 1 = 20,000 - 1
+1. Generate the code, configure your platformio.ini, and then `main.c` in your PlatformIO project.
+1. Set some private definitions after `/* USER CODE BEGIN PD */`.
+  ```c
+  #define SERVO_PULSE_MIN 1000 // 1.0 ms pulse (1000 counts @ 1.0us resolution)
+  #define SERVO_PULSE_MAX 2000 // 2.0 ms pulse (2000 counts @ 1.0us resolution)
+  #define SWEEP_DELAY     5    // Delay in milliseconds per step
+  ```
+1. Set some Private variables after `/* USER CODE BEGIN PV */`.
+  ```c
+  uint16_t current_pulse = SERVO_PULSE_MIN;
+  ```
+1. Start timer and generating PWM in `/* USER CODE BEGIN 2 */`
+  ```c
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4); // Note the channel is 4
+  // Initialize the servo to the starting position (MIN)
+  __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, SERVO_PULSE_MIN);
+  ```
+1. Set PWM values from 0 to 180 and back again in `/* USER CODE BEGIN 3 */`
+  ```c
+    // === SWEEP UP: MIN (1ms/1000 counts) to MAX (2ms/2000 counts) ===
+    for(current_pulse = SERVO_PULSE_MIN; current_pulse <= SERVO_PULSE_MAX; current_pulse++) {
+        __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, current_pulse);
+        HAL_Delay(SWEEP_DELAY); // Slow down the sweep for visibility
+    }
+
+    // === SWEEP DOWN: MAX to MIN ===
+    for(current_pulse = SERVO_PULSE_MAX; current_pulse > SERVO_PULSE_MIN; current_pulse--) {
+        __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, current_pulse);
+        HAL_Delay(SWEEP_DELAY);
+    }
+  ```
+1. Build and upload.
+1. Observe that your servo is rotating, and you see this kind of signal if you check `PD15` on oscilloscope.
+  ![servo-pin-output-osc.png]({{site.baseurl}}/assets/images/servo-pin-output-osc.png)
