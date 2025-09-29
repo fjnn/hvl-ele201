@@ -248,18 +248,18 @@ As you realized, we wrote down some numbers like 108 Hz for HCLK, 108-1 for pres
 
 ## Timer Frequency Calculation
 
-![Prescalar diagram]({{site.baseurl}}/assets/images/prescalar_diagram_updated.png)
+![Prescalar diagram]({{site.baseurl}}/assets/images/prescalar_diagram.png)
 
 Note that HCLK is our main clock. It means that this clock will ignite other busses like APB (Advanced Perpheral Bus) to set PCLKs (Peripheral Clocks). Look at the clock configuration on CubeMX. By setting it to 108 MHz, our main clock generates $$108\times 10^6$$ ticks every second!
 
 Each timer has an internal counter that increments based on a clock source. The rate at which this counter increments is the "timer tick frequency." The timer's input clock is first divided by the Prescaler and then used to increment the counter.
 
 The relationship between HCLK and PCLK is like this:
- $$PCLKx = \dfrac{HCLK}{(APBx\_Prescaler + 1)(AutoReloadRegister + 1)}$$
+ $$PCLKx = \dfrac{HCLK}{(APBx\_Prescaler + 1)}$$
 
 which means that if you set your HCLK = 108 Mhz, and AHBx Prescalar to /2, then your peripheral clock will work at half speed of your main clock, but with x2 multiplier before the APB1 timer clocks, your timers connected to APB1 with have 108MHz internal clock. 
 
-Note that we are not modifying the Auto-reload register counter yet, so you can basically ignore this part in the formula for now.
+Note that in [PWM lecture](https://fjnn.github.io/hvl-ele201/lectures/l6-dac-pwm#part-2-pulse-width-modulation-pwm), you will have Auto-reload register for PWM frequency, but we are not dealing with that yet.
 
 ## Prescalar
 
