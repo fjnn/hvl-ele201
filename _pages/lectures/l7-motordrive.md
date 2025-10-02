@@ -1,7 +1,7 @@
 ---
 layout: single
-title: "Lecture 8 - DC motor drive and H-bridge"
-permalink: /lectures/l8-motordrive
+title: "Lecture 7 - DC motor drive and H-bridge"
+permalink: /lectures/l7-motordrive
 toc: true
 breadcrumbs: true
 sidebar:

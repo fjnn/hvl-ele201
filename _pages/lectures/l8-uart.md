@@ -1,7 +1,7 @@
 ---
 layout: single
-title: "Lecture 7 - UART: Universal Asynchronous Read and Write"
-permalink: /lectures/l7-uart
+title: "Lecture 8 - UART: Universal Asynchronous Read and Write"
+permalink: /lectures/l8-uart
 toc: true
 breadcrumbs: true
 sidebar:

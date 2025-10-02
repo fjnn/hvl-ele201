@@ -25,10 +25,12 @@ lectures:
     url: /lectures/l5-adc
   - title: "L6 - DAC and PWM"
     url: /lectures/l6-dac-pwm
-  - title: "L7 - UART"
-    url: /lectures/l7-uart
-  - title: "L8 - Motor drive"
-    url: /lectures/l8-motordrive
+  - title: "L7 - Motor drive"
+    url: /lectures/l7-motordrive
+  - title: "Communication Protocols"
+    url: /lectures/l8-1-commprotocol
+  - title: "L8 - UART"
+    url: /lectures/l8-uart
   - title: "L9 - Ethernet 1"
     url: /lectures/l9-ethernet1
   - title: "L10 - Ethernet 2"
