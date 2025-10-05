@@ -107,7 +107,7 @@ EN pin as shown H or L here, but it is the pin we will provide PWM signal. 1A an
 Set up this circuit. We will not use the potentiometer and the button in this exercise, but we will use them in the next ones.
 
 {: .notice--warning}
-PLEASE DO NOT CONNECT ANYTHING IF YOU ARE CONNECED TO YOUR PC VIA USB! FIRST UNPLUG THE POWER!
+PLEASE DO NOT CONNECT ANYTHING IF YOU ARE CONNECED TO YOUR PC VIA USB! First, unplug the USB power. Second, set up your whole circuit, including your 9V battery. Observe that the power LED of Nucleo is not blinking red (it means that there is a short circuit or power imbalance like if you connect your 3.3V and 9V on the same bus). Touch your L293D and check that it is not burning hot. Now, *probably* you can connect USB.
 
 ![h-bridge-circuit.png]({{site.baseurl}}/assets/images/h-bridge-circuit.png)
 
@@ -158,12 +158,98 @@ PLEASE DO NOT CONNECT ANYTHING IF YOU ARE CONNECED TO YOUR PC VIA USB! FIRST UNP
   - Rotate the motor in the other direction *faster* for 2 seconds
   - Stop the motor for 2 seconds
 1. Before paste-ing the code below, think about it. How you would implement this code?
-
-
   <button onclick="var c=document.getElementById('show-dir-code'); if(c.style.display==='none'){c.style.display='block'; this.textContent='Hide Code';}else{c.style.display='none'; this.textContent='Show code';}">Show code</button>
   <pre id="show-dir-code" style="display:none;"><code>
   // Set Direction (IN_1A HIGH, IN_2A LOW)
-  HAL_GPIO_WritePin(IN_1A_P, GPIO_PIN_5, GPIO_PIN_SET);
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);
-</code></pre>
+    HAL_GPIO_WritePin(IN_1A_GPIO_Port, IN_1A_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(IN_2A_GPIO_Port, IN_2A_Pin, GPIO_PIN_RESET);
+    // Set slow speed, let's say ~25% duty cycle
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 249);
+    HAL_Delay(2000);
+    // Set high speed, let's say ~75% duty cycle
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 749);
+    HAL_Delay(2000);
+
+    // Set Direction (IN_1A LOW, IN_2A HIGH)
+    HAL_GPIO_WritePin(IN_1A_GPIO_Port, IN_1A_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(IN_2A_GPIO_Port, IN_2A_Pin, GPIO_PIN_SET);
+    // Set slow speed, let's say ~25% duty cycle
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 249);
+    HAL_Delay(2000);
+    // Set high speed, let's say ~75% duty cycle
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 749);
+    HAL_Delay(2000);
+
+    // STOP MOTOR!
+    HAL_GPIO_WritePin(IN_1A_GPIO_Port, IN_1A_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(IN_2A_GPIO_Port, IN_2A_Pin, GPIO_PIN_RESET);
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
+    HAL_Delay(2000);
+  </code></pre>
+
+Build and upload.
+
+{: .notice--warning}
+Unplug the GND pin of the battery to save some power unless you use it.
+
+### Some weird behaviours?
+What happens if you press the RESET button on your board? If your motor runs even faster in one direction, then it is probably related to the **raw hardware reset state of the GPIO pins**.  Why does it happen? When you hold the Reset button CPU is halted, which means the microcontroller's CPU is stopped, meaning no code (main, MX_GPIO_Init, MX_TIM1_Init) is executing. All peripheral registers, including the GPIO Output Data Register (ODR), are reset to their default values. On many STM32 chips, the default hardware state of an unconfigured GPIO pin is either floating (which can be pulled HIGH by noise or capacitance) or weakly pulled HIGH for a short duration.
+
+The L293D motor driver requires two conditions to run the motor:
+- The Enable pin (your PWM pin) must be HIGH.
+- One of the Input pins (``IN_1A`` or ``IN_2A``) must be HIGH (the other LOW).
+
+If the motor runs while you hold reset, it means the default hardware reset state of your pins is causing: *(PWM Pin State=HIGH) AND ((IN_1A=HIGH) OR (IN_2A=HIGH))*
+
+
+Since you cannot control the hardware state while the chip is in reset, the fix is either:
+- Hardware Fix (Most Robust): Add a physical pull-down resistor (e.g., 10kΩ) to the PWM Enable pin. If you want, you can also add 2 more 10kΩ to the Direction Pins (``IN_1A``, ``IN_2A``) on your circuit board. This guarantees the pins are held safely LOW (motor OFF) until the microcontroller's C code starts running and configures them.
+
+Software Fix (Defensive): Ensure that the pins that control the direction (IN_1A and IN_2A) are configured and forced to a safe, LOW state as the very first instruction set of the program.
+
+Another issue might be that you experience something called *classic transient state issue* in microcontroller programming. If you observe a short moment that your motor spins fast, it is almost certainly due to a temporary full power signal (100% duty cycle) being applied to your L293D motor driver right as the peripherals stabilize.
+
+
+## Exercise-2: Adjusting DC motor speed with potentiometer
+We will use the same circuit and almost the same CubeMX settings. 
+1. Let's try something new this time. Do not create a new CubeMX project, but go to your folders and find the previous project.
+1. Copy paste the whole folder and rename it to something make sense, f.ex `motor_drive_with_potentiometer`. Rename both the folder and the CubeMX .ioc file in it.
+1. Go to VSCode and open the project in PlatformIO. In this way, we don't need to generate `platformio.ini` file. It is already copied with the previous one.
+1. Now, you can also open this project on CubeMX by just double clicking the .ioc file in the new folder.
+1. Configure GPIO for direction-change button: Locate and configure pin ``PA7`` as ``GPIO_Output`` and label it as **DIR_BTN**. By using this button, we will change the motor rotation direction: Stop->Clockwise->Counter-clockwise and go back to Clockwise.
+1. Configure `PA3` for potentiometer as analog input. Go to `Analog > ADC1 > Enable IN3`. This will activate `PA3` as `ADC1_IN3`. Re-label this pin as `POT_IN`. By using this value, we will adjust the motor speed. *Note that it would be much better to use ADC with DMA here, but in the tutorial, we will keep things simple.*
+1. Clock configuration, project name and settings are already inplace, just generate the code.
+
+<u>Code implementation</u>
+
+1. There is already a bit of code from before. We will keep some of it.
+1. There are different ways of setting if-else statements but I think the most elegant solution for this exercise is to set up a *finite state machine* ❤️. Put this in `/* USER CODE BEGIN PTD */`:
+  ```c
+  // Define the states for the Motor Finite State Machine
+  typedef enum {
+    MOTOR_STATE_STOP = 0, // Explicitly set to 0
+    MOTOR_STATE_CW,       // Defaults to 1
+    MOTOR_STATE_CCW       // Defaults to 2
+  } MotorState_t;
+  ```
+1. Set some fix values as private definitions under `/* USER CODE BEGIN PD */`:
+  ```c
+  #define ADC_MAX_VALUE 4095      // Max value for 12-bit ADC
+  #define PWM_MAX_VALUE 999       // TIM1 Period value (0 to 999 = 1000 counts)
+  #define MIN_ACTIVE_SPEED 100    // Minimum PWM value to overcome motor friction (approx 10%)
+  #define DEBOUNCE_TIME_MS 100    // Debounce time for button
+  ```
+1. Set some private variables and their initial values before we start under `/* USER CODE BEGIN PV */`:
+  ```c
+  uint32_t adc_value = 0;
+  uint32_t current_pwm = 0;
+  MotorState_t current_motor_state = MOTOR_STATE_STOP; // Initial state
+  GPIO_PinState last_dir_btn_state = GPIO_PIN_RESET;
+  uint32_t last_button_press_time = 0;
+  ```
+1. Time to update `/* USER CODE BEGIN 3 */`. Read the ADC value, map it to between 0-999, and set it as PWM value in  Additionally, read the `DIR_BTN` and toggle the motor rotation direction every press. Try yourself, before revealing the solution. My suggested code here get a bit long, since I implemented debouncing to the button, added a dead zone for the ADC-PWM mapping. Therefore, below there is link that will take you to the solution.
+
+  [Click here if you want to see the solution](https://github.com/fjnn/stm32-lecture-projects/blob/58aa0e49fc8054c7b2f01460c54fc0833e2ffcf8/motor_control_with_potentiometer/Src/main.c)
+
+Build, upload and observe.
 
