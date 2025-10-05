@@ -212,7 +212,7 @@ It is surely possible to use any of the general-purpose timers, but since out TI
     $$108 MHz/108=1 MHz$$
 
     This gives us a nice, round base clock of 1 MHz to work with. It makes calculating the PWM period (with the ``ARR`` register) very easy. For example, if you set the ``ARR`` to 999, you'll get a perfect 1 kHz PWM signal, since $$1 MHz/(999+1)=1 kHz$$.         
-1. `TIM1_CH1` pin is automatically set to `PE9`, but if you try dragging the pin by pressing CTRL, you will see that `PA8` is also an alternative. However, it is not as easily apprachable pin as `PE9` in this board, that's why we will keep the default at `PE9`.
+1. `TIM1_CH1` pin is automatically set to `PE9`. Note that you can change it by pressing CTRL, to `PA8` as well.
 2.  Generate the code and then open `main.c` in your PlatformIO project.
 3.  Create a variable to represent the desired PWM duty cycle under `/* USER CODE BEGIN PV */`.
     ```c
