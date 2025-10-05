@@ -33,12 +33,12 @@ lectures:
     url: /lectures/l8-uart
   - title: "L9 - Ethernet 1"
     url: /lectures/l9-ethernet1
-  - title: "L10 - Ethernet 2"
-    url: /lectures/l10-ethernet2
+  - title: "L10 - Project Work"
+    url: /lectures/l10-project-work
   - title: "L11 - I2C"
     url: /lectures/l11-i2c
-  - title: "L12 - (Lab)"
-    url: /lectures/l12-lab
+  - title: "L12 - (W46 - Project Presentations)"
+    url: /lectures/l12-project-presentations
   - title: "L13 - Efficiency"
     url: /lectures/l13-efficiency
   - title: "Miscellaneous"

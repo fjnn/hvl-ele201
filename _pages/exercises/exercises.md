@@ -31,6 +31,7 @@ taxonomy: markup
 - [L6 - Potentiometer LED Dimmer with PWM](https://github.com/fjnn/stm32-lecture-projects/tree/main/pwm-led-dimmer)
 - [L6 - Simple servo motor angle set](https://github.com/fjnn/stm32-lecture-projects/tree/main/servo_simple)
 - [L7 - Simple DC motor drive with L293D](https://github.com/fjnn/stm32-lecture-projects/tree/c55ef2a15c37537c4abd669b2d2805a7f19ee6b3/motor_control_simple)
+- [L7 - Adjusting DC motor speed with potentiometer](https://github.com/fjnn/stm32-lecture-projects/tree/58aa0e49fc8054c7b2f01460c54fc0833e2ffcf8/motor_control_with_potentiometer)
 - [L8 - UART Hello World](https://github.com/fjnn/stm32-lecture-projects/tree/a7cd06a22d43433b1056bfae968c738f5ca27df2/usart3-helloworld)
 - [L8 UART Two STM32s Transmitter](https://github.com/fjnn/stm32-lecture-projects/tree/a7cd06a22d43433b1056bfae968c738f5ca27df2/uart-two-stm32-transmit)
 - [L8 UART Two STM32s Receiver](https://github.com/fjnn/stm32-lecture-projects/tree/a7cd06a22d43433b1056bfae968c738f5ca27df2/uart-two-stm32-receive)

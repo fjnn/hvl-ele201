@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Lecture 12 - (Lab) Microcontrollers Network"
-permalink: /lectures/l12-lab
+permalink: /lectures/l12-project-presentations
 toc: true
 breadcrumbs: true
 sidebar:
@@ -13,7 +13,7 @@ taxonomy: markup
 ---
 
 {: .notice--info}
-Det blir mest sansynleg kun på Canvas. 
+More info will be on Canvas.
 
 
 

@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Lecture 10 - Ethernet 2"
-permalink: /lectures/l10-ethernet2
+permalink: /lectures/l10-project-work
 toc: true
 breadcrumbs: true
 sidebar:
@@ -13,7 +13,7 @@ taxonomy: markup
 ---
 
 {: .notice--info}
-Ethernet TODO
+You will work on your projects this week.
 
 
 
