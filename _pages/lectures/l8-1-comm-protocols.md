@@ -11,7 +11,7 @@ sidebar:
     nav: lectures
 taxonomy: markup
 ---
-A communication protocol is a system of rules governing how two entities are to communicate with each other. Often it is useful to separate the protocol into various layers, governing different aspects of the communication. Some layers may be general in nature, and applicable to many systems, while others may be very application specific.
+A communication protocol is a system of rules administer how two entities are to communicate with each other. Often it is useful to separate the protocol into various layers to manage different aspects of the communication. Some layers may be general in nature, and applicable to many systems, while others may be very application specific.
 
 A communication protocol is sometimes linked to a specific physical means of transmission, e.g. som specific voltage levels on the wires connecting two devices. Other protocols can be agnostic to the transport medium.
 
