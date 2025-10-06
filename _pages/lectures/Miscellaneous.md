@@ -105,3 +105,90 @@ I think this is where the beauty of an embedded system lies. Simple and fast. Un
 On an operating system, you might not worry about how memory is allocated. There’s usually plenty of resources, and the OS handles much of the complexity for you. However in embedded systems, you are both the architect and the craftsman: you must carefully choose what to include, optimize for every byte and every microamp, and understand the hardware intimately. This directness is both a challenge and a joy. You get to see the immediate results of your optimizations; an LED blinks faster, a sensor uses less power, a device runs longer on a battery. The constraints force you to be creative and efficient.
 
 Anyways, let's cut the praise and continue the actual business.
+
+
+# STM32F767ZI Nucleo-144 Default Pin Assignments
+
+When creating a project for the STM32F767ZI Nucleo-144 board in STM32CubeMX, the following pins are configured by default to support essential on-board features, debugging, and clocking.
+
+## 1. System and Clock Configuration (RCC)
+
+These pins are connected to the external crystal oscillators on the Nucleo board.
+
+| Pin | Peripheral | Function | Explanation |
+| :--- | :--- | :--- | :--- |
+| **PH0** | `RCC_OSC_IN` | **High-Speed External (HSE) Input** | Main system clock input (typically 8 MHz crystal). |
+| **PH1** | `RCC_OSC_OUT` | **High-Speed External (HSE) Output** | Main system clock output. |
+| **PC14** | `RCC_OSC32_IN` | **Low-Speed External (LSE) Input** | Clock input for the RTC (Real-Time Clock) (32.768 kHz crystal). |
+| **PC15** | `RCC_OSC32_OUT` | **Low-Speed External (LSE) Output** | Clock output for the RTC. |
+
+***
+
+## 2. Debugging and Programming (SWD)
+
+These pins are dedicated to the on-board **ST-LINK/V2-1 debugger/programmer**.
+
+| Pin | Peripheral | Function | Explanation |
+| :--- | :--- | :--- | :--- |
+| **PA13** | `SYS_JTMS-SWDIO` | **Serial Wire Debug Data (SWDIO)** | Data I/O line for programming and debugging. |
+| **PA14** | `SYS_JTCK-SWCLK` | **Serial Wire Debug Clock (SWCLK)** | Clock line for the SWD interface. |
+
+***
+
+## 3. On-Board Peripherals (LEDs and Button)
+
+These pins connect to the user-interface components on the Nucleo-144 board.
+
+| Pin | Peripheral | Board Label | Function |
+| :--- | :--- | :--- | :--- |
+| **PC13** | `GPIO_Input` | **USER_Btn (B1)** | User Push Button. Configured as input. |
+| **PB0** | `GPIO_Output` | **LD1 (Green)** | User-programmable LED. |
+| **PB7** | `GPIO_Output` | **LD2 (Blue)** | User-programmable LED. |
+| **PB14** | `GPIO_Output` | **LD3 (Red)** | User-programmable LED. |
+
+***
+
+## 4. Virtual COM Port (VCP)
+
+The ST-LINK is typically wired to the **USART3** peripheral to create a VCP over USB for serial terminal communication.
+
+| Pin | Peripheral | Function |
+| :--- | :--- | :--- |
+| **PD8** | `USART3_TX` | Transmit for Virtual COM Port |
+| **PD9** | `USART3_RX` | Receive for Virtual COM Port |
+
+***
+
+## 5. Ethernet (RMII Interface)
+
+The STM32F767ZI Nucleo-144 features an Ethernet PHY, typically configured using the **RMII (Reduced Media Independent Interface)**.
+
+| Pin | Peripheral | Function |
+| :---- | :---- | :---- |
+| **PA1** | `RMII_REF_CLK` | Reference Clock (50 MHz) |
+| **PA7** | `RMII_CRS_DV` | Carrier Sense / Data Valid |
+| **PB11** | `RMII_TX_EN` | Transmit Enable |
+| **PB12** | `RMII_TXD0` | Transmit Data 0 |
+| **PB13** | `RMII_TXD1` | Transmit Data 1 |
+| **PC4** | `RMII_RXD0` | Receive Data 0 |
+| **PC5** | `RMII_RXD1` | Receive Data 1 |
+| **PC1** | `ETH_MDC` | Management Data Clock |
+| **PA2** | `ETH_MDIO` | Management Data I/O |
+
+***
+
+## 6. USB OTG High Speed (HS)
+
+The board's USB Type B connector for High-Speed communication is wired to the **USB OTG HS** peripheral, often using a **ULPI** (UTMI+ Low Pin Interface) PHY.
+
+| Pin | Peripheral | Function |
+| :--- | :--- | :--- |
+| **PA5** | `USB_OTG_HS_ULPI_CK` | ULPI Clock |
+| **PB0** | `USB_OTG_HS_ULPI_D1` | ULPI Data 1 |
+| **PB1** | `USB_OTG_HS_ULPI_D2` | ULPI Data 2 |
+| **PB10** | `USB_OTG_HS_ULPI_D3` | ULPI Data 3 |
+| **PB11** | `USB_OTG_HS_ULPI_D4` | ULPI Data 4 |
+| **PB12** | `USB_OTG_HS_ULPI_D5` | ULPI Data 5 |
+| **PB13** | `USB_OTG_HS_ULPI_D6` | ULPI Data 6 |
+| **PC0** | `USB_OTG_HS_ULPI_STP` | ULPI Stop |
+| **PC2** | `USB_OTG_HS_ULPI_DIR` | ULPI Direction |
