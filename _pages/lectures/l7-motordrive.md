@@ -110,6 +110,7 @@ Set up this circuit. We will not use the potentiometer and the button in this ex
 PLEASE DO NOT CONNECT ANYTHING IF YOU ARE CONNECED TO YOUR PC VIA USB! First, unplug the USB power. Second, set up your whole circuit, including your 9V battery. Observe that the power LED of Nucleo is not blinking red (it means that there is a short circuit or power imbalance like if you connect your 3.3V and 9V on the same bus). Touch your L293D and check that it is not burning hot. Now, *probably* you can connect USB.
 
 ![h-bridge-circuit.png]({{site.baseurl}}/assets/images/h-bridge-circuit.png)
+![circuit-motor1.jpg]({{site.baseurl}}/assets/images/circuit-motor1.jpg)
 
 <u>STM32CubeMX setup:</u>
 
