@@ -352,9 +352,9 @@ We will learn more about motor control in ... but actually a servo motor is a si
 To control a servo motor, you need to generate a specific type of PWM signal:
 - Fixed Frequency (Period): Servos require the control signal to repeat every 20 milliseconds, which translates to a frequency of 50 Hz. This is the timer's total period (our ARR value).
 - Variable Pulse Width (Duty Cycle): The angle is determined by the short high-time pulse within that 20 ms window:
-  - A pulse width of 1.0 ms typically corresponds to 0 degrees (minimum angle).
+  - A pulse width of 0.5 ms typically corresponds to 0 degrees (minimum angle).
   - A pulse width of 1.5 ms typically corresponds to 90 degrees (center).
-  - A pulse width of 2.0 ms typically corresponds to 180 degrees (maximum angle).
+  - A pulse width of 2.5 ms typically corresponds to 180 degrees (maximum angle).
 
 By precisely configuring our STM32 timer to hit this 50 Hz period and then manipulating the pulse width between 1ms and 2ms using the CCR (Capture/Compare Register), we gain full control over the servo's position.
 
@@ -384,12 +384,11 @@ Note that  It is better to use the 5V pin as source for your servo.
   - Set prescaler (PSC) to `108-1` to generate an easily calculatable 1μs resolution (1 MHz counter frequency):
     $$ PSC = (108 MHz / 1 MHz) - 1 = 108 - 1$$
   - Set Counter Period (ARR) to $$10 000 - 1$$ to get a 20 ms period (50 Hz) with a $1 \mu s$ resolution.
-    $$ ARR = (20 ms / 1 us) - 1 = 20,000 - 1
 1. Generate the code, configure your platformio.ini, and then `main.c` in your PlatformIO project.
 1. Set some private definitions after `/* USER CODE BEGIN PD */`.
   ```c
-  #define SERVO_PULSE_MIN 1000 // 1.0 ms pulse (1000 counts @ 1.0us resolution)
-  #define SERVO_PULSE_MAX 2000 // 2.0 ms pulse (2000 counts @ 1.0us resolution)
+  #define SERVO_PULSE_MIN 500 // 1.0 ms pulse (1000 counts @ 1.0us resolution)
+  #define SERVO_PULSE_MAX 2500 // 2.0 ms pulse (2000 counts @ 1.0us resolution)
   #define SWEEP_DELAY     5    // Delay in milliseconds per step
   ```
 1. Set some Private variables after `/* USER CODE BEGIN PV */`.
