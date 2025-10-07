@@ -11,3 +11,6 @@ sidebar:
     nav: network-lectures
 taxonomy: markup
 ---
+
+# References
+If you want to learn more about this topic you can check out Modules 4 in the netacad course (CCNA: Introduction to Networks).

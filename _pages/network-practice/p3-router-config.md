@@ -15,7 +15,7 @@ taxonomy: markup
 This page will expect you to know the different modes of the cisco IOS, how to identify them and how to navigate between them. For more information check [here]({{ site.baseurl }}/network-practice/p4-cisco-ios-navigation#ios-navigation). The different modes are as follows:
 - `Router>` User EXEC Mode
 - `Router#` Privileged EXEC Mode
-- `Router(config)` Global Configuration Mode
+- `Router(config)#` Global Configuration Mode
 
 **IMPORTANT:** This page is likely not complete but will have to most common commands you'll need. In a lot of cases there will be links to the switch CLI commands page if the commands are identical.
  
