@@ -190,13 +190,91 @@ So, if you change your text to, let's say *integer 5*, you will not be seeing 00
   ![byte5]({{site.baseurl}}/assets/images/logic_analy5.png)
   Note that you can change if it will be sent as 0000 0101 or 1010 0000 by changing the MSB First parameter in CubeMX.
 
+## Alternatively `sprintf`
+`sprintf()` is a standard C function used to format and store a string into a character array. It allows you to create formatted text (including numbers, variables, etc.) before sending it over UART or displaying it elsewhere.
 
-# Exercise-2: Send data between two boards
+You can use the same CubeMX configuration with the following code modifications:
+
+1. Generated the `main.c` from your CubeMX with the same USART3 and clock configurations.
+1. Place this after `/* USER CODE BEGIN 2 */`:
+  ```c
+  // Initialize an empty buffer with 100 free spots to fill later
+  char transmit_buffer[100];
+  uint8_t timeout = 100;
+  int tall = 50;
+  ```
+1. Send the data in the `while(1)` loop after `/* USER CODE BEGIN 3 */`:
+  ```c
+   // Prepare/Update the string we want to transmit through UART
+  sprintf(transmit_buffer, "Sensorvalue : %d \n", tall);
+  HAL_UART_Transmit(&huart3, transmit_buffer, strlen(transmit_buffer), timeout);
+  HAL_Delay(1000);
+  tall++;
+  ```
+
+# Exercise-2: Receive data from UART to toggle LED
+Let's change the direction of data transmission. In the previous exercise we received data from UART to our serial monitor. Now we will learn how to send data to our STM32F767 Nucleo board to control things connected to it. To make things simple, we will just control the built-in LD1 led for nw, but you know that you can control all other things such as motor speed, servo angle etc. using the same principle. 
+
+Now we will read a command ('1' or '0') from the serial monitor and control the onboard green LED (LD1 on pin PB0).
+
+1. Create a new project targeting the STM32F767ZI without using the default mode.
+1. On the left, go to ``System Core > RCC > HSE: Crystal/Ceramic Resonator``.
+1. Under "Pinout & Configuration," go to ``System Core > GPIO``.
+1. Select pin ``PB0`` and set it to GPIO_Output and rename it to `LD1`. This is the pin connected to the green LED (LD1).
+1. Under "Pinout & Configuration," go to ``Connectivity > USART3``.
+  1. Set the Mode to Asynchronous.
+  1. Change the default RX and TX pins to PD8 (TX) and PD9 (RX) since they are connected to our STLINK.
+  1. In the Parameter Settings tab make sure the Baud Rate is set to 115200.
+  1. In the NVIC Settings tab, check the box to Enable the **USART3 global interrupt**.
+1. Set your clock configurations as always with 8 MHz Input frequency, PLLCLK in system clock MUX, and HCLK 108 MHz. If you clock configuration is not correct, you will see either just gibberish or nothing at all on your terminal.
+1. Give a proper name and generate the code as usual: Basic application structure, STM32CubeIDE Toolchain, untick "Generate under root" and generate the code.
+
+Now we can modify our code. At this step, it might be easier to use Putty or a Serial Monitor extension for VS Code.
+
+1. Copy the `platformio.ini` from your previous project.
+1. Since we enabled interrupt for UART receive event, we want our variable to hold the received data to be global. Paste this in `/* USER CODE BEGIN PV */`:
+```c
+#define RX_BUFFER_SIZE 1
+uint8_t RxData[RX_BUFFER_SIZE];
+```
+1. Now we can start the interrupt so that our callback will wait for a data to receive. Put this in `/* USER CODE BEGIN 2 */`.
+```c
+HAL_UART_Receive_IT(&huart3, RxData, RX_BUFFER_SIZE);
+```
+1. As we discussed about *weak* functions that they are normally defined in their respective HAL library (i.e for UART the `__weak void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)` is defined in `stm32f7xx_hal_uart.c`), and we don't want to modify the CubeMX generated code, we will define another `HAL_UART_RxCpltCallback` function in our `main.c`, but outside of the main() function. Paste this under `/* USER CODE BEGIN 4 */`.
+```c
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+    // Check if the callback is for the correct UART peripheral
+    if (huart->Instance == USART3)
+    {
+      // HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin); // Debug this to check if you trigger RX interrupt
+        if (RxData[0] == '1')
+        {
+            HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_SET);
+        }
+        else if (RxData[0] == '0')
+        {
+            HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_RESET);
+        }
+
+        // Restart the interrupt reception for the next character
+        HAL_UART_Receive_IT(&huart3, RxData, RX_BUFFER_SIZE);
+    }
+}
+```
+
+Open serial monitor, select the correct port. Make sure that there is **no line ending** in the data you send. Start the monitor and send 1 or 0 as text. Observe the LD1.
+
+# Exercise-3: Send data between two boards
 As I mentioned before, since you have learned the basics of UART protocol, you can make two boards talk to each other! Find your best buddy and follow this tutorial together. This tutorial demonstrates how to establish one-way (simplex) Universal Asynchronous Receiver-Transmitter (UART) communication between two STM32F767ZI Nucleo boards. One of you wil be transmitter and the other will be receiver.
 
 Configure the boards:
 - Board 1 (Transmitter): Sends a simple text message periodically.
 - Board 2 (Receiver): Listens for the message using interrupts and toggles an onboard LED when a message is successfully received.
+
+{: .notice--info}
+DISCLAMER: I haven't checked the tutorial below using two STM32F767 at the same time. Only debugged for each board through oscilloscope. Please let me know if you see any issues!
 
 <u>STM32CubeMX setup:</u>
 
@@ -261,7 +339,7 @@ Configure the boards:
       }
   }
   ```
-1. Note that the ``while(1)`` loop in ``main.c`` is left empty for the Receiver, as all data handling is done in the interrupt callback.
+1. Note that the ``while(1)`` loop in ``main.c`` is left empty for the Receiver, as all data handling is done in the interrupt callback. *Although in embedded system it is better not to leave it "that" empty but put a small `HAL_Delay(100)`  to create a predictable "hang" behavior, ensuring the system stays active and responsive to its environment.*
 1. Build and upload
 
 <u>Demonstration</u>
@@ -274,4 +352,4 @@ Can you discuss how to forward the received data to the terminal on the receiver
 
 
 # Bluetooth exercise
-pass (maybe)
+Pass it. Given as suggested project :)
