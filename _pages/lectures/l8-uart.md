@@ -190,6 +190,15 @@ So, if you change your text to, let's say *integer 5*, you will not be seeing 00
   ![byte5]({{site.baseurl}}/assets/images/logic_analy5.png)
   Note that you can change if it will be sent as 0000 0101 or 1010 0000 by changing the MSB First parameter in CubeMX.
 
+{: .notice--info}
+MSB (most significant bit) and LSB (least significant bit) refer to the bits with the highest and lowest value in a binary number, respectively. The MSB is the leftmost bit and has the greatest impact on the number's value, while the LSB is the rightmost bit and has the smallest impact. 
+![Basic-fundamentals-of-LSB-and-MSB.png]({{site.baseurl}}/assets/images/Basic-fundamentals-of-LSB-and-MSB.png) (Source: [researchgate.net](https://www.researchgate.net/figure/Basic-fundamentals-of-LSB-and-MSB_fig1_375252948))
+  
+{: .notice--info}
+Little-endian and big-endian describe how multi-byte data (like a 32-bit integer) is stored in computer memory. In big-endian systems, the most significant byte (the "big end") of the data is stored at the lowest memory address. In little-endian systems, the least significant byte (the "little end") is stored at the lowest memory address. 
+![techart_endian_3.jpeg]({{site.baseurl}}/assets/images/techart_endian_3.jpeg) (Source: [allaboutcircuits.com](https://www.allaboutcircuits.com/technical-articles/big-endian-little-endian-endianness-byte-arrangement-digital-systems/))
+
+
 ## Alternatively `sprintf`
 `sprintf()` is a standard C function used to format and store a string into a character array. It allows you to create formatted text (including numbers, variables, etc.) before sending it over UART or displaying it elsewhere.
 
