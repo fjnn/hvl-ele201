@@ -364,8 +364,11 @@ DISCLAMER: I haven't checked the tutorial below using two STM32F767 at the same 
     HAL_UART_Transmit(&huart3, (uint8_t*)RxData, len, timeout);
     HAL_Delay(1000); // Wait for 1 second for better visualization on terminal
     ```
-    
+
 1. Build and upload
+
+When Serial monitors are enabled:
+![two_board_uart.jpg]({{site.baseurl}}/assets/images/two_board_uart.jpg)
 
 <u>Demonstration</u>
 
