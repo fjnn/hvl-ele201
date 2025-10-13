@@ -290,11 +290,12 @@ DISCLAMER: I haven't checked the tutorial below using two STM32F767 at the same 
 1. Create a new project targeting the STM32F767ZI without using the default mode.
 1. On the left, go to System Core > RCC > HSE: Crystal/Ceramic Resonator.
 1. Set `PB0` (pin connected to LD1) as `GPIO_Output` and change its label to `LD1`.
-1. Under "Pinout & Configuration," go to Connectivity > USART3.
+1. Under "Pinout & Configuration," go to Connectivity > USART3. This is the UART that will make the board communicate with its PC via serial monitor.
 1. Set the Mode to Asynchronous.
 1. In the Parameter Settings tab:
   - Set the Baud Rate to 115200 (This is a common, reliable speed).
   - Leave Word Length at 8 Bits, Parity at None, and Stop Bits at 1.
+1. Do the same for USART2 with pins `PD5` and `PA3`. This is the UART that will make two boards communicate.
 1. In the **NVIC Settings** tab, check the box to ``Enable`` the USART3 global interrupt. *Note: While the Transmitter board doesn't strictly need the interrupt, enabling it here ensures the configuration is identical for both projects.*
 1. Set your clock configurations as always with 8 MHz Input frequency, PLLCLK in system clock MUX, and HCLK 108 MHz. If you clock configuration is not correct, you will see either just gibberish or nothing at all on your terminal.
 1. Give a proper name and generate the code as usual: Basic application structure, STM32CubeIDE Toolchain, untick "Generate under root" and generate the code.
@@ -316,7 +317,7 @@ DISCLAMER: I haven't checked the tutorial below using two STM32F767 at the same 
   ```
 1. In the main `while(1)` loop add the code to transmit the message under ``/* USER CODE BEGIN 3 */``:
   ```c
-  HAL_UART_Transmit(&huart3, (uint8_t *)TxData, TxSize, HAL_MAX_DELAY);
+  HAL_UART_Transmit(&huart2, (uint8_t *)TxData, TxSize, HAL_MAX_DELAY);
   HAL_Delay(500); // Wait 500ms before sending the next message
   ```
 1. Build and upload. 
@@ -331,7 +332,7 @@ DISCLAMER: I haven't checked the tutorial below using two STM32F767 at the same 
   ```
 1. in the ``main()`` function, add the following line under ``/* USER CODE BEGIN 2 */`` to start the interrupt-driven reception. This command initiates the UART to listen for data:
   ```c
-  HAL_UART_Receive_IT(&huart3, RxData, RX_BUFFER_SIZE);
+  HAL_UART_Receive_IT(&huart2, RxData, RX_BUFFER_SIZE);
   ```
 1. Implement the UART Receive Complete Callback function outside of the ``main()`` function. As we discussed in the interrupt lecture, those ISR callback functions are defined in the respective `stm32f7xx_hal_XXXX.c` drivers under `Drivers\STM32F7xx_HAL_Driver\Src\`. Since we enabled the NVIC for UART, our weak callback function is defined in `Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_uart.c`. So now, since we don't want to overwrite any CubeMX generated code, we will re-define this in `/* USER CODE BEGIN 4 */`.  This function is automatically called by the HAL when the expected amount of data (RX_BUFFER_SIZE) has been received.
   ```c
@@ -344,11 +345,26 @@ DISCLAMER: I haven't checked the tutorial below using two STM32F767 at the same 
           HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
 
           // 2. Restart the interrupt reception for the next message
-          HAL_UART_Receive_IT(&huart3, RxData, RX_BUFFER_SIZE);
+          HAL_UART_Receive_IT(&huart2, RxData, RX_BUFFER_SIZE);
       }
   }
   ```
 1. Note that the ``while(1)`` loop in ``main.c`` is left empty for the Receiver, as all data handling is done in the interrupt callback. *Although in embedded system it is better not to leave it "that" empty but put a small `HAL_Delay(100)`  to create a predictable "hang" behavior, ensuring the system stays active and responsive to its environment.*
+1. However, if you want to see what transmitter sent on your Serial monitor, then you must add these:
+
+    ```c
+    /* USER CODE BEGIN 2 */
+    uint16_t len = 1; // 1 Byte
+    uint32_t timeout = 100; 
+    ```
+    and
+
+    ```c
+    /* USER CODE BEGIN 3 */
+    HAL_UART_Transmit(&huart3, (uint8_t*)RxData, len, timeout);
+    HAL_Delay(1000); // Wait for 1 second for better visualization on terminal
+    ```
+    
 1. Build and upload
 
 <u>Demonstration</u>
