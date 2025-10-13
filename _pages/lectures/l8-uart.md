@@ -339,7 +339,7 @@ DISCLAMER: I haven't checked the tutorial below using two STM32F767 at the same 
   void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   {
       // Check if the callback is for the correct UART peripheral
-      if (huart->Instance == USART3)
+      if (huart->Instance == USART2)
       {
           // 1. Toggle the green onboard LED (LD1 on PB0)
           HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
