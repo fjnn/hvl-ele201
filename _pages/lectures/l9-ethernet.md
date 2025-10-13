@@ -138,6 +138,12 @@ This logic uses the LwIP ``netconn`` API to establish a TCP connection, send the
     float sensor_reading = 25.5f;
     ```
 
+1. We will create a private function to send http posts later on. Let's give e heads-up to the compiler before the main() function. *(Psst: this is a very C-thing. We talked about it [here](https://fjnn.github.io/hvl-ele201/lectures/l2-gpio#function-definitions).*Put this under `/* USER CODE BEGIN PFP */`:
+
+    ```c
+    void send_http_post(float value);
+    ``` 
+
 1. In the main `while(1)` loop, call the function (we will define in the next step) periodically under `/* USER CODE BEGIN 3 */` Since we changed the SysTick timer, instead of using `HAL_Delay()`, we will use `osDelay()`:
 
     ```c
@@ -221,3 +227,28 @@ This logic uses the LwIP ``netconn`` API to establish a TCP connection, send the
     }
     ```
 1. Build and upload.
+
+TODO:
+ADD include lwip/api.h in main.h
+
+
+# Troubleshooting
+
+## Conflicting types for 'HAL_RCC_OscConfig'
+
+If you are getting the error message in the image below after enabling ETH module in CubeMX:
+![eth_rcc_error.png]({{site.baseurl}}/assets/images/eth_rcc_error.png)
+
+**TL;DR:** There is a bug in PlatformIO HAL package version (1.17.2). 
+1. Go to `YOUR_USER_NAME\.platformio\packages\framework-stm32cubef7\Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_rcc.c`. *You can easily copy this path from your error message*. 
+1. Add the `const` keyword in about **line 342**, before `RCC_OscInitTypeDef` like this: *HAL_RCC_OscConfig(**const** RCC_OscInitTypeDef *RCC_OscInitStruct);*
+1. Also in about **line 722**, before `RCC_ClkInitTypeDef ` like this: *HAL_RCC_ClockConfig(**const** RCC_ClkInitTypeDef *RCC_ClkInitStruct, uint32_t FLatency);*
+
+<u>Reasoning for nerds:</u>
+
+It seems like it is due to a bug related to PlatformIO HAL package version (1.17.2). The C files and H files have a mismatch pointer types when they define these two functions: 1) `HAL_RCC_OscConfig(const RCC_OscInitTypeDef *RCC_OscInitStruct);` and 2)`HAL_RCC_ClockConfig(const RCC_ClkInitTypeDef *RCC_ClkInitStruct, uint32_t FLatency);`. The header files has `const` keywords before `RCC_OscInitTypeDef ` and `RCC_ClkInitTypeDef `, but not the C files.  The header file prototype correctly specifies the pointer parameter as `const` (meaning the function will not modify the structure), but the C file function definition does not have the `const` keyword. This is considered a conflict by the C compiler because `const T*` and `T*` are different pointer types.
+
+I know it is annoying but we must add this const keywords in these C files. The good news is that, this modification will be done only once since these files are in the default stm32f7xx instalation of PlatformIO. Yes. We "fix a bug" 😎 
+
+
+

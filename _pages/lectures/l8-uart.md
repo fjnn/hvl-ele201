@@ -45,7 +45,7 @@ You can think of it this way:
 ![BBUART_diagram1_2.webp]({{site.baseurl}}/assets/images/BBUART_diagram1_2.webp)
 (Source: [allaboutcircuits.com](https://www.allaboutcircuits.com/technical-articles/back-to-basics-the-universal-asynchronous-receiver-transmitter-uart/))
 
-The "A" in UART, **Asynchronous**, is crucial: it means *there is no shared clock signal between the transmitter and the receiver*. Instead, the two devices must agree on the** Baud Rate** (the speed, or bits per second) and use special start and stop bits to synchronize their data streams.
+The "A" in UART, **Asynchronous**, is crucial: it means *there is no shared clock signal between the transmitter and the receiver*. Instead, the two devices must agree on the **Baud Rate** (the speed, or bits per second) and use special start and stop bits to synchronize their data streams.
 
 The serial bits are shown below. It takes 10 bit-times to send 8 bits. 
 ![rs232_bits.png]({{site.baseurl}}/assets/images/rs232_bits.png)
