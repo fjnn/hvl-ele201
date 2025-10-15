@@ -1,7 +1,7 @@
 ---
 layout: single
-title: "Lecture 10 - Ethernet 2"
-permalink: /lectures/l10-project-work
+title: "Lecture 11 - Project work"
+permalink: /lectures/l11-project-work
 toc: true
 breadcrumbs: true
 sidebar:

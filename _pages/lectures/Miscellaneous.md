@@ -161,7 +161,7 @@ The ST-LINK is typically wired to the **USART3** peripheral to create a VCP over
 
 ## 5. Ethernet (RMII Interface)
 
-The STM32F767ZI Nucleo-144 features an Ethernet PHY, typically configured using the **RMII (Reduced Media Independent Interface)**.
+The STM32F767ZI Nucleo-144 features an Ethernet PHY, typically configured using the **RMII (Reduced Media Independent Interface)**. A PHY is an abbreviation for the Physical Layer (Layer 1) of the OSI networking model, or more commonly, it refers to the PHY chip (or transceiver) that implements this layer's functions.
 
 | Pin | Peripheral | Function |
 | :---- | :---- | :---- |
@@ -179,6 +179,7 @@ The STM32F767ZI Nucleo-144 features an Ethernet PHY, typically configured using 
 
 ## 6. USB OTG High Speed (HS)
 
+USB On-The-Go (OTG) is a specification that allows portable USB devices to be cabled together without a computer. When using the standard USB protocol, one device, most commonly a computer, will always be the host, and the other device will always be the peripheral. With a USB OTG cable, both devices can act as either a host or peripheral, allowing for interaction between two traditionally peripheral devices. (Source:[totalphase.com](https://www.totalphase.com/blog/2024/12/what-is-usb-otg-and-how-does-it-work/?srsltid=AfmBOoog6fT-ICR6tlqQPhI81asFhLiIg5bvuP6DaWdeh4X055LY2gq9))
 The board's USB Type B connector for High-Speed communication is wired to the **USB OTG HS** peripheral, often using a **ULPI** (UTMI+ Low Pin Interface) PHY.
 
 | Pin | Peripheral | Function |
@@ -192,3 +193,20 @@ The board's USB Type B connector for High-Speed communication is wired to the **
 | **PB13** | `USB_OTG_HS_ULPI_D6` | ULPI Data 6 |
 | **PC0** | `USB_OTG_HS_ULPI_STP` | ULPI Stop |
 | **PC2** | `USB_OTG_HS_ULPI_DIR` | ULPI Direction |
+
+## 7. Power and Ground Pins (Unlabeled when you start)
+
+While not explicitly highlighted with a peripheral name, many pins on the periphery of the chip are dedicated to power, ground, and analog reference:
+
+- **VDD / VSS**: Power supply (3.3V) and Ground for the digital core.
+- **VCA / VSA**: Power supply and Ground for the analog components (like ADC/DAC).
+- **VBAT**: Power supply for the RTC and backup registers.
+- **VREF+ / VREF-**: Reference voltages for the Analog-to-Digital Converter (ADC) and Digital-to-Analog Converter (DAC).
+- **BOOTO**: Boot mode selection pin (used to select boot from main Flash, System memory, or SRAM).
+
+
+
+
+
+
+
