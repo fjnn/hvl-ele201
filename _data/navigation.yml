@@ -61,16 +61,16 @@ network-lectures:
     url: /network-lectures/l7-router-lab
   - title: "L8 - Physical Layer"
     url: /network-lectures/l8-physical-layer
-  - title: "L9 - Transport Layer and Protocols"
+  - title: "L9 - Transport Layer, Application Layer Protocols"
     url: /network-lectures/l9-transport-layer
-  - title: "L10 - Network Security"
-    url: /network-lectures/l10-network-security
-  - title: "L11 - Microcontroller Network Lab Part 1"
-    url: /network-lectures/l11-microcontroller-network-lab-p1
-  - title: "L12 - Microcontroller Network Lab Part 2"
-    url: /network-lectures/l12-microcontroller-network-lab-p2
-  - title: "L13 - Industrial Networks"
-    url: /network-lectures/l13-industrial-networks
+  - title: "L10 - IPv6 and Semester Project"
+    url: /network-lectures/ipv6
+  - title: "L11 - Network Security (Guest Lecture by Lukas Schild)"
+    url: /network-lectures/network-security
+  - title: "L12 - Subnetting Lab"
+    url: /network-lectures/subnetting-lab
+  - title: "L13 - Industrial Networks (Guest Lecture by Johannes Møgster)"
+    url: /network-lectures/industrial-networks
   - title: "Acronyms"
     url: /network-lectures/acronyms
 

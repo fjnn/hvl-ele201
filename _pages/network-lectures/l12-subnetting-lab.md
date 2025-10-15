@@ -1,7 +1,7 @@
 ---
 layout: single
-title: "Microcontroller Network Lab Part 1"
-permalink: /network-lectures/l11-microcontroller-network-lab-p1
+title: "Subnetting Lab"
+permalink: /network-lectures/subnetting-lab
 toc: true
 breadcrumbs: true
 sidebar:
