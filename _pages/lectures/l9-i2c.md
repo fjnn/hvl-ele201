@@ -1,7 +1,7 @@
 ---
 layout: single
-title: "Lecture 10 - I2C (Inter-Integrated Circuit)"
-permalink: /lectures/l10-i2c
+title: "Lecture 9 - I2C (Inter-Integrated Circuit)"
+permalink: /lectures/l9-i2c
 toc: true
 breadcrumbs: true
 sidebar:

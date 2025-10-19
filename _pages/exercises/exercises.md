@@ -36,3 +36,4 @@ taxonomy: markup
 - [L8 - UART Receive Data - Toggle LED](https://github.com/fjnn/stm32-lecture-projects/tree/1d5f383dc9516d05950569e6018551a79606b65c/uart_receive_data)
 - [L8 UART Two STM32s Transmitter](https://github.com/fjnn/stm32-lecture-projects/tree/a7cd06a22d43433b1056bfae968c738f5ca27df2/uart-two-stm32-transmit)
 - [L8 UART Two STM32s Receiver](https://github.com/fjnn/stm32-lecture-projects/tree/a7cd06a22d43433b1056bfae968c738f5ca27df2/uart-two-stm32-receive)
+- [L9 MMA8451 Accelerometer I2C](https://github.com/fjnn/stm32-lecture-projects/tree/1c0900a61778a8f173ac99d27d1238e4768ae5e1/i2c_mma8451)

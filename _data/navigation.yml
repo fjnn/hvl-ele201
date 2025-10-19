@@ -31,10 +31,10 @@ lectures:
     url: /lectures/l8-1-commprotocol
   - title: "L8 - UART"
     url: /lectures/l8-uart
-  - title: "L9 - Ethernet"
-    url: /lectures/l9-ethernet
-  - title: "L10 - I2C"
-    url: /lectures/l10-i2c
+  - title: "L9 - I2C"
+    url: /lectures/l9-i2c
+  - title: "L10 - Ethernet"
+    url: /lectures/l10-ethernet
   - title: "L11 - Project Work"
     url: /lectures/l11-project-work
   - title: "L12 - (W46 - Project Presentations)"
