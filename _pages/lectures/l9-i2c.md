@@ -120,8 +120,8 @@ In this exercise we will configure **I2C1** as the Master to communicate with th
 
 The I2C communication requires minimal wiring.
 
-- **Connect SCL:** STM32F767 **PB6** (I2C1_SCL) &rarr; MMA8451 **SCL**
-- **Connect SDA:** STM32F767 **PB7** (I2C1_SDA) &rarr; MMA8451 **SDA**
+- **Connect SCL:** STM32F767 **PB8** (I2C1_SCL) &rarr; MMA8451 **SCL**
+- **Connect SDA:** STM32F767 **PB9** (I2C1_SDA) &rarr; MMA8451 **SDA**
 - **Power:** Connect the STM32's **VCC** (3.3V) &rarr; MMA8451 **VCC**
 - **Ground:** Connect the STM32's **GND** &rarr; MMA8451 **GND**
 
