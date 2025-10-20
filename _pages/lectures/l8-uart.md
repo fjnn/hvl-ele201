@@ -216,7 +216,7 @@ You can use the same CubeMX configuration with the following code modifications:
   ```c
    // Prepare/Update the string we want to transmit through UART
   sprintf(transmit_buffer, "Sensorvalue : %d \n", tall);
-  HAL_UART_Transmit(&huart3, transmit_buffer, strlen(transmit_buffer), timeout);
+  HAL_UART_Transmit(&huart3, (uint8_t*)transmit_buffer, strlen(transmit_buffer), timeout);
   HAL_Delay(1000);
   tall++;
   ```
