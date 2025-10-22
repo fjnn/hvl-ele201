@@ -221,6 +221,22 @@ You can use the same CubeMX configuration with the following code modifications:
   tall++;
   ```
 
+If you have issues with `sprintf()`, you may want to update your platformio.ini to this:
+
+```c
+[env:nucleo_f767zi]
+platform = ststm32
+board = nucleo_f767zi
+framework = stm32cube
+build_flags = 
+-IInc
+-Wl,--undefined,_printf_float
+upload_protocol = stlink
+debug_tool = stlink
+monitor_speed = 115200 ; Set the baud rate for the serial monitor
+debug_build_flags = -O0 -g -ggdb
+```
+
 # Exercise-2: Receive data from UART to toggle LED
 Let's change the direction of data transmission. In the previous exercise we received data from UART to our serial monitor. Now we will learn how to send data to our STM32F767 Nucleo board to control things connected to it. To make things simple, we will just control the built-in LD1 led for nw, but you know that you can control all other things such as motor speed, servo angle etc. using the same principle. 
 
