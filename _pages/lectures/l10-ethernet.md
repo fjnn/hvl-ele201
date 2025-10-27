@@ -67,6 +67,7 @@ The planning of this lecture is through making a Web server tutorial. The server
   1. Platform Settings: LAN8742 for both fields. 
   1. It should look like this:
     ![lwip-settings.png]({{site.baseurl}}/assets/images/lwip-settings.png)
+  1. Go to "General Settings" set DHCP options disabled. TODO Gizem!! IP settings finish-
 1. Under "Pinout & Configuration" again go to ``Middleware and Software Packages > FREERTOS``. Select Interface: `CMSIS_v1`. It is often the easiest and most stable choice for initial projects, but you can choose CMSIS_v2 for more functionality and newer standards.
   - **Why FreeRTOS is Necessary for LwIP?**
     - Multitasking: LwIP itself runs as a separate task (the LwIP stack task), which handles all network events (DHCP, ARP, TCP/IP packets).
@@ -79,6 +80,7 @@ The planning of this lecture is through making a Web server tutorial. The server
   1. In the CubeMX Pinout & Configuration window, navigate to System Core > SYS.
   1. In the Parameter Settings tab, find the setting `Timebase Source`.
   1. Navigate to ``Timers > TIM6``.
+  1. Debug: Serial wire (might be unnecessary tho)
   1. You should see that the Mode is set to **Internal Clock** and the settings are configured to provide a **1ms timebase**. No further changes should be needed here.
     ![systic_tim6.png]({{site.baseurl}}/assets/images/systic_tim6.png)
 1. Go to Clock configuration and det HCLK to **216 MHz** this time. We need speed for reliable communication!
@@ -86,7 +88,7 @@ The planning of this lecture is through making a Web server tutorial. The server
 
 <u>Preparing the webserver and ethernet connection:</u>
 
-1. This part of this exercise is not relevant to microcontroller part. You have learned how to set up a Web server in the network part of this course. You can use any Web server, but at this step we will run a simple Python script that hosts a local server. Follow this link for that: # TODO (Projects > Set a simple web server using Python for test purposes)
+1. This part of this exercise is not relevant to microcontroller part. You have learned how to set up a Web server in the network part of this course. You can use any Web server, but at this step we will run a simple Python script that hosts a local server. Follow this link for that: [server_test.py](https://github.com/fjnn/stm32-lecture-projects/blob/main/python_server/server_test.py)
 1. Note the IP address printed by the Python script (something like ``192.168.1.10``). You will use this in the C code.
 1. Connect your STM32F767 board to your local network (directly to your PC, or router or switch) using a standard Ethernet cable.
 
@@ -154,8 +156,6 @@ This logic uses the LwIP ``netconn`` API to establish a TCP connection, send the
 
     // Wait 2 seconds before sending the next message. Use osDelay for LwIP/FreeRTOS.
     osDelay(2000); 
-
-    /* USER CODE END 3 */
     ```
 
 1. Define a new function to handle the HTTP POST request outside of main(), ideally in `/* USER CODE BEGIN 4 */`:
@@ -228,8 +228,13 @@ This logic uses the LwIP ``netconn`` API to establish a TCP connection, send the
     ```
 1. Build and upload.
 
+
+Notes:
+
+1. The ipaddr_aton function expects a pointer to an ip4_addr or ip_addr type. You should be using ip4_addr_t for IPv4 addresses.
+
 TODO:
-ADD include lwip/api.h in main.h
+ADD include api.h in main.c
 
 
 # Troubleshooting
