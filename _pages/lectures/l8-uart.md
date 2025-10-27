@@ -205,6 +205,13 @@ Little-endian and big-endian describe how multi-byte data (like a 32-bit integer
 You can use the same CubeMX configuration with the following code modifications:
 
 1. Generated the `main.c` from your CubeMX with the same USART3 and clock configurations.
+1. Add necessary includes after `/* USER CODE BEGIN Includes */`:
+
+  ```c
+  #include <string.h>
+  #include <stdio.h>
+  ```
+  
 1. Place this after `/* USER CODE BEGIN 2 */`:
   ```c
   // Initialize an empty buffer with 100 free spots to fill later
