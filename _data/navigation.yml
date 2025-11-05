@@ -85,6 +85,8 @@ network-practice:
     url: /network-practice/p2-switch-config
   - title: "Router CLI Commands"
     url: /network-practice/p3-router-config
+  - title: "Semester Project Webserver"
+    url: /network-practice/webserver
 
 
 examples:
