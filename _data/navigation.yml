@@ -43,7 +43,9 @@ lectures:
     url: /lectures/l13-efficiency
   - title: "Miscellaneous"
     url: /lectures/miscellaneous
-  
+  - title: "Exam Cheatsheet"
+    url: /lectures/exam-prep
+
 network-lectures:
   - title: "L1 - Introduction and Basic Concepts"
     url: /network-lectures/l1-intro

@@ -257,3 +257,15 @@ I know it is annoying but we must add this const keywords in these C files. The 
 
 
 
+# Add to ethernet notes:
+That's a shift from a poll-based system (checking the button only when a client requests it) to an event-driven system (notifying a client immediately when the button is pressed).
+
+To send data as soon as the button is pressed, you need to use GPIO External Interrupts (EXTI) to detect the press and then use Mongoose's WebSocket or MQTT functionality to push the data to the connected client. A standard HTTP GET/POST model (what you currently have) requires the client to ask for the data, which creates latency.
+
+the server should update its internal state whenever a client sends a write request, and the button's getter should read the current hardware state.
+
+Your getter function, my_get_buttons, is called only when a client (the web browser) sends a GET request to the /buttons endpoint. If you try to use this function to implement your 2-second polling:
+
+The button status would only update when a client explicitly polls it. If no browser is connected, the polling timer does nothing. If a browser polls every 10 seconds, the server's internal state is only checked every 10 seconds.
+
+It mixes responsibilities. The getter's job is to return the current state, not to implement periodic background logic. Therefore extern glue_set_buttons
