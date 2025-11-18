@@ -185,6 +185,8 @@ $$
 
 </div>
 
+​![pwm_frequency_calculation.png]({{site.baseurl}}/assets/images/pwm_frequency_calculation.png)
+
 In our board: Up to 16 PWMs available from the four full-featured general-purpose timers (TIM2, TIM3, TIM4, TIM5) alone, plus additional channels from other timers.
  
 ​![stm32_pwm_implementation.png]({{site.baseurl}}/assets/images/stm32_pwm_implementation.png)
