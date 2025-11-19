@@ -12,6 +12,7 @@ sidebar:
 taxonomy: markup
 ---
 
+In this page, you will find formulas, diagrams and codes to help you in the exam. 
 
 ![Nucleo circuit]({{ site.baseurl }}/assets/images/nucleo-circuit.png)
 ![Board pinout]({{ site.baseurl }}/assets/images/board_pinout.png)
@@ -90,8 +91,14 @@ Note that these codes won't work as they are. The purpose of these code snippets
 ## Main function
 
 ```c
+#include "main.h"
+/* USER CODE BEGIN 0 */
+/* You can add extra code here such as for global variables, function definitions etc. */
+
 int main(void)
 {
+  /* USER CODE BEGIN 1 */  
+  /* You can add extra code here such as for local variables, function calls etc. */
   HAL_Init();
   SystemClock_Config();
 
@@ -101,7 +108,8 @@ int main(void)
   MX_ADC1_Init();
   MX_DAC_Init();
   
-  /* USER CODE BEGIN 2 */  
+  /* USER CODE BEGIN 2 */ 
+  /* You can add extra code here such as for initializing variables, starting timers etc. */ 
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
   __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, SERVO_PULSE_MIN);
   
@@ -115,6 +123,7 @@ int main(void)
   {
 
     /* USER CODE BEGIN 3 */
+    /* You can add extra code for things you want to run in the loop. */
     // sprintf
     char transmit_buffer[100];
 	  uint8_t timeout = 100;
@@ -177,7 +186,7 @@ int main(void)
     Accel_Y = (int16_t)((RxData[2] << 8) | RxData[3]) >> 2;
     Accel_Z = (int16_t)((RxData[4] << 8) | RxData[5]) >> 2;
 
-    // 2. Conversion to g-force values (2g range / 8192 counts)
+    // 3. Conversion to g-force values (2g range / 8192 counts)
     #define ACCEL_RANGE_G 2.0f
     #define ACCEL_MAX_RAW 8192.0f
 
@@ -186,10 +195,61 @@ int main(void)
     Accel_X_g = ((float)Accel_X / ACCEL_MAX_RAW) * ACCEL_RANGE_G; 
     Accel_Y_g = ((float)Accel_Y / ACCEL_MAX_RAW) * ACCEL_RANGE_G;
     Accel_Z_g = ((float)Accel_Z / ACCEL_MAX_RAW) * ACCEL_RANGE_G;
-
-    
   }
 }
+
+/* USER CODE BEGIN 4 */
+/* You can add extra code here such as for defining interrupt calls, custom functions etc. */
+void SystemClock_Config(void)
+{
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+
+  /** Configure the main internal regulator output voltage
+  */
+  __HAL_RCC_PWR_CLK_ENABLE();
+  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE3);
+
+  /** Initializes the RCC Oscillators according to the specified parameters
+  * in the RCC_OscInitTypeDef structure.
+  */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+  RCC_OscInitStruct.PLL.PLLM = 8;
+  RCC_OscInitStruct.PLL.PLLN = 108;
+  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+  RCC_OscInitStruct.PLL.PLLQ = 2;
+  RCC_OscInitStruct.PLL.PLLR = 2;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Activate the Over-Drive mode
+  */
+  if (HAL_PWREx_EnableOverDrive() != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Initializes the CPU, AHB and APB buses clocks
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
 ```
 
 ## Initializer functions
@@ -336,19 +396,19 @@ void HAL_TIM_TriggerCallback(TIM_HandleTypeDef *htim){
     }
 }
 
-// Callback-funksjon for avbrudd
+// Callback-function for interrupt
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-    if (GPIO_Pin == GPIO_PIN_13) // Sjekk om det er PB13 som utløste avbruddet
+    if (GPIO_Pin == GPIO_PIN_13) // Check if PB13 is the one pressed
     {
-        led_state ^= 1; // Toggle tilstanden
+        led_state ^= 1; // Toggle the LED state
         if (led_state)
         {
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); // Slå på LED
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); // Turn on LED
         }
         else
         {
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET); // Slå av LED
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET); // Turn off LED
         }
     }
 }
@@ -385,60 +445,6 @@ static void MX_ADC1_Init(void)
   sConfig.Rank = ADC_REGULAR_RANK_1;
   sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-}
-```
-
-### SystemClock_Config()
-
-```c
-void SystemClock_Config(void)
-{
-  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
-  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-
-  /** Configure the main internal regulator output voltage
-  */
-  __HAL_RCC_PWR_CLK_ENABLE();
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE3);
-
-  /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-  RCC_OscInitStruct.PLL.PLLM = 8;
-  RCC_OscInitStruct.PLL.PLLN = 108;
-  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 2;
-  RCC_OscInitStruct.PLL.PLLR = 2;
-  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  /** Activate the Over-Drive mode
-  */
-  if (HAL_PWREx_EnableOverDrive() != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
-
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_3) != HAL_OK)
   {
     Error_Handler();
   }
