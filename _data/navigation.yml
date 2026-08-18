@@ -49,30 +49,30 @@ lectures:
 network-lectures:
   - title: "L1 - Introduction and Basic Concepts"
     url: /network-lectures/l1-intro
-  - title: "L2 - Data Link and Network Layer"
-    url: /network-lectures/l2-data-link-and-network-layer
-  - title: "L3 - IP Address Part 1"
-    url: /network-lectures/l3-ip-address-p1
-  - title: "L4 - Switch Lab"
-    url: /network-lectures/l4-switch-lab
-  - title: "L5 - IP Address Part 2"
-    url: /network-lectures/l5-ip-address-p2
-  - title: "L6 - IP Network Case Study"
-    url: /network-lectures/l6-ip-network-case-study
-  - title: "L7 - Router Lab"
-    url: /network-lectures/l7-router-lab
-  - title: "L8 - Physical Layer"
-    url: /network-lectures/l8-physical-layer
-  - title: "L9 - Transport Layer, Application Layer Protocols"
-    url: /network-lectures/l9-transport-layer
-  - title: "L10 - IPv6 and Semester Project"
-    url: /network-lectures/ipv6
-  - title: "L11 - Network Security (Guest Lecture by Lukas Schild)"
-    url: /network-lectures/network-security
-  - title: "L12 - Subnetting Lab"
-    url: /network-lectures/subnetting-lab
-  - title: "L13 - Industrial Networks (Guest Lecture by Johannes Møgster)"
-    url: /network-lectures/industrial-networks
+  # - title: "L2 - Data Link and Network Layer"
+  #   url: /network-lectures/l2-data-link-and-network-layer
+  # - title: "L3 - IP Address Part 1"
+  #   url: /network-lectures/l3-ip-address-p1
+  # - title: "L4 - Switch Lab"
+  #   url: /network-lectures/l4-switch-lab
+  # - title: "L5 - IP Address Part 2"
+  #   url: /network-lectures/l5-ip-address-p2
+  # - title: "L6 - IP Network Case Study"
+  #   url: /network-lectures/l6-ip-network-case-study
+  # - title: "L7 - Router Lab"
+  #   url: /network-lectures/l7-router-lab
+  # - title: "L8 - Physical Layer"
+  #   url: /network-lectures/l8-physical-layer
+  # - title: "L9 - Transport Layer, Application Layer Protocols"
+  #   url: /network-lectures/l9-transport-layer
+  # - title: "L10 - IPv6 and Semester Project"
+  #   url: /network-lectures/ipv6
+  # - title: "L11 - Network Security (Guest Lecture by Lukas Schild)"
+  #   url: /network-lectures/network-security
+  # - title: "L12 - Subnetting Lab"
+  #   url: /network-lectures/subnetting-lab
+  # - title: "L13 - Industrial Networks (Guest Lecture by Johannes Møgster)"
+  #   url: /network-lectures/industrial-networks
   - title: "Acronyms"
     url: /network-lectures/acronyms
 
