@@ -53,7 +53,7 @@ You can watch this video to setup your first blink code using both CubeMX and Pl
    c. Change Application Structure from Advanced to Basic.
    d. Change Toolchain/IDE to STM32CubeIDE
    e. Remove the tick in front of the Generate Under Root.
-4. Make sure that your setup looks similar to this:
+4. Make sure that your setup looks similar to this and then press **Generate Code**:
    ![cubemx-firstblink]({{site.baseurl}}/assets/images/cubemx-firstblink.png)
 5. Go to File Explorer on your P **OR** VSCode>File>Open Folder and find where your new project is. Create a **platformio.ini** file and copy the content below in it.
    ```c
@@ -67,7 +67,7 @@ You can watch this video to setup your first blink code using both CubeMX and Pl
    Please make sure that platformio.ini does not have another extension like *platformio.ini.txt* if you created it as a text document.
 6. Now you can open it as a project using PlatformIO. 
    ![Platformio-open]({{site.baseurl}}/assets/images/platformio-open.png)
-7. The piece of code you need to add after `/*USER CODE BEGIN 3*/` is here:
+7. The piece of code you need to add after `/*USER CODE BEGIN 3*/` in `main.c` is here:
 
    ```c
    HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);

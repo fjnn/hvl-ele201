@@ -65,6 +65,10 @@ IMAP	(Internet Message Access Protocol):	Retrieving and managing email messages 
 - DDS	(Data Distribution Service)	High-performance, real-time data exchange for mission-critical systems.	Used in robotics, autonomous vehicles, defense, and air traffic control where latency and reliability are absolutely non-negotiable. It uses a data-centric publish/subscribe model. ROS2 is using this protocol and finally supports Real-time!!
 - SSH	(Secure Shell)	Secure remote command-line login and data tunnel.	The indispensable tool for engineers! It allows you to securely manage a Linux server or embedded device from anywhere over an encrypted channel.
 
+## Extra
+for video-lovers:
+Almost all communication protocols within microcontrollers context are [here.](https://www.youtube.com/watch?v=0rlpwVNyBO8)
+
 
 
 

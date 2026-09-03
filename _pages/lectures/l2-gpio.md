@@ -15,19 +15,50 @@ taxonomy: markup
 <!-- {: .notice--info}
 Lesing av trykknapp og skriving til LED. Header-filar og eksterne bibliotek. typedef og struct. Introduksjon til peikerar. Deklarasjon og definisjon av funksjonar, parameter og returtype. -->
 
-{: .notice--info}
+<div class="notice--info" markdown="1">
 **Formål:** Etter å ha gått gjennom denne sida, skal du kunne:
 
-{: .notice--info} 
 *   Forstå kva GPIO (General Purpose Input/Output) er og kva rolle det har i mikrokontroller-applikasjonar.
 *   Lese inn frå ein trykknapp og styre ein LED ved hjelp av GPIO-pinnar.
 *   Skilje mellom header-filer og eksterne bibliotek i C-prosjekt.
 *   Bruke `typedef` og `struct` for å definere eigne datatypar.
 *   Forstå det grunnleggande om peikarar og korleis dei blir brukt i C.
 *   Deklarere og definere funksjonar, inkludert forståing av parameter og returtypar.
+</div>
 
 
 # Some important C concepts
+
+<div class="notice--info" markdown="1">
+In this course we will be using C-language in programming. We will mostly use HAL libraries from STM32 and you will get familiar with the syntax of the most used functions and you are not expected to be fluent in programming C. However, if you don't understand how C works, it might be very difficult to understand why/how we do certain things in this way. Therefore, this lecture we will talk a bit about the general concepts in C. You don't have to run the code but if you want to, you can follow this steps:
+
+1. Create/Open a folder for keeping C files. I called my folder ``c_ws`` and put in in Documents. You can choose wherever you want!
+2. Create a project folder. I called mine `my_first_c_program` under `c_ws`.
+3. Create a `platformio.ini` file in the project folder and paste this code in it:
+  ```c
+  [env:native]
+  platform = native
+  ```
+4. Create a `src` folder, and then a `main.c` file in it.
+5. Paste this code in the `main.c`
+
+    ```c
+    #include <stdio.h>
+
+    int main() {
+        printf("Hello from C!\n");
+        return 0;
+    }
+    ```
+
+6. On the left side, find PIO icon, under Miscellaneous select PlatformIO Core Cli. This will open a terminal in VS Code.
+7. Type or paste this to your terminal ``pio run; .\.pio\build\native\program.exe``
+8. If you see *Hello from C!* in your terminal, you can just copy-paste any C-code in the `main.c` to test-
+
+Note that C is a GIGANTIC language with lots of intricate use cases. This solution is only for simple C-code and may not work for every C-code, but you are good to go in this course with this setup!
+</div>
+
+
 ## Function definitions
 In a C program, you have to have a main function. The `main` function in C is a special function that serves as the entry point for program execution. When a C program is compiled and executed, the operating system or runtime environment calls the main function to begin the program's operations. It looks something like this:
 ```c
@@ -101,8 +132,8 @@ int main() {
 
 
 ## Parameter and return types
-Parameter: input of a function
-Return: output of a function
+- Parameter: input of a function
+- Return: output of a function
 
 For example, ``int add(int a, int b)`` declares ``a`` and ``b`` as integer parameters.
 
@@ -112,19 +143,19 @@ For example, ``int add(int a, int b)`` declares ``a`` and ``b`` as integer param
 These are the fundamental built-in types in C:
 
 - **Integer types:**
-  - `char`: Used for single characters (can also be treated as small integers). Can be signed or unsigned.
-  - `short` (or `short int`): A short integer. Can be signed or unsigned.
-  - `int`: The most common integer type. Can be signed or unsigned. Its size can vary depending on the system (usually 2 or 4 bytes).
-  - `long` (or `long int`): A long integer, typically larger than int. Can be signed or unsigned.
-  - `long long` (or `long long int`): An even longer integer, introduced in C99. Can be signed or unsigned.
+  - `char`: Used for single characters (can also be treated as small integers). Can be signed or unsigned. (1 Byte.)
+  - `short` (or `short int`): A short integer. Can be signed or unsigned. (2 Bytes)
+  - `int`: The most common integer type. Can be signed or unsigned. Its size can vary depending on the system (4 Bytes).
+  - `long` (or `long int`): A long integer, typically larger than int. Can be signed or unsigned. (also 4 Bytes) In regular C language a `long` is often double the size of a regular integer, but for STM32 there is practically no difference between `int` and `long`; both are 32-bit (4-byte) signed integers.
+  - `long long` (or `long long int`): An even longer integer, introduced in C99. Can be signed or unsigned. (8 Bytes)
 
 - **Floating-point types:**
-  - `float`: Single-precision floating-point numbers.
-  - `double`: Double-precision floating-point numbers (more precise than float).
-  - `long double`: Extended-precision floating-point numbers (highest precision).
+  - `float`: Single-precision floating-point numbers (4 Bytes)
+  - `double`: Double-precision floating-point numbers (more precise than float, double the size = 8 Bytes).
+  - `long double`: Extended-precision floating-point numbers (highest precision, yet still the same size as double = 8 Bytes).
 
 - **Boolean type:**
-  - `_Bool` (or `bool`): For boolean values (true/false), introduced in C99.
+  - `_Bool` (or `bool`): For boolean values (true/false), introduced in C99.( 1 Bit *careful, not Byte, just a single bit*)
 
 ---
 
@@ -156,10 +187,10 @@ These are built upon the basic types:
 
 ### 3. User-Defined Data Types
 
-You can define your own custom data types and use them as parameters:
+You can define your own custom data types and use them as parameters. In C, ``struct``, ``union``, ``enum``, and ``typedef`` are core tools for creating custom data types, managing memory efficiently, and writing clean code.
 
 - **Structures (`struct`):**
-  - `struct StructureName parameter_name`: Allows you to group different data types into a single unit. You can pass structures by value (a copy is made) or by pointer (for efficiency and modification).
+  - `struct StructureName parameter_name`: Allows you to group different data types into a single unit. You can pass structures by value (a copy is made) or by pointer (for efficiency and modification). It is used for grouping multiple variables of different types under a single name. Every member inside a structure gets its own **unique memory space**, allowing you to store all members simultaneously. It is often use in representing real-world entities or complex data entities (e.g., a set of Sensor reading, a Student, a Graphics Point, a File Record).
   - **Example:**
     ```c
     struct Point {
@@ -184,24 +215,63 @@ You can define your own custom data types and use them as parameters:
   - `union UnionName parameter_name`: Similar to structs, but all members share the same memory location.
   - **Example:**
     ```c
+    #include <stdio.h>
+    Ja a
     union Data {
         int i;
         float f;
         char str[20];
     };
-    union Data data;
+
+    int main() {
+        union Data data;
+
+        data.i = 10;
+        printf("data.i: %d\n", data.i);
+
+        // Writing to data.f overwrites the memory used by data.i
+        data.f = 220.5;
+        printf("data.f: %.1f\n", data.f);
+
+        return 0;
+    }
     ```
 
+  ![Struct vs Union]({{ site.baseurl }}/assets/images/struct_vs_union.jpg)
+  (Source: [Piyush Itankar](https://www.linkedin.com/posts/streetdogg_back-to-the-basics-struct-vs-union-activity-7345994239798890496-fqHY))
+
 - **Enumerations (`enum`):**
-  - `enum EnumName parameter_name`: Defines a set of named integer constants.
+  - `enum EnumName parameter_name`: Defines a set of named integer constants. Think about it like super-basic version of lists in Python that you can iterate over, and each element is like indices.
+  
+  (*an ``array`` in C would be a better correspondance to lists in Python, though*). 
   - **Example:**
     ```c
-    enum Color { RED, GREEN, BLUE };
-    enum Color myColor;
+    #include <stdio.h>
+
+    enum Day {
+        SUNDAY,    // 0
+        MONDAY,    // 1
+        TUESDAY,   // 2
+        WEDNESDAY, // 3
+        THURSDAY,  // 4
+        FRIDAY,    // 5
+        SATURDAY   // 6
+    };
+
+    int main() {
+        enum Day today = WEDNESDAY;
+
+        if (today == WEDNESDAY) {
+            printf("It is the middle of the week!\n");
+        }
+        return 0;
+    }
     ```
 
 - **Typedef'd types:**
   - `MyCustomType parameter_name`: `typedef` allows you to create aliases for existing data types (including complex ones like structs or pointers), making code more readable. It is very similar to regular `struct`, but it allows you to define a structure and simultaneously create a new, shorter, and more convenient name for that structure type. This new name can then be used directly without the struct keyword.
+
+  You may think about `typedef struct` like Classes in Python.
   - **Example:**
     ```c
     typedef struct {
@@ -261,7 +331,7 @@ Output:
 ```
 
 ![Pointer in C](https://media.geeksforgeeks.org/wp-content/uploads/20241210113214643291/pointer-in-c.png)
-(Source: [geeksforgeeks.org](https://www.geeksforgeeks.org/c/c-pointers/))
+(Source: [geeksforgeeks.org](https://www.geeksforgeeks.org/c/c-pointers/)
 
 
 The size of a pointer in C depends on the architecture (bit system) of the machine, **not the data type it points to**.
@@ -352,6 +422,9 @@ Now time to get more familiar with registers and reading datasheet.
 8. Build and upload.
 9. Observe the blue LED state as you press user button (blue button) on your board.
 
+{: .notice--info}
+Can you try to find how `GPIO_PIN_SET` is defined? (Answer: `typedef enum`)
+
 ## main.h
 A header file in C is a crucial component of program organization, serving as a central place to declare functions, variables, and data types that are used across multiple source code files. Think of it as a contract or an interface that tells different parts of your program what's available and how to use it, without revealing the full implementation details. Header files typically have a `.h` extension (f.ex: `main.h`, `stm32f7xx_hal.h` etc.)
 
@@ -364,12 +437,12 @@ So now, please check the pin numbers and ports for user LEDs and buttons from th
 ![main.h pinout example]({{ site.baseurl }}/assets/images/mainh.png)
 
 ## Exercise(Home/Lab): Button counter
-As you see, there are three LEDs and one user button on out STM32F767 Nucleo board. In this exercise, I want you to make a binary counter. Every time you press the button, the counter should change the LEDs accordingly.
+As you see, there are three LEDs and one user button on out STM32F767 Nucleo board. In this exercise, I want you to make 3-bit binary counter. Every time you press the button, the counter should change the LEDs accordingly.
 
 ![Binary counter example]({{ site.baseurl }}/assets/images/binary-counter.png)
 (Source: [youtube.com/Mathmo14159](https://www.youtube.com/watch?v=zELAfmp3fXY&ab_channel=Mathmo14159))
 
-You can be creative about how smart you want to do the counting operation, or you can use just several if-elses. Good luck!
+You can be creative about how smart you want to do the counting operation. You can use just several if-elses at this level - definitely an acceptable solution. However, if you want to be C-nerdy, you can have a look at **Bit-Shift Operator** (``<<``) and/or **bitmasking** in C. This will allow you to make a proper bit counter. Good luck!
 
 
 # External LED and Button
@@ -519,3 +592,5 @@ https://deepbluembedded.com/stm32-gpio-write-pin-digital-output-lab/ -->
 <!-- ## Button debounce
 https://deepbluembedded.com/stm32-button-debounce-code-examples-tutorial/ -->
 <!-- https://howtomechatronics.com/how-it-works/electrical-engineering/schmitt-trigger/ -->
+
+Note that we are not trying to solve the problems yet. We are just trying to identify and to get familiar what methods we can use to identify problems. Spoiler allert - what you might see here (when you press the button once, the LED toggles twice or more) is explained and solved [here](https://fjnn.github.io/hvl-ele201/lectures/l4-timers-interrupt2#exercise-bounce-problem-with-external-interrupts). It is more of an external button problem, but might occur on built-in buttons too.
