@@ -32,6 +32,7 @@ Lesing av trykknapp og skriving til LED. Header-filar og eksterne bibliotek. typ
 <div class="notice--info" markdown="1">
 In this course we will be using C-language in programming. We will mostly use HAL libraries from STM32 and you will get familiar with the syntax of the most used functions and you are not expected to be fluent in programming C. However, if you don't understand how C works, it might be very difficult to understand why/how we do certain things in this way. Therefore, this lecture we will talk a bit about the general concepts in C. You don't have to run the code but if you want to, you can follow this steps:
 
+1. Install [MYSY2 C-compiler for Windows](https://www.msys2.org/) and [configure your VS Code](https://code.visualstudio.com/docs/cpp/config-mingw) to find this compiler.
 1. Create/Open a folder for keeping C files. I called my folder ``c_ws`` and put in in Documents. You can choose wherever you want!
 2. Create a project folder. I called mine `my_first_c_program` under `c_ws`.
 3. Create a `platformio.ini` file in the project folder and paste this code in it:
@@ -506,6 +507,12 @@ Choose the next standard resistor value above your calculation (e.g., 100 Ω) to
 
 {: .notice--info}
 **Notice:** For high power LED’s you should also make sure that the power dissipated in the resistor does nod exceed the ratings of the resistor. For very high power applications a simple current limiting resistor is not suitable, and you should instead use power electronics. This however is a entire field of engineering on it’s own, and way outside the scope of what we will be covering here.
+
+## How to know a resistor value?
+With a multimeter! 
+However if you don't have a multimeter, you can use the colors of the bands on your resistor. You will see either 4 or 5 bands in your resistor, and you can [check this link](https://hirophysics.com/Labsheet/resis-codes/resis-codes.html) to use the band calculation of your resistors or refer to the image below:
+
+![5-band resistor colorcode](https://hirophysics.com/Labsheet/resis-codes/images/5-band.jpg)
 
 ## Exercise-2: Toggle an external LED with external button
 <!-- ext_btn_led.ioc -->
