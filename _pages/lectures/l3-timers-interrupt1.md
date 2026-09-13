@@ -31,7 +31,7 @@ On the STM32F767, we have a sophisticated clock system. It's not just one clock;
 - LSI (Low-Speed Internal): An internal RC oscillator, primarily used for the independent watchdog and the RTC in low-power modes.
 - PLL (Phase-Locked Loop): This is a frequency multiplier. We often use the PLL to take a relatively low-frequency source (like HSE or HSI) and multiply it up to a much higher frequency to drive the main system clock (SYSCLK) and various peripherals.
 
-In STM32 microcontrollers, SYSCLK (System Clock) is the main clock source for the entire system, while HCLK (AHB Clock) is a derived clock used by the CPU and AHB bus. SYSCLK can be generated from various sources like HSI, HSE, or PLL, and then HCLK is derived from SYSCLK by a configurable prescaler. This means that HCLK runs at a lower frequency than SYSCLK, and it is used to clock the core and other AHB peripherals. 
+In STM32 microcontrollers, SYSCLK (System Clock) is the main clock source for the entire system, while HCLK (AHB Clock) is a derived clock used by the CPU and AHB bus. SYSCLK can be generated from various sources like HSI, HSE, or PLL, and then HCLK is derived from SYSCLK by a configurable prescaler. This means that HCLK often runs at a lower frequency than SYSCLK, and it is used to clock the core and other AHB peripherals. 
 
 **SYSCLK (System Clock):**
 It is the main clock for the STM32 microcontroller. It's source can be selected from:
@@ -51,6 +51,23 @@ If **SYSCLK** = 100 MHz and the prescaler is set to divide by 2, then **HCLK** =
 - **APB2 (Advanced Peripheral Bus 2):** This bus can run at the same frequency as HCLK or at a divided rate, depending on the prescaler setting. It connects to higher-speed peripherals such as TIM1, TIM8, USART1/6, SPI1, and the ADCs.
 
 The prescaler values for APB1 and APB2 are set in the RCC (Reset and Clock Control) registers. For example, if HCLK is 100 MHz and the APB1 prescaler is set to 4, then the APB1 clock will be 25 MHz. This means that all peripherals on APB1 will operate at 25 MHz.
+
+## Some important STM32F767-specific features
+
+The features listed here are not something you expected by heart to know unless you one day happen to use this microcontroller in your professional life. However, right now it is nice to know these features, and how this beautiful uC differs from other common mainstream uCs and development boards:
+
+- Internal Multi-Speed Oscillator (MSI) / CSI: The STM32F7 series introduces CSI (Low-power Internal RC oscillator ~4 MHz) used for low-power operation and driving the PLL.
+
+- Maximum Clock Frequencies:
+  - SYSCLK / HCLK: Up to 216 MHz (with Over-Drive enabled).
+  - APB1 (PCLK1): Max 54 MHz.
+  - APB2 (PCLK2): Max 108 MHz.
+
+- Clock Security System (CSS): Hardware feature that continuously monitors the external HSE crystal. If the crystal fails, it automatically switches SYSCLK back to HSI and generates an interrupt/break.
+
+- Over-Drive Mode: Operating the STM32F767 at its max limit of 216 MHz requires enabling the Over-Drive power mode in the power controller (PWR) before raising the PLL output above 180 MHz.
+
+- Flash Wait States (Latency): Because Flash memory cannot execute at 216 MHz directly, the ART Accelerator (Flash access control) must be configured with correct wait states (latency) relative to HCLK voltage and speed.
 
 # Timer
 
@@ -302,11 +319,11 @@ and each tick was calculated 1 us, so converting to Larger Units (for better und
 
 Therefore, we need to choose a different prescalar if we want to measure longer time.
 
-{: .notice--info}
-**Note:** 
-- What is the maximum minutes that you can count with TIM3 with prescalar 27-1?
+<div class="notice--info" markdown="1">
+- What is the maximum minutes that you can count with TIM3 with prescalar 26?
 - What prescalar you should choose to be able to count with TIM3 for more than one-day?
 - Can you count more than 1-week with TIM3? If so, which prescalar? If not, what would you do to change to be able to count upto a week?
+</div>
 
 
 # Timer modes
