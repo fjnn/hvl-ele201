@@ -506,58 +506,53 @@ In this exercise we will learn how to measure the time of events and print the e
    ![timer-uart-clock.png]({{site.baseurl}}/assets/images/timer-uart-clock.png)
 7. Give a good name to your project, do the necessary project settings and generate the code.
 8. Create a `platformio.ini` file in your project and paste the following content in it.
-    ```c
-    [env:nucleo_f767zi]
-    platform = ststm32
-    board = nucleo_f767zi
-    framework = stm32cube
-    build_flags = 
-      -IInc
-    upload_protocol = stlink
-    debug_tool = stlink
-    debug_build_flags = -O0 -g -ggdb
-    monitor_speed = 115200
-    ```
+```c
+[env:nucleo_f767zi]
+platform = ststm32
+board = nucleo_f767zi
+framework = stm32cube
+build_flags = 
+  -IInc
+upload_protocol = stlink
+debug_tool = stlink
+debug_build_flags = -O0 -g -ggdb
+monitor_speed = 115200
+```
 9. Paste this code after `/* USER CODE BEGIN Includes */`
-    ```c
-    #include<string.h> // for strlen()
-    #include<stdio.h> // for sprintf()
-    ```
+```c
+#include<string.h> // for strlen()
+#include<stdio.h> // for sprintf()
+```
 10. Paste this code after `/* USER CODE BEGIN 1 */`
-    ```c
-    char uart_buf[50];
-    int uart_buf_len;
-    uint16_t timer_val;
-    ```
-11. Paste this code after  `/* USER CODE BEGIN 2 */`
-    ````c
-    // Initial text on the screen
-    uart_buf_len = sprintf(uart_buf, "Timer Test\r\n");
-    HAL_UART_Transmit(&huart3, (uint8_t *)uart_buf, uart_buf_len, 100);
-
-    // Start timer
-    HAL_TIM_Base_Start(&htim2);
-    ````
+```c
+char uart_buf[50];
+int uart_buf_len;
+uint16_t timer_val;
+```
+11. Paste this code after `/* USER CODE BEGIN 2 */`
+```c
+// Initial text on the screen
+uart_buf_len = sprintf(uart_buf, "Timer Test\r\n");
+HAL_UART_Transmit(&huart3, (uint8_t *)uart_buf, uart_buf_len, 100);
+// Start timer
+HAL_TIM_Base_Start(&htim2);
+```
 12. Paste this code after  `/* USER CODE BEGIN 3 */`
-    ```c
-    // Get current time (microseconds)
-    timer_val = __HAL_TIM_GET_COUNTER(&htim16);
-
-    // Wait for 50 ms
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
-    HAL_Delay(50);
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
-
-    // Get time elapsed
-    timer_val = __HAL_TIM_GET_COUNTER(&htim16) - timer_val;
-
-    // Show elapsed time
-    uart_buf_len = sprintf(uart_buf, "%u us\r\n", timer_val); // unfortunately there is no str() func. in C.
-    HAL_UART_Transmit(&huart2, (uint8_t *)uart_buf, uart_buf_len, 100);
-
-    // Wait again so we don't flood the Serial terminal
-    HAL_Delay(1000);
-    ```
+```c
+// Get current time (microseconds)
+timer_val = __HAL_TIM_GET_COUNTER(&htim16);
+// Wait for 50 ms
+HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+HAL_Delay(50);
+HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+// Get time elapsed
+timer_val = __HAL_TIM_GET_COUNTER(&htim16) - timer_val;
+// Show elapsed time
+uart_buf_len = sprintf(uart_buf, "%u us\r\n", timer_val); // unfortunately there is no str() func. in C.
+HAL_UART_Transmit(&huart3, (uint8_t *)uart_buf, uart_buf_len, 100);
+// Wait again so we don't flood the Serial terminal
+HAL_Delay(1000);
+```
 
 
 {: .notice--info}
