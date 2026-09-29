@@ -37,3 +37,13 @@ taxonomy: markup
 - [L8 UART Two STM32s Transmitter](https://github.com/fjnn/stm32-lecture-projects/tree/a7cd06a22d43433b1056bfae968c738f5ca27df2/uart-two-stm32-transmit)
 - [L8 UART Two STM32s Receiver](https://github.com/fjnn/stm32-lecture-projects/tree/a7cd06a22d43433b1056bfae968c738f5ca27df2/uart-two-stm32-receive)
 - [L9 MMA8451 Accelerometer I2C](https://github.com/fjnn/stm32-lecture-projects/tree/1c0900a61778a8f173ac99d27d1238e4768ae5e1/i2c_mma8451)
+
+Mini project solutions (Some projects fit several sensors)
+These are only suggestive template solutions. You can improve them as your creativity goes!
+
+- [Digital sensors - Reed switch, vibration sensor, tilt sensor etc.](https://github.com/fjnn/stm32-lecture-projects/tree/main/reed_sensor_test)
+- [Analog sensors - Hall effect, water level, force/torque sensor etc.](https://github.com/fjnn/stm32-lecture-projects/blob/main/adc_duration_test)
+- [7 segment](https://github.com/fjnn/stm32-lecture-projects/tree/main/segment7_test)
+- [Ultrasonic HC SR04](https://github.com/fjnn/stm32-lecture-projects/tree/main/ultrasonic_hc_sr04_test)
+- [Laser-IR, Color sensor(CN70) etc.](https://github.com/fjnn/stm32-lecture-projects/tree/main/IR_Laser_test)
+- [DHT11](https://github.com/fjnn/stm32-lecture-projects/tree/main/dht11_test)
