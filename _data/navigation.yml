@@ -45,6 +45,8 @@ lectures:
     url: /lectures/miscellaneous
   - title: "Exam Cheatsheet"
     url: /lectures/exam-prep
+    title: "Mini Projects Gathering2"
+    url: /lectures/mini-projects
 
 network-lectures:
   - title: "L1 - Introduction and Basic Concepts"
