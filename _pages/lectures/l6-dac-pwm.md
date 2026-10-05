@@ -106,7 +106,7 @@ In this example our goal is to generate a **100 Hz** sine wave using **100 sampl
 1. Next, configure the timer. Navigate to **Timers \> TIM6**.
 1. Set it **Activated**. Note that TIM6 is a basic timer that is hard-wired to use the internal APB1 clock as its sole clock source. The "Activated" checkbox is all you need to tick. By enabling the timer, you are implicitly selecting its internal clock.
 1. Under "Trigger Event Selection," set the trigger to `Update Event`.
-1. Since our goal is to generate a **100 Hz** sine wave using **100 samples**, which requires a DAC trigger frequency of $$100\,\text{Hz} \times 100\,\text{samples} = 10{,}000\,\text{Hz}$$ (or $$10\,\text{kHz}$$). the **APB1** clock (which feeds TIM6) runs at **54 MHz**. Therefore set your **Prescaler** to `54-1` and the **Counter Period (ARR)** to `99`. This will achieve a 10 kHz DAC trigger frequency.
+1. Since our goal is to generate a **100 Hz** sine wave using **100 samples**, which requires a DAC trigger frequency of $$100\,\text{Hz} \times 100\,\text{samples} = 10{,}000\,\text{Hz}$$ (or $$10\,\text{kHz}$$). the **APB1** clock (which feeds TIM6) runs at **108 MHz**. Therefore set your **Prescaler** to `108-1` and the **Counter Period (ARR)** to `99`. This will achieve a 10 kHz DAC trigger frequency.
 1. Generate the code.
 
 Time to program the Sine Wave:
@@ -382,15 +382,15 @@ Note that  It is better to use the 5V pin as source for your servo.
   - Set the Clock Source to `Internal Clock`.
   - Set Channel 4 to `PWM Generation CH4`. You will see that `PD15` is activated.
 1. In the timer configuration below:
-  - Knowing that APB1 Timer Clock Frequency: 108 MHz (Although the peripheral max frequency for APB1 is 54 MHz. I know it is a bit confusing with timer calculations, and I did a mistake before `54-1` in some exercises priorly, I have fixed it by adding ARR into formula!)
+  - Knowing that APB1 Timer Clock Frequency: 108 MHz (Although the peripheral max frequency for APB1 is 54 MHz, the Timer frequency max is 108 MHz as you can see in clock configuration settings in CubeMX)
   - Set prescaler (PSC) to `108-1` to generate an easily calculatable 1μs resolution (1 MHz counter frequency):
     $$ PSC = (108 MHz / 1 MHz) - 1 = 108 - 1$$
-  - Set Counter Period (ARR) to $$10 000 - 1$$ to get a 20 ms period (50 Hz) with a $1 \mu s$ resolution.
+  - Set Counter Period (ARR) to $$20 000 - 1$$ to get a 20 ms period (50 Hz) with a $1 \mu s$ resolution.
 1. Generate the code, configure your platformio.ini, and then `main.c` in your PlatformIO project.
 1. Set some private definitions after `/* USER CODE BEGIN PD */`.
   ```c
   #define SERVO_PULSE_MIN 500 // 1.0 ms pulse (1000 counts @ 1.0us resolution)
-  #define SERVO_PULSE_MAX 2500 // 2.0 ms pulse (2000 counts @ 1.0us resolution)
+  #define SERVO_PULSE_MAX 2400 // 2.0 ms pulse (2000 counts @ 1.0us resolution)
   #define SWEEP_DELAY     5    // Delay in milliseconds per step
   ```
 1. Set some Private variables after `/* USER CODE BEGIN PV */`.
