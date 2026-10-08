@@ -17,3 +17,4 @@ Welcome to the practice section of the website. As part of this course you shoul
 Interactive Explanations for different protocols and services can be found here:
 - [Interactive Explanation: Address Resolution Protocol (ARP)]({{ site.baseurl }}/network-practice/arp-demo)
 - [Interactive Explanation: Dynamic Host Configuration Protocol (DHCP)]({{ site.baseurl }}/network-practice/dhcp-demo)
+- [Interactive Explanation: Domain Name System (DNS)]({{ site.baseurl }}/network-practice/dns-demo)

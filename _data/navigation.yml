@@ -95,6 +95,8 @@ network-practice:
     url: /network-practice/arp-demo
   - title: "Interactive DHCP Explanation"
     url: /network-practice/dhcp-demo
+  - title: "Interactive DNS Explanation"
+    url: /network-practice/dns-demo
 
 
 examples:

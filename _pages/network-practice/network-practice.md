@@ -18,4 +18,5 @@ taxonomy: markup
 - [Semester Project Webserver]({{ site.baseurl }}/network-practice/webserver)
 - [Interactive ARP Explanation]({{ site.baseurl }}/network-practice/arp-demo)
 - [Interactive DHCP Explanation]({{ site.baseurl }}/network-practice/dhcp-demo)
+- [Interactive DNS Explanation]({{ site.baseurl }}/network-practice/dns-demo)
 
