@@ -17,4 +17,5 @@ taxonomy: markup
 - [Router CLI Commands]({{ site.baseurl }}/network-practice/p3-router-config)
 - [Semester Project Webserver]({{ site.baseurl }}/network-practice/webserver)
 - [Interactive ARP Explanation]({{ site.baseurl }}/network-practice/arp-demo)
+- [Interactive DHCP Explanation]({{ site.baseurl }}/network-practice/dhcp-demo)
 

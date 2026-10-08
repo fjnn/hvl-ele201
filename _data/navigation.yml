@@ -93,6 +93,8 @@ network-practice:
     url: /network-practice/webserver
   - title: "Interactive ARP Explanation"
     url: /network-practice/arp-demo
+  - title: "Interactive DHCP Explanation"
+    url: /network-practice/dhcp-demo
 
 
 examples:
