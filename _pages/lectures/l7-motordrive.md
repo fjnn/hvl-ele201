@@ -217,7 +217,7 @@ We will use the same circuit and almost the same CubeMX settings.
 1. Copy paste the whole folder and rename it to something make sense, f.ex `motor_drive_with_potentiometer`. Rename both the folder and the CubeMX .ioc file in it.
 1. Go to VSCode and open the project in PlatformIO. In this way, we don't need to generate `platformio.ini` file. It is already copied with the previous one.
 1. Now, you can also open this project on CubeMX by just double clicking the .ioc file in the new folder.
-1. Configure GPIO for direction-change button: Locate and configure pin ``PA7`` as ``GPIO_Output`` and label it as **DIR_BTN**. By using this button, we will change the motor rotation direction: Stop->Clockwise->Counter-clockwise and go back to Clockwise.
+1. Configure GPIO for direction-change button: Locate and configure pin ``PA7`` as ``GPIO_Input`` and label it as **DIR_BTN**. By using this button, we will change the motor rotation direction: Stop->Clockwise->Counter-clockwise and go back to Clockwise.
 1. Configure `PA3` for potentiometer as analog input. Go to `Analog > ADC1 > Enable IN3`. This will activate `PA3` as `ADC1_IN3`. Re-label this pin as `POT_IN`. By using this value, we will adjust the motor speed. *Note that it would be much better to use ADC with DMA here, but in the tutorial, we will keep things simple.*
 1. Clock configuration, project name and settings are already inplace, just generate the code.
 
