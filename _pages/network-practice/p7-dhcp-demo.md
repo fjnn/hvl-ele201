@@ -52,6 +52,7 @@ Use the controls to step through **Discover, Offer, Request, and Acknowledgement
             <div class="status-content" id="dhcpStatus">Host A has joined the network but does not yet have an IPv4 address. It will use DHCP to request its configuration.</div>
         </section>
         <section class="network-diagram" aria-label="DHCP network diagram">
+            <div class="step-badge" id="dhcpStepBadge" aria-hidden="true"></div>
             <div class="network-grid" id="dhcpNetworkGrid">
                 <div class="router">
                     <div class="router-icon" aria-hidden="true">G</div>
@@ -185,6 +186,7 @@ Use the controls to step through **Discover, Offer, Request, and Acknowledgement
         network: root.querySelector('#dhcpNetworkGrid'),
         svg: root.querySelector('#dhcpCableSvg'),
         status: root.querySelector('#dhcpStatus'),
+        badge: root.querySelector('#dhcpStepBadge'),
         steps: [...root.querySelectorAll('.step')],
         previous: root.querySelector('#dhcpPrevious'),
         next: root.querySelector('#dhcpNext'),
@@ -379,6 +381,7 @@ Use the controls to step through **Discover, Offer, Request, and Acknowledgement
             element.classList.toggle('completed', index < state.currentStep);
         });
         elements.status.textContent = step.description;
+        elements.badge.textContent = `Step ${state.currentStep + 1} / ${stepData.length}`;
         root.querySelectorAll('.device').forEach(device => {
             device.classList.remove('active', 'sending', 'receiving', 'success');
             const deviceState = step.devices?.[device.dataset.role];
@@ -641,6 +644,19 @@ Use the controls to step through **Discover, Offer, Request, and Acknowledgement
     .device.sending .device-icon { box-shadow: 0 0 0 4px rgba(100, 208, 223, 0.42); }
     .device.receiving .device-icon { box-shadow: 0 0 0 4px rgba(235, 104, 82, 0.28); }
     .device.success .device-icon { background: var(--hvl-darkgreen); }
+
+    .step-badge {
+        position: absolute;
+        z-index: 3;
+        top: 12px;
+        left: 12px;
+        padding: 5px 12px;
+        border-radius: 999px;
+        color: var(--hvl-white);
+        background: var(--hvl-second);
+        font-size: 0.85em;
+        font-weight: 700;
+    }
 
     .cable-svg { position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%; pointer-events: none; }
     .packet-dot-halo { opacity: 0.24; }
