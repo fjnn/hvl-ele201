@@ -91,6 +91,8 @@ network-practice:
     url: /network-practice/p3-router-config
   - title: "Semester Project Webserver"
     url: /network-practice/webserver
+  - title: "Interactive ARP Explanation"
+    url: /network-practice/arp-demo
 
 
 examples:

@@ -16,4 +16,5 @@ taxonomy: markup
 - [Switch CLI Commands]({{ site.baseurl }}/network-practice/p2-switch-config)
 - [Router CLI Commands]({{ site.baseurl }}/network-practice/p3-router-config)
 - [Semester Project Webserver]({{ site.baseurl }}/network-practice/webserver)
+- [Interactive ARP Explanation]({{ site.baseurl }}/network-practice/arp-demo)
 
