@@ -12,6 +12,6 @@ sidebar:
 taxonomy: markup
 ---
 
-Guest Lecture by [Johannes Møgster](https://no.linkedin.com/in/mogsterj) who is a Senior Project Engineer at [Goodtech](https://goodtech.no/).
+<!-- Guest Lecture by [Johannes Møgster](https://no.linkedin.com/in/mogsterj) who is a Senior Project Engineer at [Goodtech](https://goodtech.no/). -->
 
 <!-- Netacad course on industrial networking (Industrial Networking Essentials) -->
