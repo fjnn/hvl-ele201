@@ -54,9 +54,8 @@ SDA line, on the other hand, is the line that everyone uses. Master asks for a d
 
 
 The data is transmitted in the form of packets which comprises 9 bits. The sequence of these bits are:
-- Start Condition: 1 bit
-- Slave Address: 8 bit
-- Acknowledge: 1 bit
+![uart1.png]({{site.baseurl}}/assets/images/uart1.png) 
+Read more [here](https://www.ti.com/lit/an/sbaa565/sbaa565.pdf)
 
 
 This allows that both the master and slaves know whether the message is received or not.
