@@ -53,18 +53,14 @@ Another big difference that there is a clock signal. It is sent through the SCL 
 SDA line, on the other hand, is the line that everyone uses. Master asks for a data from a slave, and the slave sends its response from the same line. All slaves use the same line. You may imagine that the speed of communication reduces drastically as you add mode nodes to I2C.
 
 
-The data is transmitted in the form of packets which comprises 9 bits. The sequence of these bits are:
-![uart1.png]({{site.baseurl}}/assets/images/uart1.png) 
-Read more [here](https://www.ti.com/lit/an/sbaa565/sbaa565.pdf)
-
-
-This allows that both the master and slaves know whether the message is received or not.
-
-Last, but not least, the data package consists of two main parts: Address and Data.
-
+The data is transmitted in the form of packets which comprises 9 bits. The data package consists of two main parts: Address and Data. The sequence of these bits are:
 ![I2C_Basic_Address_and_Data_Frames.jpg]({{site.baseurl}}/assets/images/I2C_Basic_Address_and_Data_Frames.jpg)(Source: [learn.sparkfun.com](https://learn.sparkfun.com/tutorials/i2c/all)) 
 
+The ACK bit allows that both the master and slaves know whether the message is received or not.
+
 **START** condition plus **address packet** plus one more **data packet** plus **STOP** condition collectively form a complete **Data transfer**.
+
+Read more [here](https://www.ti.com/lit/an/sbaa565/sbaa565.pdf)
 
 The address can be found in the datasheet of the device. It can be:
 
@@ -112,7 +108,7 @@ In this exercise we will configure **I2C1** as the Master to communicate with th
       - Leave Word Length at 8 Bits, Parity at None, and Stop Bits at 1.
     1. In the `NVIC` Settings tab, ensure the `USART3` global interrupt is **disabled**. We will use polling/blocking UART functions for simplicity, but interrupts can be used for non-blocking communication.
 1. Clock Configuration and Code Generation:
-    1. Set your clock configurations with **8 MHz** Input frequency, **PLLCLK** in system clock MUX, and **HCLK = 108 MHz**
+    1. Set your clock configurations as **HCLK = 108 MHz**
     1. Give a proper name and generate the code as usual: Basic application structure, STM32CubeIDE Toolchain, untick "Generate under root" and generate the code.
 
 ## Hardware setup
@@ -130,19 +126,19 @@ I2C requires pull-up resistors on the SCL and SDA lines. Most MMA8451 breakout b
 ## Code implementation
 
 1. Here is your **platformio.ini**:
-    ```c
-    [env:nucleo_f767zi]
-    platform = ststm32
-    board = nucleo_f767zi
-    framework = stm32cube
-    build_flags = 
-    -IInc
-    -Wl,--undefined,_printf_float
-    upload_protocol = stlink
-    debug_tool = stlink
-    monitor_speed = 115200 ; Set the baud rate for the serial monitor
-    debug_build_flags = -O0 -g -ggdb
-    ```
+```c
+[env:nucleo_f767zi]
+platform = ststm32
+board = nucleo_f767zi
+framework = stm32cube
+build_flags = 
+-IInc
+-Wl,--undefined,_printf_float
+upload_protocol = stlink
+debug_tool = stlink
+monitor_speed = 115200 ; Set the baud rate for the serial monitor
+debug_build_flags = -O0 -g -ggdb
+```
 1. First add `#include<stdio.h>` and `#include<string.h>` in ``/* USER CODE BEGIN Includes */`` for `sprintf()` and `strlen()`.
 1. We need to initialize the **MMA8451** (set it to active mode) and then continuously read the acceleration data. In ``main.c``, under ``/* USER CODE BEGIN PV */``, define the I2C address and relevant registers. We know these addresses from the [MMA8451 datasheet](https://www.nxp.com/docs/en/data-sheet/MMA8451Q.pdf). Additionally, according to the [Adafruit documentation](https://cdn-learn.adafruit.com/downloads/pdf/adafruit-mma8451-accelerometer-breakout.pdf), the **A** pin is pulled up to **3.3V** with a **10 kΩ** resistor by default. This sets the **I2C 7-bit address to 0x1D**. If you connect the **A** pin to **GND**, the address becomes **0x1C**.
 ![mma8451_slave.png]({{site.baseurl}}/assets/images/mma8451_slave.png)
