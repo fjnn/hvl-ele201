@@ -25,3 +25,8 @@ taxonomy: markup
 - [Industrial Networks]({{ site.baseurl }}/network-lectures/industrial-networks)
 - [Acronyms]({{ site.baseurl }}/network-lectures/acronyms)
 
+### Networking Recap
+
+[Recap Quiz]({{ site.baseurl }}/network-lectures/recap-quiz)
+
+
