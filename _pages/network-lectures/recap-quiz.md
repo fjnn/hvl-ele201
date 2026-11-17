@@ -31,6 +31,8 @@ taxonomy: markup
     </div>
     <h3>Score by category</h3>
     <ul id="quiz-category-scores"></ul>
+    <h3>Solutions</h3>
+    <ol id="quiz-solutions"></ol>
     <button class="btn btn--primary" id="quiz-restart" type="button">New round</button>
   </section>
 </div>
@@ -105,6 +107,7 @@ taxonomy: markup
   const score = document.getElementById("quiz-score");
   const percentage = document.getElementById("quiz-percentage");
   const categoryScores = document.getElementById("quiz-category-scores");
+  const solutions = document.getElementById("quiz-solutions");
   let round = [];
 
   function shuffle(items) {
@@ -147,15 +150,29 @@ taxonomy: markup
     const answers = new FormData(form);
     const categories = new Map();
     let correct = 0;
+    solutions.replaceChildren();
     round.forEach((item, index) => {
       const category = categories.get(item.category) || { correct: 0, total: 0 };
-      const isCorrect = Number(answers.get(`question-${index}`)) === item.answer;
+      const selectedAnswer = Number(answers.get(`question-${index}`));
+      const isCorrect = selectedAnswer === item.answer;
       category.total++;
       if (isCorrect) {
         category.correct++;
         correct++;
       }
       categories.set(item.category, category);
+
+      const solution = document.createElement("li");
+      const question = document.createElement("p");
+      const selected = document.createElement("p");
+      const correctAnswer = document.createElement("p");
+      question.className = "quiz-solution-question";
+      question.textContent = `${index + 1}. ${item.question}`;
+      selected.className = `quiz-solution-selected ${isCorrect ? "is-correct" : "is-incorrect"}`;
+      selected.textContent = `Selected: ${item.options[selectedAnswer]}`;
+      correctAnswer.textContent = `Correct: ${item.options[item.answer]}`;
+      solution.append(question, selected, correctAnswer);
+      solutions.appendChild(solution);
     });
     score.textContent = `${correct} / ${round.length} correct`;
     percentage.textContent = `${Math.round(correct / round.length * 100)}%`;
@@ -285,6 +302,33 @@ taxonomy: markup
     margin: 0;
     padding: 0.9rem 0;
     border-bottom: 1px solid #d8dfe2;
+  }
+  #quiz-solutions {
+    margin: 0 0 1.75rem;
+    padding-left: 1.5rem;
+  }
+  #quiz-solutions li {
+    margin: 0;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid #d8dfe2;
+  }
+  #recap-quiz .quiz-solution-question {
+    margin-bottom: 0.5rem;
+    color: #28363b;
+    font-weight: 700;
+  }
+  #recap-quiz .quiz-solution-selected {
+    font-weight: 700;
+  }
+  #recap-quiz .quiz-solution-selected.is-correct {
+    color: #167447;
+  }
+  #recap-quiz .quiz-solution-selected.is-incorrect {
+    color: #b42318;
+  }
+  #recap-quiz #quiz-solutions li p {
+    margin-top: 0;
+    margin-bottom: 0.25rem;
   }
   #recap-quiz .quiz-category-heading {
     display: flex;
